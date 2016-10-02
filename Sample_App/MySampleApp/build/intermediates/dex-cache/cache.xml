@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="C:\Users\Will Schrag\.gradle\caches\modules-2\files-2.1\com.amazonaws\aws-android-sdk-core\2.2.18\802a5fa1642253476592c2ee55930578e499fe63\aws-android-sdk-core-2.2.18.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="802a5fa1642253476592c2ee55930578e499fe63">
+        <dex dex="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-core-2.2.18_4df210a1da2e391e0310ec9c642533a0bbb48277\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Will Schrag\.gradle\caches\modules-2\files-2.1\com.amazonaws\aws-android-sdk-ddb\2.2.18\88caede5170508d7f3a7d1297eab570d9f80c26c\aws-android-sdk-ddb-2.2.18.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="88caede5170508d7f3a7d1297eab570d9f80c26c">
+        <dex dex="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-ddb-2.2.18_8f963d291b01d2127813984951f229ab0847ac83\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Will Schrag\.gradle\caches\modules-2\files-2.1\com.amazonaws\aws-android-sdk-s3\2.2.18\2b3576bbfdb287d7f1f3ec5f17ccfce41fb0d96\aws-android-sdk-s3-2.2.18.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="02b3576bbfdb287d7f1f3ec5f17ccfce41fb0d96">
+        <dex dex="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-s3-2.2.18_811d635e3797a49495d5d83f6571fc1548d7c7c8\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\D\Sdk\extras\android\m2repository\com\android\support\support-annotations\23.1.0\support-annotations-23.1.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="92e3fc113ec3ee36b64603a38857b95700025633">
+        <dex dex="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-23.1.0_2092d62b11a7c5813999926160e6700d9d6afe94\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Will Schrag\.gradle\caches\modules-2\files-2.1\com.amazonaws\aws-android-sdk-lambda\2.2.18\59a0a65641b5c730bc6056e75467a9afcbf9c009\aws-android-sdk-lambda-2.2.18.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="59a0a65641b5c730bc6056e75467a9afcbf9c009">
+        <dex dex="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-lambda-2.2.18_29cb450fa2e3fdc0bf3444ff8f99b39e2cbc5534\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="d1d4ce003386734d8c5141de772ba0362ffe00a5">
+        <dex dex="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_99bcc002545f44282e06b0cdface368d37b17fbd\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="ddde541c289c8b816a8f8fd6c325d80788c522a6">
+        <dex dex="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-23.1.0_e55f8c82242d0eb7ccb28a2bbb36752cf1ba18cc\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="1c057bfb39ddc75b07e50acb285c998292172988">
+        <dex dex="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_42f1651c3970222b50f334e54bae3091fcc29aed\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Will Schrag\.gradle\caches\modules-2\files-2.1\com.amazonaws\aws-android-sdk-ddb-mapper\2.2.18\afef7014288ac5d34e518f4ee82f32545d2115d\aws-android-sdk-ddb-mapper-2.2.18.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="0afef7014288ac5d34e518f4ee82f32545d2115d">
+        <dex dex="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-ddb-mapper-2.2.18_a1450310dd0db59050c93d69f636a431c6868474\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\exploded-aar\com.android.support\multidex\1.0.1\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="78ea232052df889856dcb7b7b542707c89bb3bfb">
+        <dex dex="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-multidex-1.0.1_223b80e0b7907c1c1b5ff10861b96380c446158b\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\exploded-aar\com.android.support\support-v4\23.1.0\jars\libs\internal_impl-23.1.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="8716243bf04bae8d6c9ca94d27b9a9be7236f0a3">
+        <dex dex="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-23.1.0_ac08ee39667d28de34315a0c43c4fd22368a5cad\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Program Files\Android\Android Studio\gradle\m2repository\com\google\code\gson\gson\2.2.4\gson-2.2.4.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="a60a5e993c98c864010053cb901b7eab25306568">
+        <dex dex="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\gson-2.2.4_313aff129984a0a45e086871ec03bfcc02e7284e\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\23.1.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="57ae0d750ff83f0c738d21720224ac7ea866a094">
+        <dex dex="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-23.1.0_dbd956497448ab6aa8946643105bb4b3cc881ded\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\Will Schrag\.gradle\caches\modules-2\files-2.1\com.amazonaws\aws-android-sdk-cognito\2.2.18\c4bf9dca3b2cbf00f5a3c7c95d4b69f4f14094dd\aws-android-sdk-cognito-2.2.18.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="c4bf9dca3b2cbf00f5a3c7c95d4b69f4f14094dd">
+        <dex dex="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-cognito-2.2.18_9078da2489a8c5f7a76b2ceccbbafbd95ce10e73\classes.dex" />
+    </item>
+
+</items>
