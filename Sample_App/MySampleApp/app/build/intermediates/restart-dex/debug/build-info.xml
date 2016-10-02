@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<instant-run
+    api-level="22"
+    density="xhdpi"
+    format="8"
+    plugin-version="2.2.0"
+    timestamp="985594618268574"
+    token="-3219612597503388445"
+    verifier="COLD_SWAP_REQUESTED" >
+
+    <task
+        name="javac"
+        duration="785" />
+    <task
+        name="instant-run-dex"
+        duration="0" />
+    <task
+        name="instant-run-transform"
+        duration="479" />
+    <task
+        name="verifier"
+        duration="351" />
+
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\instant-run-resources\resources-debug.ir.ap_"
+        type="RESOURCES" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_1\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_4\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_2\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_6\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_3\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_5\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_8\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_7\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-core-2.2.18_4df210a1da2e391e0310ec9c642533a0bbb48277\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-23.1.0_e55f8c82242d0eb7ccb28a2bbb36752cf1ba18cc\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_9\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-23.1.0_2092d62b11a7c5813999926160e6700d9d6afe94\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-s3-2.2.18_811d635e3797a49495d5d83f6571fc1548d7c7c8\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-lambda-2.2.18_29cb450fa2e3fdc0bf3444ff8f99b39e2cbc5534\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-multidex-1.0.1_223b80e0b7907c1c1b5ff10861b96380c446158b\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\gson-2.2.4_313aff129984a0a45e086871ec03bfcc02e7284e\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_99bcc002545f44282e06b0cdface368d37b17fbd\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_42f1651c3970222b50f334e54bae3091fcc29aed\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-23.1.0_ac08ee39667d28de34315a0c43c4fd22368a5cad\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-ddb-2.2.18_8f963d291b01d2127813984951f229ab0847ac83\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_0\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-cognito-2.2.18_9078da2489a8c5f7a76b2ceccbbafbd95ce10e73\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-ddb-mapper-2.2.18_a1450310dd0db59050c93d69f636a431c6868474\classes.dex"
+        type="DEX" />
+    <artifact
+        location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-23.1.0_dbd956497448ab6aa8946643105bb4b3cc881ded\classes.dex"
+        type="DEX" />
+
+    <build
+        timestamp="983565274197778"
+        verifier="FULL_BUILD_REQUESTED" >
+        <artifact
+            location="C:\Users\Will Schrag\AndroidStudioProjects\Sample_App\MySampleApp\app\build\outputs\apk\app-debug.apk"
+            type="MAIN" />
+    </build>
+    <build
+        timestamp="985594618268574"
+        verifier="COLD_SWAP_REQUESTED" >
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\instant-run-resources\resources-debug.ir.ap_"
+            type="RESOURCES" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_1\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_4\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_2\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_6\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_3\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_5\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_8\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_7\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-core-2.2.18_4df210a1da2e391e0310ec9c642533a0bbb48277\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-23.1.0_e55f8c82242d0eb7ccb28a2bbb36752cf1ba18cc\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_9\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-23.1.0_2092d62b11a7c5813999926160e6700d9d6afe94\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-s3-2.2.18_811d635e3797a49495d5d83f6571fc1548d7c7c8\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-lambda-2.2.18_29cb450fa2e3fdc0bf3444ff8f99b39e2cbc5534\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-multidex-1.0.1_223b80e0b7907c1c1b5ff10861b96380c446158b\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\gson-2.2.4_313aff129984a0a45e086871ec03bfcc02e7284e\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_99bcc002545f44282e06b0cdface368d37b17fbd\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_42f1651c3970222b50f334e54bae3091fcc29aed\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-23.1.0_ac08ee39667d28de34315a0c43c4fd22368a5cad\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-ddb-2.2.18_8f963d291b01d2127813984951f229ab0847ac83\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\5\slice_0\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-cognito-2.2.18_9078da2489a8c5f7a76b2ceccbbafbd95ce10e73\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\aws-android-sdk-ddb-mapper-2.2.18_a1450310dd0db59050c93d69f636a431c6868474\classes.dex"
+            type="DEX" />
+        <artifact
+            location="C:\Users\Will Schrag\Documents\GitHub\ERIS\Sample_App\MySampleApp\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-23.1.0_dbd956497448ab6aa8946643105bb4b3cc881ded\classes.dex"
+            type="DEX" />
+    </build>
+
+</instant-run>
