@@ -1,7 +1,68 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="42412652-7c08-4311-97ab-aca3e952c457" name="Default" comment="" />
+    <list default="true" id="42412652-7c08-4311-97ab-aca3e952c457" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-cognito-2.2.18.jar_1r725k6cietn43luuungwjsv3/com/amazonaws/mobileconnectors/cognito/internal/storage/CognitoSyncStorage$DatasetUpdatesImpl$Builder.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-cognito-2.2.18.jar_1r725k6cietn43luuungwjsv3/com/amazonaws/services/cognitosync/model/transform/InvalidLambdaFunctionOutputExceptionUnmarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/ArgumentMarshaller$BinaryAttributeMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/ArgumentMarshaller$BinarySetAttributeMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/ArgumentMarshaller$BooleanAttributeMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/ArgumentMarshaller$ListAttributeMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/ArgumentMarshaller$MapAttributeMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/ArgumentMarshaller$NumberAttributeMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/ArgumentMarshaller$NumberSetAttributeMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/ArgumentMarshaller$StringAttributeMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/ArgumentMarshaller$StringSetAttributeMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/AttributeTransformerChain$ProxyParameters.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/ConversionSchemas$AbstractMarshallerSet.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/ConversionSchemas$AnnotationAwareMarshallerSet.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/ConversionSchemas$AnnotationAwareUnmarshallerSet.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/ConversionSchemas$CachingMarshallerSet.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/ConversionSchemas$CachingUnmarshallerSet.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/ConversionSchemas$StandardConversionSchema.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/ConversionSchemas$StandardItemConverter.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/ConversionSchemas$StandardUnmarshallerSet.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/ConversionSchemas$V2CompatibleMarshallerSet.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/DynamoDBMapper$TransformerParameters.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/DynamoDBMapperConfig$ConsistentReads.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/DynamoDBMapperConfig$DefaultTableNameResolver.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/DynamoDBMapperConfig$ObjectTableNameResolver.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/DynamoDBMapperConfig$PaginationLoadingStrategy.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/DynamoDBMapperConfig$TableNameOverride.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/DynamoDBMapperConfig$TableNameResolver.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/DynamoDBMapperFieldModel$DynamoDBAttributeType.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/DynamoDBTableSchemaParser$TableIndexesInfo.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/marshallers/BooleanSetToNumberSetMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/marshallers/BooleanToBooleanMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/marshallers/BooleanToNumberMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/marshallers/ByteArraySetToBinarySetMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/marshallers/ByteArrayToBinaryMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/marshallers/ByteBufferSetToBinarySetMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/marshallers/ByteBufferToBinaryMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/marshallers/CalendarSetToStringSetMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/marshallers/CalendarToStringMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/marshallers/DateSetToStringSetMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/marshallers/NumberSetToNumberSetMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/marshallers/NumberToNumberMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/marshallers/ObjectSetToStringSetMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/marshallers/S3LinkToStringMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/marshallers/StringSetToStringSetMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/marshallers/StringToStringMarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/unmarshallers/BigDecimalSetUnmarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/unmarshallers/BigDecimalUnmarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/unmarshallers/BigIntegerSetUnmarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/unmarshallers/BigIntegerUnmarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/unmarshallers/BooleanSetUnmarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/unmarshallers/ByteArraySetUnmarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/unmarshallers/ByteBufferSetUnmarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/unmarshallers/ByteBufferUnmarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/unmarshallers/CalendarSetUnmarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/aws-android-sdk-ddb-mapper-2.2.18.jar_3getgqzxgngod6iwqqk48h0ct/com/amazonaws/mobileconnectors/dynamodbv2/dynamodbmapper/unmarshallers/IntegerSetUnmarshaller.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/internal_impl-23.1.0.jar_4thbm3ahquevmoe183hhe1yrf/android/support/v4/view/accessibility/AccessibilityManagerCompatIcs$AccessibilityStateChangeListenerBridge.class" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/../../Sample_App/MySampleApp/app/build/tmp/expandedArchives/internal_impl-23.1.0.jar_4thbm3ahquevmoe183hhe1yrf/android/support/v4/view/accessibility/AccessibilityNodeProviderCompatJellyBean$AccessibilityNodeInfoBridge.class" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="ERIS.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,6 +84,50 @@
   </component>
   <component name="FavoritesManager">
     <favorites_list name="ERIS" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="Application.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/Application.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="136">
+              <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/MainActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="85">
+              <caret line="37" column="13" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SplashActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/SplashActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="238">
+              <caret line="29" column="13" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/build.gradle">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="578">
+              <caret line="49" column="62" selection-start-line="49" selection-start-column="62" selection-end-line="49" selection-end-column="62" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
@@ -1705,6 +1810,10 @@
               <option name="myItemId" value="ERIS" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Gradle Scripts" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidBuildScriptsGroupNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -1736,6 +1845,72 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="com" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mysampleapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ERIS" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mysampleapp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="demo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ERIS" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="com" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidPsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="amazonaws" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="ERIS" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="java" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidSourceTypeNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -1959,7 +2134,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -1978,7 +2153,7 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -2000,5 +2175,47 @@
   <component name="XDebuggerManager">
     <breakpoint-manager />
     <watches-manager />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/Application.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="18" column="13" selection-start-line="18" selection-start-column="13" selection-end-line="18" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/MainActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="37" column="13" selection-start-line="37" selection-start-column="13" selection-end-line="37" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/mysampleapp/SplashActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="29" column="13" selection-start-line="29" selection-start-column="13" selection-end-line="29" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="578">
+          <caret line="49" column="62" selection-start-line="49" selection-start-column="62" selection-end-line="49" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
   </component>
 </project>
