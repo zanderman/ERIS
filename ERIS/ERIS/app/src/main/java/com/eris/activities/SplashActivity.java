@@ -6,13 +6,15 @@
 //
 // Source code generated from template: aws-my-sample-app-android v0.9
 //
-package com.eris;
+package com.eris.activities;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+
+import com.eris.R;
 
 import java.util.concurrent.CountDownLatch;
 

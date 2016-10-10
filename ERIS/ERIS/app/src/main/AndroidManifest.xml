@@ -38,7 +38,7 @@
 
 
         <activity
-            android:name=".SplashActivity"
+            android:name=".activities.SplashActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/app_name">
             <intent-filter>
@@ -48,7 +48,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/title_activity_main"></activity>
 
         <service

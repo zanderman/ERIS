@@ -6,9 +6,8 @@
 //
 // Source code generated from template: aws-my-sample-app-android v0.9
 //
-package com.eris;
+package com.eris.activities;
 
-import android.*;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -29,6 +28,7 @@ import android.widget.Toast;
 
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobile.user.IdentityManager;
+import com.eris.R;
 import com.eris.demo.DemoConfiguration;
 import com.eris.demo.HomeDemoFragment;
 import com.eris.navigation.NavigationDrawer;
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * Initializes the Toolbar for use with the activity.
      */
     private void setupToolbar(final Bundle savedInstanceState) {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(com.eris.R.id.toolbar);
         // Set up the activity to use this toolbar. As a side effect this sets the Toolbar's title
         // to the activity's title.
         setSupportActionBar(toolbar);
