@@ -41,6 +41,9 @@ captures/
 .idea/workspace.xml
 ./ERIS/ERIS/.idea/workspace.xml
 
+# OSX files
+.DS_Store
+
 # Keystore files
 *.jks
 

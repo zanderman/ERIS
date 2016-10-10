@@ -1,7 +1,0 @@
-#Mon Oct 10 12:56:57 EDT 2016
-base.0=/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_72009daa4b236f3d26a2d20b4f5fdb36c69bd180
-renamed.1=classes2.dex
-renamed.0=classes.dex
-file.1=/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_8bccc52aac09153f4b432a5fe3d3d6f3e9b9707d/classes.dex
-base.1=/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_8bccc52aac09153f4b432a5fe3d3d6f3e9b9707d
-file.0=/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_72009daa4b236f3d26a2d20b4f5fdb36c69bd180/classes.dex
