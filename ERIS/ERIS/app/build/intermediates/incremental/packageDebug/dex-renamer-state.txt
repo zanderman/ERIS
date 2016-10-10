@@ -1,7 +1,7 @@
-#Sun Oct 02 18:32:11 EDT 2016
-base.0=C\:\\Users\\Will Schrag\\AndroidStudioProjects\\Sample_App\\MySampleApp\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_34f330800e3c90da67b8fb5c93ddd3a0710d6edb
-renamed.1=classes.dex
-renamed.0=classes2.dex
-file.1=C\:\\Users\\Will Schrag\\AndroidStudioProjects\\Sample_App\\MySampleApp\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_28b913639246c8cf83ff37d7df4c89e8567d59f1\\classes.dex
-base.1=C\:\\Users\\Will Schrag\\AndroidStudioProjects\\Sample_App\\MySampleApp\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_28b913639246c8cf83ff37d7df4c89e8567d59f1
-file.0=C\:\\Users\\Will Schrag\\AndroidStudioProjects\\Sample_App\\MySampleApp\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_34f330800e3c90da67b8fb5c93ddd3a0710d6edb\\classes.dex
+#Mon Oct 10 11:51:25 EDT 2016
+base.0=/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_72009daa4b236f3d26a2d20b4f5fdb36c69bd180
+renamed.1=classes2.dex
+renamed.0=classes.dex
+file.1=/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_8bccc52aac09153f4b432a5fe3d3d6f3e9b9707d/classes.dex
+base.1=/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_8bccc52aac09153f4b432a5fe3d3d6f3e9b9707d
+file.0=/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_72009daa4b236f3d26a2d20b4f5fdb36c69bd180/classes.dex

@@ -1,26 +1,10 @@
 [
     {
-        "merged": "C:\\Users\\Will Schrag\\Documents\\GitHub\\ERIS\\Sample_App\\MySampleApp\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi\\splash_icon.png",
-        "source": "C:\\Users\\Will Schrag\\Documents\\GitHub\\ERIS\\Sample_App\\MySampleApp\\app\\src\\main\\res\\mipmap-xxhdpi\\splash_icon.png"
+        "merged": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/res/merged/debug/mipmap-xxhdpi/ic_launcher.png",
+        "source": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/src/main/res/mipmap-xxhdpi/ic_launcher.png"
     },
     {
-        "merged": "C:\\Users\\Will Schrag\\AndroidStudioProjects\\Sample_App\\MySampleApp\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi\\ic_launcher.png",
-        "source": "C:\\Users\\Will Schrag\\AndroidStudioProjects\\Sample_App\\MySampleApp\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png"
-    },
-    {
-        "merged": "C:\\Users\\Will Schrag\\AndroidStudioProjects\\Sample_App\\MySampleApp\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi\\splash_icon.png",
-        "source": "C:\\Users\\Will Schrag\\AndroidStudioProjects\\Sample_App\\MySampleApp\\app\\src\\main\\res\\mipmap-xxhdpi\\splash_icon.png"
-    },
-    {
-        "merged": "C:\\Users\\Will Schrag\\Documents\\GitHub\\ERIS\\ERIS\\ERIS\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi\\ic_launcher.png",
-        "source": "C:\\Users\\Will Schrag\\Documents\\GitHub\\ERIS\\ERIS\\ERIS\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png"
-    },
-    {
-        "merged": "C:\\Users\\Will Schrag\\Documents\\GitHub\\ERIS\\ERIS\\ERIS\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi\\splash_icon.png",
-        "source": "C:\\Users\\Will Schrag\\Documents\\GitHub\\ERIS\\ERIS\\ERIS\\app\\src\\main\\res\\mipmap-xxhdpi\\splash_icon.png"
-    },
-    {
-        "merged": "C:\\Users\\Will Schrag\\Documents\\GitHub\\ERIS\\Sample_App\\MySampleApp\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxhdpi\\ic_launcher.png",
-        "source": "C:\\Users\\Will Schrag\\Documents\\GitHub\\ERIS\\Sample_App\\MySampleApp\\app\\src\\main\\res\\mipmap-xxhdpi\\ic_launcher.png"
+        "merged": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/res/merged/debug/mipmap-xxhdpi/splash_icon.png",
+        "source": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/src/main/res/mipmap-xxhdpi/splash_icon.png"
     }
 ]

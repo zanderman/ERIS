@@ -1,26 +1,10 @@
 [
     {
-        "merged": "C:\\Users\\Will Schrag\\Documents\\GitHub\\ERIS\\ERIS\\ERIS\\app\\build\\intermediates\\res\\merged\\debug\\color-v11\\abc_background_cache_hint_selector_material_light.xml",
-        "source": "C:\\Users\\Will Schrag\\Documents\\GitHub\\ERIS\\ERIS\\ERIS\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.0\\res\\color-v11\\abc_background_cache_hint_selector_material_light.xml"
+        "merged": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/res/merged/debug/color-v11/abc_background_cache_hint_selector_material_dark.xml",
+        "source": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/color-v11/abc_background_cache_hint_selector_material_dark.xml"
     },
     {
-        "merged": "C:\\Users\\Will Schrag\\Documents\\GitHub\\ERIS\\Sample_App\\MySampleApp\\app\\build\\intermediates\\res\\merged\\debug\\color-v11\\abc_background_cache_hint_selector_material_light.xml",
-        "source": "C:\\Users\\Will Schrag\\Documents\\GitHub\\ERIS\\Sample_App\\MySampleApp\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.0\\res\\color-v11\\abc_background_cache_hint_selector_material_light.xml"
-    },
-    {
-        "merged": "C:\\Users\\Will Schrag\\AndroidStudioProjects\\Sample_App\\MySampleApp\\app\\build\\intermediates\\res\\merged\\debug\\color-v11\\abc_background_cache_hint_selector_material_dark.xml",
-        "source": "C:\\Users\\Will Schrag\\AndroidStudioProjects\\Sample_App\\MySampleApp\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.0\\res\\color-v11\\abc_background_cache_hint_selector_material_dark.xml"
-    },
-    {
-        "merged": "C:\\Users\\Will Schrag\\Documents\\GitHub\\ERIS\\ERIS\\ERIS\\app\\build\\intermediates\\res\\merged\\debug\\color-v11\\abc_background_cache_hint_selector_material_dark.xml",
-        "source": "C:\\Users\\Will Schrag\\Documents\\GitHub\\ERIS\\ERIS\\ERIS\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.0\\res\\color-v11\\abc_background_cache_hint_selector_material_dark.xml"
-    },
-    {
-        "merged": "C:\\Users\\Will Schrag\\Documents\\GitHub\\ERIS\\Sample_App\\MySampleApp\\app\\build\\intermediates\\res\\merged\\debug\\color-v11\\abc_background_cache_hint_selector_material_dark.xml",
-        "source": "C:\\Users\\Will Schrag\\Documents\\GitHub\\ERIS\\Sample_App\\MySampleApp\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.0\\res\\color-v11\\abc_background_cache_hint_selector_material_dark.xml"
-    },
-    {
-        "merged": "C:\\Users\\Will Schrag\\AndroidStudioProjects\\Sample_App\\MySampleApp\\app\\build\\intermediates\\res\\merged\\debug\\color-v11\\abc_background_cache_hint_selector_material_light.xml",
-        "source": "C:\\Users\\Will Schrag\\AndroidStudioProjects\\Sample_App\\MySampleApp\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.1.0\\res\\color-v11\\abc_background_cache_hint_selector_material_light.xml"
+        "merged": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/res/merged/debug/color-v11/abc_background_cache_hint_selector_material_light.xml",
+        "source": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/color-v11/abc_background_cache_hint_selector_material_light.xml"
     }
 ]
