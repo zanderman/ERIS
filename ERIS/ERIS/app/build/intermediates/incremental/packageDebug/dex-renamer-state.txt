@@ -1,4 +1,4 @@
-#Mon Oct 10 12:34:31 EDT 2016
+#Mon Oct 10 12:51:34 EDT 2016
 base.0=/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_72009daa4b236f3d26a2d20b4f5fdb36c69bd180
 renamed.1=classes2.dex
 renamed.0=classes.dex

@@ -4,29 +4,29 @@
     density="420dpi"
     format="8"
     plugin-version="2.2.0"
-    timestamp="18061697173632"
+    timestamp="19087871405879"
     token="-639275730953063517"
     verifier="FULL_BUILD_REQUESTED" >
 
     <task
         name="javac"
-        duration="956" />
+        duration="0" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="235" />
+        duration="0" />
     <task
         name="verifier"
-        duration="37" />
+        duration="0" />
 
     <artifact
         location="/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/outputs/apk/app-debug.apk"
         type="MAIN" />
 
     <build
-        timestamp="18061697173632"
+        timestamp="19087871405879"
         verifier="FULL_BUILD_REQUESTED" >
         <artifact
             location="/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/outputs/apk/app-debug.apk"

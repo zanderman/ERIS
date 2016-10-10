@@ -3,6 +3,15 @@
 
     <item
         is-multidex="true"
+        jar="/Users/derieux/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-s3/2.2.18/2b3576bbfdb287d7f1f3ec5f17ccfce41fb0d96/aws-android-sdk-s3-2.2.18.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="02b3576bbfdb287d7f1f3ec5f17ccfce41fb0d96">
+        <dex dex="/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/transforms/dex/debug/folders/1000/10/aws-android-sdk-s3-2.2.18_5c9a2ed3f0b52c43ad48e00726da15ebd6e5cfbc/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="/Users/derieux/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-ddb/2.2.18/88caede5170508d7f3a7d1297eab570d9f80c26c/aws-android-sdk-ddb-2.2.18.jar"
         jumboMode="true"
         optimize="true"
@@ -61,44 +70,8 @@
         jumboMode="true"
         optimize="true"
         revision="23.0.1"
-        sha1="dba5e11fcf8bd29328717f383dded19b19437805">
+        sha1="67cc6750ae2378badcfcf8a16694824db1894138">
         <dex dex="/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_8bccc52aac09153f4b432a5fe3d3d6f3e9b9707d/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/classes.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="ddde541c289c8b816a8f8fd6c325d80788c522a6">
-        <dex dex="/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-23.1.0_bd60bec9f2e72796ac4aa09e941d99d4eb06b9d2/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/libs/internal_impl-23.1.0.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="8716243bf04bae8d6c9ca94d27b9a9be7236f0a3">
-        <dex dex="/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-23.1.0_663751baea1fddeb6f657c92f02e9e9af44d02c5/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="fff3d6633d3ae144ef5f52658ae8eb2537c66970">
-        <dex dex="/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_72009daa4b236f3d26a2d20b4f5fdb36c69bd180/classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="/Users/derieux/.gradle/caches/modules-2/files-2.1/com.amazonaws/aws-android-sdk-s3/2.2.18/2b3576bbfdb287d7f1f3ec5f17ccfce41fb0d96/aws-android-sdk-s3-2.2.18.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="23.0.1"
-        sha1="02b3576bbfdb287d7f1f3ec5f17ccfce41fb0d96">
-        <dex dex="/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/transforms/dex/debug/folders/1000/10/aws-android-sdk-s3-2.2.18_5c9a2ed3f0b52c43ad48e00726da15ebd6e5cfbc/classes.dex" />
     </item>
     <item
         is-multidex="true"
@@ -120,12 +93,39 @@
     </item>
     <item
         is-multidex="true"
+        jar="/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="ddde541c289c8b816a8f8fd6c325d80788c522a6">
+        <dex dex="/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/transforms/dex/debug/folders/1000/10/com.android.support-support-v4-23.1.0_bd60bec9f2e72796ac4aa09e941d99d4eb06b9d2/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.0/jars/libs/internal_impl-23.1.0.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="8716243bf04bae8d6c9ca94d27b9a9be7236f0a3">
+        <dex dex="/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/transforms/dex/debug/folders/1000/10/internal_impl-23.1.0_663751baea1fddeb6f657c92f02e9e9af44d02c5/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
         jar="/Applications/Android Studio.app/Contents/gradle/m2repository/com/google/code/gson/gson/2.2.4/gson-2.2.4.jar"
         jumboMode="true"
         optimize="true"
         revision="23.0.1"
         sha1="a60a5e993c98c864010053cb901b7eab25306568">
         <dex dex="/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/transforms/dex/debug/folders/1000/10/gson-2.2.4_d0ce76b63ce905fbab3c5d385c8e1b8692010f19/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="23.0.1"
+        sha1="fff3d6633d3ae144ef5f52658ae8eb2537c66970">
+        <dex dex="/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_72009daa4b236f3d26a2d20b4f5fdb36c69bd180/classes.dex" />
     </item>
 
 </items>
