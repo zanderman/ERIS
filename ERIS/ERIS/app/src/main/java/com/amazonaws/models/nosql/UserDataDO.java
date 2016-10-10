@@ -16,12 +16,12 @@ import java.util.Set;
 public class UserDataDO {
     private String _userId;
     private String _currentIncidentId;
-    private Set<Double> _heartbeatRecord;
-    private Set<String> _incidentSubordinates;
+    private List<String> _heartbeatRecord;
+    private List<String> _incidentSubordinates;
     private String _incidentSuperior;
-    private Set<Double> _location;
+    private List<String> _location;
     private String _name;
-    private Set<String> _orgSubordinates;
+    private List<String> _orgSubordinates;
     private String _orgSuperior;
     private String _orginization;
 
@@ -43,19 +43,19 @@ public class UserDataDO {
         this._currentIncidentId = _currentIncidentId;
     }
     @DynamoDBAttribute(attributeName = "heartbeatRecord")
-    public Set<Double> getHeartbeatRecord() {
+    public List<String> getHeartbeatRecord() {
         return _heartbeatRecord;
     }
 
-    public void setHeartbeatRecord(final Set<Double> _heartbeatRecord) {
+    public void setHeartbeatRecord(final List<String> _heartbeatRecord) {
         this._heartbeatRecord = _heartbeatRecord;
     }
     @DynamoDBAttribute(attributeName = "incidentSubordinates")
-    public Set<String> getIncidentSubordinates() {
+    public List<String> getIncidentSubordinates() {
         return _incidentSubordinates;
     }
 
-    public void setIncidentSubordinates(final Set<String> _incidentSubordinates) {
+    public void setIncidentSubordinates(final List<String> _incidentSubordinates) {
         this._incidentSubordinates = _incidentSubordinates;
     }
     @DynamoDBAttribute(attributeName = "incidentSuperior")
@@ -67,11 +67,11 @@ public class UserDataDO {
         this._incidentSuperior = _incidentSuperior;
     }
     @DynamoDBAttribute(attributeName = "location")
-    public Set<Double> getLocation() {
+    public List<String> getLocation() {
         return _location;
     }
 
-    public void setLocation(final Set<Double> _location) {
+    public void setLocation(final List<String> _location) {
         this._location = _location;
     }
     @DynamoDBAttribute(attributeName = "name")
@@ -83,11 +83,11 @@ public class UserDataDO {
         this._name = _name;
     }
     @DynamoDBAttribute(attributeName = "orgSubordinates")
-    public Set<String> getOrgSubordinates() {
+    public List<String> getOrgSubordinates() {
         return _orgSubordinates;
     }
 
-    public void setOrgSubordinates(final Set<String> _orgSubordinates) {
+    public void setOrgSubordinates(final List<String> _orgSubordinates) {
         this._orgSubordinates = _orgSubordinates;
     }
     @DynamoDBIndexRangeKey(attributeName = "orgSuperior", globalSecondaryIndexName = "superiors")
