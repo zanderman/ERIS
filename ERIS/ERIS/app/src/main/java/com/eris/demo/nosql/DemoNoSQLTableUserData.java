@@ -442,14 +442,14 @@ public class DemoNoSQLTableUserData extends DemoNoSQLTableBase {
         firstItem.setUserId(AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
         firstItem.setCurrentIncidentId(
             DemoSampleDataGenerator.getRandomSampleString("currentIncidentId"));
-        firstItem.setHeartbeatRecord(DemoSampleDataGenerator.getSampleNumberSet());
-        firstItem.setIncidentSubordinates(DemoSampleDataGenerator.getSampleStringSet());
+        firstItem.setHeartbeatRecord(DemoSampleDataGenerator.getSampleList());
+        firstItem.setIncidentSubordinates(DemoSampleDataGenerator.getSampleList());
         firstItem.setIncidentSuperior(
             DemoSampleDataGenerator.getRandomSampleString("incidentSuperior"));
-        firstItem.setLocation(DemoSampleDataGenerator.getSampleNumberSet());
+        firstItem.setLocation(DemoSampleDataGenerator.getSampleList());
         firstItem.setName(
             DemoSampleDataGenerator.getRandomSampleString("name"));
-        firstItem.setOrgSubordinates(DemoSampleDataGenerator.getSampleStringSet());
+        firstItem.setOrgSubordinates(DemoSampleDataGenerator.getSampleList());
         firstItem.setOrgSuperior(
             DemoSampleDataGenerator.getRandomSampleString("orgSuperior"));
         firstItem.setOrginization(DemoSampleDataGenerator.getRandomPartitionSampleString("orginization"));
@@ -467,12 +467,12 @@ public class DemoNoSQLTableUserData extends DemoNoSQLTableBase {
             final UserDataDO item = new UserDataDO();
             item.setUserId(DemoSampleDataGenerator.getRandomSampleString("userId"));
             item.setCurrentIncidentId(DemoSampleDataGenerator.getRandomSampleString("currentIncidentId"));
-            item.setHeartbeatRecord(DemoSampleDataGenerator.getSampleNumberSet());
-            item.setIncidentSubordinates(DemoSampleDataGenerator.getSampleStringSet());
+            item.setHeartbeatRecord(DemoSampleDataGenerator.getSampleList());
+            item.setIncidentSubordinates(DemoSampleDataGenerator.getSampleList());
             item.setIncidentSuperior(DemoSampleDataGenerator.getRandomSampleString("incidentSuperior"));
-            item.setLocation(DemoSampleDataGenerator.getSampleNumberSet());
+            item.setLocation(DemoSampleDataGenerator.getSampleList());
             item.setName(DemoSampleDataGenerator.getRandomSampleString("name"));
-            item.setOrgSubordinates(DemoSampleDataGenerator.getSampleStringSet());
+            item.setOrgSubordinates(DemoSampleDataGenerator.getSampleList());
             item.setOrgSuperior(DemoSampleDataGenerator.getRandomSampleString("orgSuperior"));
             item.setOrginization(DemoSampleDataGenerator.getRandomPartitionSampleString("orginization"));
 
