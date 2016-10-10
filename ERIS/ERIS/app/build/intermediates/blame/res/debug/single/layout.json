@@ -4,12 +4,12 @@
         "source": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/layout/abc_popup_menu_item_layout.xml"
     },
     {
-        "merged": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/res/merged/debug/layout/abc_select_dialog_material.xml",
-        "source": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/layout/abc_select_dialog_material.xml"
-    },
-    {
         "merged": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/res/merged/debug/layout/demo_nosql_select_operation_list_item.xml",
         "source": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/src/main/res/layout/demo_nosql_select_operation_list_item.xml"
+    },
+    {
+        "merged": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/res/merged/debug/layout/abc_select_dialog_material.xml",
+        "source": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/layout/abc_select_dialog_material.xml"
     },
     {
         "merged": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/res/merged/debug/layout/abc_action_bar_up_container.xml",
@@ -56,12 +56,12 @@
         "source": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/layout/abc_action_menu_layout.xml"
     },
     {
-        "merged": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/res/merged/debug/layout/abc_action_mode_close_item_material.xml",
-        "source": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/layout/abc_action_mode_close_item_material.xml"
-    },
-    {
         "merged": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/res/merged/debug/layout/abc_search_view.xml",
         "source": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/layout/abc_search_view.xml"
+    },
+    {
+        "merged": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/res/merged/debug/layout/abc_action_mode_close_item_material.xml",
+        "source": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.0/res/layout/abc_action_mode_close_item_material.xml"
     },
     {
         "merged": "/Users/derieux/Developer/GitHub/ERIS/ERIS/ERIS/app/build/intermediates/res/merged/debug/layout/abc_activity_chooser_view_list_item.xml",

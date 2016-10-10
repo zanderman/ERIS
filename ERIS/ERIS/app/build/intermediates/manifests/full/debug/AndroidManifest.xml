@@ -28,13 +28,13 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
-        android:name="com.mysampleapp.Application"
+        android:name="com.eris.Application"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.mysampleapp.SplashActivity"
+            android:name="com.eris.SplashActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/app_name" >
             <intent-filter>
@@ -44,7 +44,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.mysampleapp.MainActivity"
+            android:name="com.eris.MainActivity"
             android:label="@string/title_activity_main" >
         </activity>
     </application>
