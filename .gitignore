@@ -39,6 +39,7 @@ captures/
 *.iml
 .idea/
 .idea/workspace.xml
+./ERIS/ERIS/.idea/workspace.xml
 
 # Keystore files
 *.jks
