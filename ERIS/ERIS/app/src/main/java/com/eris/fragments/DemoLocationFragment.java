@@ -1,10 +1,11 @@
 package com.eris.fragments;
 
+
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,9 @@ import android.widget.Toast;
 import com.eris.R;
 import com.eris.adapters.ResponderListAdapter;
 import com.eris.classes.Responder;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 
 ///**
 // * A simple {@link Fragment} subclass.
@@ -25,7 +29,7 @@ import com.eris.classes.Responder;
 // * Use the {@link DemoLocationFragment#newInstance} factory method to
 // * create an instance of this fragment.
 // */
-public class DemoLocationFragment extends Fragment {
+public class DemoLocationFragment extends Fragment implements OnMapReadyCallback {
 
     /*
      * Private Members
@@ -37,7 +41,6 @@ public class DemoLocationFragment extends Fragment {
     public DemoLocationFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,6 +56,12 @@ public class DemoLocationFragment extends Fragment {
         // Obtain access to fragment UI elements.
         buttonAddResponder = (Button) root.findViewById(R.id.buttonAddResponder);
         responderListView = (ListView) root.findViewById(R.id.responderListView);
+
+        // Add Google Map to fragment.
+        final SupportMapFragment fragment = SupportMapFragment.newInstance();
+        final FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.map_fragment_container,fragment);
+        fragmentTransaction.commit();
 
         // Return the root view.
         return root;
@@ -106,5 +115,15 @@ public class DemoLocationFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+
+    /**
+     *
+     * @param googleMap
+     */
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
     }
 }
