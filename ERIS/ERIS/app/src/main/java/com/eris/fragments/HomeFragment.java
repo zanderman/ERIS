@@ -1,5 +1,6 @@
 package com.eris.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.eris.R;
+import com.eris.activities.MainActivity;
 
 public class HomeFragment extends Fragment {
 
@@ -61,6 +64,9 @@ public class HomeFragment extends Fragment {
                         .replace(R.id.main_fragment_container, fragment,DemoLocationFragment.class.getSimpleName())
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
+
+                // Set the title for the fragment.
+                ((MainActivity) getActivity()).setActionBarTitle("Demo: Location");
             }
         });
 
@@ -74,6 +80,9 @@ public class HomeFragment extends Fragment {
                         .replace(R.id.main_fragment_container, fragment,DemoSceneFragment.class.getSimpleName())
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
+
+                // Set the title for the fragment.
+                ((MainActivity) getActivity()).setActionBarTitle("Demo: Scene");
             }
         });
     }
