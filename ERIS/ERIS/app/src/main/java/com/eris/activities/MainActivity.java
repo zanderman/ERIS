@@ -30,7 +30,7 @@ import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobile.user.IdentityManager;
 import com.eris.R;
 import com.eris.demo.DemoConfiguration;
-import com.eris.demo.HomeDemoFragment;
+import com.eris.fragments.HomeFragment;
 import com.eris.navigation.NavigationDrawer;
 import com.eris.services.LocationService;
 
@@ -176,8 +176,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         if (fragmentManager.getBackStackEntryCount() == 0) {
-            if (fragmentManager.findFragmentByTag(HomeDemoFragment.class.getSimpleName()) == null) {
-                final Class fragmentClass = HomeDemoFragment.class;
+            if (fragmentManager.findFragmentByTag(HomeFragment.class.getSimpleName()) == null) {
+                final Class fragmentClass = HomeFragment.class;
                 // if we aren't on the home fragment, navigate home.
                 final Fragment fragment = Fragment.instantiate(this, fragmentClass.getName());
 
