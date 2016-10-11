@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/card_bg_shadow"
+    android:weightSum="1.0">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="1.0">
+
+        <TextView
+            android:hint="Name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/nameTextView"
+            android:layout_weight="0.8" />
+
+        <TextView
+            android:hint="UID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/uidTextView"
+            android:layout_weight="0.2" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1.0">
+
+        <TextView
+            android:hint="Health"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/healthTextView"
+            android:layout_weight="0.3" />
+
+        <TextView
+            android:hint="Latitude"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/locationTextView"
+            android:layout_weight="0.7" />
+    </LinearLayout>
+
+</LinearLayout>
