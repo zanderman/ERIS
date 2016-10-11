@@ -3,12 +3,19 @@ package com.eris.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.eris.R;
+import com.eris.adapters.ResponderListAdapter;
+import com.eris.classes.Responder;
 
 ///**
 // * A simple {@link Fragment} subclass.
@@ -19,91 +26,85 @@ import com.eris.R;
 // * create an instance of this fragment.
 // */
 public class DemoLocationFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-//    private OnFragmentInteractionListener mListener;
+    /*
+     * Private Members
+     */
+    private Button buttonAddResponder;
+    private ListView responderListView;
+    private ResponderListAdapter responderListAdapter;
 
     public DemoLocationFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DemoLocationFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DemoLocationFragment newInstance(String param1, String param2) {
-        DemoLocationFragment fragment = new DemoLocationFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_demo_location, container, false);
+        View root = inflater.inflate(R.layout.fragment_demo_location, container, false);
+
+        // Obtain access to fragment UI elements.
+        buttonAddResponder = (Button) root.findViewById(R.id.buttonAddResponder);
+        responderListView = (ListView) root.findViewById(R.id.responderListView);
+
+        // Return the root view.
+        return root;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Set ListView adapter.
+        responderListAdapter = new ResponderListAdapter(getActivity());
+        responderListView.setAdapter(responderListAdapter);
+
+        // Set ListView actions on item click.
+        responderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // Show responder location on map.
+                final Responder responder = responderListAdapter.getItem(i);
+                Toast.makeText(getActivity(),"Clicked: " + responder.firstName + " " + responder.lastName,Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Set ListView actions on item long click.
+        responderListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // Remove the responder from the list.
+                responderListAdapter.remove(responderListAdapter.getItem(i));
+                return true;
+            }
+        });
+
+        // Setup button onClick method.
+        buttonAddResponder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Add item to adapter.
+                final Responder responder = new Responder("abc123","John","Wayne");
+                responderListAdapter.add(responder);
+                Toast.makeText(getActivity(),"Added: " + responder.firstName + " " + responder.lastName,Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-//        mListener = null;
     }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        void onFragmentInteraction(Uri uri);
-//    }
 }
