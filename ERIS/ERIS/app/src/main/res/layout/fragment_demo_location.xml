@@ -1,12 +1,31 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1.0"
     tools:context="com.eris.fragments.DemoLocationFragment">
 
-    <TextView
+    <Button
+        android:text="Add Responder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Location demo" />
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonAddResponder" />
 
-</FrameLayout>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:id="@+id/responderListView"/>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"
+        android:id="@+id/map_fragment_container"
+        android:background="@drawable/card_bg_shadow">
+
+    </FrameLayout>
+
+</LinearLayout>
