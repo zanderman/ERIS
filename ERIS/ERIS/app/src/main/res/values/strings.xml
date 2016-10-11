@@ -10,7 +10,7 @@
     <!--IDs-->
     <string name="server_client_id">669425803052-u00tm3b6dh837uguap6875nvt20sf3o8.apps.googleusercontent.com</string>
 
-    <!-- REQUIRED FOR GENERAL APP FUNCTIONALITY - YOU MAY WANT TO KEEP THESE -->
+    <!-- REQUIRED FOR GENERAL APP FUNCTIONALITY - YOU MAY WANT TO KEEP THESE-->
 
     <string name="main_nav_menu_item_home">Home</string>
     <string name="title_activity_item_detail">Item Detail</string>
