@@ -19,11 +19,12 @@ public class UserDataDO {
     private List<String> _heartbeatRecord;
     private List<String> _incidentSubordinates;
     private String _incidentSuperior;
-    private List<String> _location;
+    private String _latitude;
+    private String _longitude;
     private String _name;
     private List<String> _orgSubordinates;
     private String _orgSuperior;
-    private String _orginization;
+    private String _organization;
 
     @DynamoDBHashKey(attributeName = "userId")
     @DynamoDBAttribute(attributeName = "userId")
@@ -66,13 +67,21 @@ public class UserDataDO {
     public void setIncidentSuperior(final String _incidentSuperior) {
         this._incidentSuperior = _incidentSuperior;
     }
-    @DynamoDBAttribute(attributeName = "location")
-    public List<String> getLocation() {
-        return _location;
+    @DynamoDBAttribute(attributeName = "latitude")
+    public String getLatitude() {
+        return _latitude;
     }
 
-    public void setLocation(final List<String> _location) {
-        this._location = _location;
+    public void setLatitude(final String _latitude) {
+        this._latitude = _latitude;
+    }
+    @DynamoDBAttribute(attributeName = "longitude")
+    public String getLongitude() {
+        return _longitude;
+    }
+
+    public void setLongitude(final String _longitude) {
+        this._longitude = _longitude;
     }
     @DynamoDBAttribute(attributeName = "name")
     public String getName() {
@@ -90,7 +99,7 @@ public class UserDataDO {
     public void setOrgSubordinates(final List<String> _orgSubordinates) {
         this._orgSubordinates = _orgSubordinates;
     }
-    @DynamoDBIndexRangeKey(attributeName = "orgSuperior", globalSecondaryIndexName = "superiors")
+    @DynamoDBAttribute(attributeName = "orgSuperior")
     public String getOrgSuperior() {
         return _orgSuperior;
     }
@@ -98,13 +107,13 @@ public class UserDataDO {
     public void setOrgSuperior(final String _orgSuperior) {
         this._orgSuperior = _orgSuperior;
     }
-    @DynamoDBIndexHashKey(attributeName = "orginization", globalSecondaryIndexName = "superiors")
-    public String getOrginization() {
-        return _orginization;
+    @DynamoDBAttribute(attributeName = "organization")
+    public String getOrganization() {
+        return _organization;
     }
 
-    public void setOrginization(final String _orginization) {
-        this._orginization = _orginization;
+    public void setOrganization(final String _organization) {
+        this._organization = _organization;
     }
 
 }
