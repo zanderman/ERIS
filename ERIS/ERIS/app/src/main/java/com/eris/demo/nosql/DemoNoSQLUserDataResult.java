@@ -104,16 +104,18 @@ public class DemoNoSQLUserDataResult implements DemoNoSQLResult {
         final TextView incidentSubordinatesValueTextView;
         final TextView incidentSuperiorKeyTextView;
         final TextView incidentSuperiorValueTextView;
-        final TextView locationKeyTextView;
-        final TextView locationValueTextView;
+        final TextView latitudeKeyTextView;
+        final TextView latitudeValueTextView;
+        final TextView longitudeKeyTextView;
+        final TextView longitudeValueTextView;
         final TextView nameKeyTextView;
         final TextView nameValueTextView;
         final TextView orgSubordinatesKeyTextView;
         final TextView orgSubordinatesValueTextView;
         final TextView orgSuperiorKeyTextView;
         final TextView orgSuperiorValueTextView;
-        final TextView orginizationKeyTextView;
-        final TextView orginizationValueTextView;
+        final TextView organizationKeyTextView;
+        final TextView organizationValueTextView;
         if (convertView == null) {
             layout = new LinearLayout(context);
             layout.setOrientation(LinearLayout.VERTICAL);
@@ -152,11 +154,17 @@ public class DemoNoSQLUserDataResult implements DemoNoSQLResult {
             layout.addView(incidentSuperiorKeyTextView);
             layout.addView(incidentSuperiorValueTextView);
 
-            locationKeyTextView = new TextView(context);
-            locationValueTextView = new TextView(context);
-            setKeyAndValueTextViewStyles(locationKeyTextView, locationValueTextView);
-            layout.addView(locationKeyTextView);
-            layout.addView(locationValueTextView);
+            latitudeKeyTextView = new TextView(context);
+            latitudeValueTextView = new TextView(context);
+            setKeyAndValueTextViewStyles(latitudeKeyTextView, latitudeValueTextView);
+            layout.addView(latitudeKeyTextView);
+            layout.addView(latitudeValueTextView);
+
+            longitudeKeyTextView = new TextView(context);
+            longitudeValueTextView = new TextView(context);
+            setKeyAndValueTextViewStyles(longitudeKeyTextView, longitudeValueTextView);
+            layout.addView(longitudeKeyTextView);
+            layout.addView(longitudeValueTextView);
 
             nameKeyTextView = new TextView(context);
             nameValueTextView = new TextView(context);
@@ -176,11 +184,11 @@ public class DemoNoSQLUserDataResult implements DemoNoSQLResult {
             layout.addView(orgSuperiorKeyTextView);
             layout.addView(orgSuperiorValueTextView);
 
-            orginizationKeyTextView = new TextView(context);
-            orginizationValueTextView = new TextView(context);
-            setKeyAndValueTextViewStyles(orginizationKeyTextView, orginizationValueTextView);
-            layout.addView(orginizationKeyTextView);
-            layout.addView(orginizationValueTextView);
+            organizationKeyTextView = new TextView(context);
+            organizationValueTextView = new TextView(context);
+            setKeyAndValueTextViewStyles(organizationKeyTextView, organizationValueTextView);
+            layout.addView(organizationKeyTextView);
+            layout.addView(organizationValueTextView);
         } else {
             layout = (LinearLayout) convertView;
             resultNumberTextView = (TextView) layout.getChildAt(0);
@@ -200,20 +208,23 @@ public class DemoNoSQLUserDataResult implements DemoNoSQLResult {
             incidentSuperiorKeyTextView = (TextView) layout.getChildAt(9);
             incidentSuperiorValueTextView = (TextView) layout.getChildAt(10);
 
-            locationKeyTextView = (TextView) layout.getChildAt(11);
-            locationValueTextView = (TextView) layout.getChildAt(12);
+            latitudeKeyTextView = (TextView) layout.getChildAt(11);
+            latitudeValueTextView = (TextView) layout.getChildAt(12);
 
-            nameKeyTextView = (TextView) layout.getChildAt(13);
-            nameValueTextView = (TextView) layout.getChildAt(14);
+            longitudeKeyTextView = (TextView) layout.getChildAt(13);
+            longitudeValueTextView = (TextView) layout.getChildAt(14);
 
-            orgSubordinatesKeyTextView = (TextView) layout.getChildAt(15);
-            orgSubordinatesValueTextView = (TextView) layout.getChildAt(16);
+            nameKeyTextView = (TextView) layout.getChildAt(15);
+            nameValueTextView = (TextView) layout.getChildAt(16);
 
-            orgSuperiorKeyTextView = (TextView) layout.getChildAt(17);
-            orgSuperiorValueTextView = (TextView) layout.getChildAt(18);
+            orgSubordinatesKeyTextView = (TextView) layout.getChildAt(17);
+            orgSubordinatesValueTextView = (TextView) layout.getChildAt(18);
 
-            orginizationKeyTextView = (TextView) layout.getChildAt(19);
-            orginizationValueTextView = (TextView) layout.getChildAt(20);
+            orgSuperiorKeyTextView = (TextView) layout.getChildAt(19);
+            orgSuperiorValueTextView = (TextView) layout.getChildAt(20);
+
+            organizationKeyTextView = (TextView) layout.getChildAt(21);
+            organizationValueTextView = (TextView) layout.getChildAt(22);
         }
 
         resultNumberTextView.setText(String.format("#%d", + position+1));
@@ -227,16 +238,18 @@ public class DemoNoSQLUserDataResult implements DemoNoSQLResult {
         incidentSubordinatesValueTextView.setText(result.getIncidentSubordinates().toString());
         incidentSuperiorKeyTextView.setText("incidentSuperior");
         incidentSuperiorValueTextView.setText(result.getIncidentSuperior());
-        locationKeyTextView.setText("location");
-        locationValueTextView.setText(result.getLocation().toString());
+        longitudeKeyTextView.setText("longitude");
+        longitudeValueTextView.setText(result.getLongitude().toString());
+        latitudeKeyTextView.setText("latitude");
+        latitudeValueTextView.setText(result.getLatitude().toString());
         nameKeyTextView.setText("name");
         nameValueTextView.setText(result.getName());
         orgSubordinatesKeyTextView.setText("orgSubordinates");
         orgSubordinatesValueTextView.setText(result.getOrgSubordinates().toString());
         orgSuperiorKeyTextView.setText("orgSuperior");
         orgSuperiorValueTextView.setText(result.getOrgSuperior());
-        orginizationKeyTextView.setText("orginization");
-        orginizationValueTextView.setText(result.getOrginization());
+        organizationKeyTextView.setText("organization");
+        organizationValueTextView.setText(result.getOrganization());
         return layout;
     }
 }
