@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,7 +32,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.Random;
 
@@ -124,8 +127,7 @@ public class DemoLocationFragment extends Fragment implements OnMapReadyCallback
                 final Responder responder = responderListAdapter.getItem(i);
                 Toast.makeText(getActivity(),"Clicked: " + responder.firstName + " " + responder.lastName,Toast.LENGTH_SHORT).show();
 
-                LatLng location = new LatLng(37.229491,-80.421531);
-                centerMapOnLocation(location);
+                centerMapOnLocation(responder.location);
             }
         });
 
@@ -133,6 +135,10 @@ public class DemoLocationFragment extends Fragment implements OnMapReadyCallback
         responderListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                // Remove corresponding marker.
+                responderListAdapter.getItem(i).marker.remove();
+
                 // Remove the responder from the list.
                 responderListAdapter.remove(responderListAdapter.getItem(i));
                 return true;
@@ -144,7 +150,13 @@ public class DemoLocationFragment extends Fragment implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 // Add item to adapter.
-                final Responder responder = new Responder("abc123","John","Wayne");
+                Responder responder = new Responder("abc123","John","Wayne");
+                responder.location = new LatLng(37.229491,-80.421531);
+                responder.marker = googleMap.addMarker(new MarkerOptions()
+                        .position(responder.location)
+                        .title(responder.firstName + " " + responder.lastName)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+
                 responderListAdapter.add(responder);
                 Toast.makeText(getActivity(),"Added: " + responder.firstName + " " + responder.lastName,Toast.LENGTH_SHORT).show();
             }
