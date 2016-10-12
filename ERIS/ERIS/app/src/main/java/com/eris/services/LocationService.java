@@ -15,7 +15,7 @@ public class LocationService extends Service implements LocationListener {
     /*
      * Final Members
      */
-    public static final String BROADCAST_ACTION = "location_update";
+    public static final String BROADCAST_ACTION_LOCATION_UPDATE = "location_update";
     public static final String KEY_LOCATION_LATITUDE = "key_location_latitude";
     public static final String KEY_LOCATION_LONGITUDE = "key_location_longitude";
     public static final String KEY_LOCATION_PROVIDER = "key_location_provider";
@@ -90,7 +90,7 @@ public class LocationService extends Service implements LocationListener {
         Log.d("service","Latitude: " + location.getLatitude() + "\t" + "Longitude: " + location.getLongitude());
 
         // Put data into an intent and broadcast it.
-        Intent intent = new Intent(BROADCAST_ACTION);
+        Intent intent = new Intent(BROADCAST_ACTION_LOCATION_UPDATE);
         intent.putExtra(KEY_LOCATION_LATITUDE, location.getLatitude());
         intent.putExtra(KEY_LOCATION_LONGITUDE, location.getLongitude());
         intent.putExtra(KEY_LOCATION_PROVIDER, location.getProvider());
