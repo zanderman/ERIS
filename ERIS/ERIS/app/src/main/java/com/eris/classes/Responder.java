@@ -1,6 +1,7 @@
 package com.eris.classes;
 
-import android.location.Location;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 
 
 public class Responder {
@@ -12,9 +13,10 @@ public class Responder {
     public String sceneID;
     public float heartRate;
     public String rank;
-    public Location location;
+    public LatLng location;
     public String firstName;
     public String lastName;
+    public Marker marker;
 
     /**
      * Constructs new responder objects.
