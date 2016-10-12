@@ -40,7 +40,7 @@ public class ResponderListAdapter extends ArrayAdapter<Responder> {
         uidTextView.setText(responder.userID);
         healthTextView.setText(responder.heartRate + " bpm");
         if (responder.location != null) {
-            locationTextView.setText(responder.location.getLatitude() + ", " + responder.location.getLongitude());
+            locationTextView.setText(responder.location.latitude + ", " + responder.location.longitude);
         }
         else {
             locationTextView.setText("location unknown");
