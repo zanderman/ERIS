@@ -50,6 +50,6 @@
         android:layout_height="wrap_content"
         android:textSize="12dp"
         android:textAllCaps="false"
-        android:id="@+id/button" />
+        android:id="@+id/skip_button" />
 
 </LinearLayout>
