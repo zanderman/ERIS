@@ -1,40 +1,48 @@
 package com.eris.services;
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsyncClient;
-import com.amazonaws.services.dynamodbv2.util.Tables;
-import com.amazonaws.services.
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
-public class DatabaseService extends Service implements AmazonDynamoDBAsync {
+import com.amazonaws.mobile.AWSMobileClient;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExpression;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedQueryList;
+import com.amazonaws.models.nosql.UserDataDO;
+
+import com.eris.classes.Responder;
+import com.google.android.gms.maps.model.LatLng;
+
+public class DatabaseService extends Service {
 
     /*
      * Final Members
      */
-    public static final String BROADCAST_ACTION = "location_update";
-    public static final String KEY_LOCATION_LATITUDE = "key_location_latitude";
-    public static final String KEY_LOCATION_LONGITUDE = "key_location_longitude";
-    public static final String KEY_LOCATION_PROVIDER = "key_location_provider";
+
+    private final DynamoDBMapper mapper;  // Object mapper for accessing DynamoDB
 
     /*
      * Private Members
      */
-    private LocationManager locationManager;
 
     /**
      * Constructor for LocationService
      */
     public DatabaseService() {
-        Log.d("service","LocationService created");
+
+        mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
+
+        Log.d("service", "DatabaseService created");
     }
+
+    /**
+     *******************************************************************************
+     * Database service methods
+     *******************************************************************************
+     */
 
     @Override
     public void onCreate() {
@@ -51,17 +59,11 @@ public class DatabaseService extends Service implements AmazonDynamoDBAsync {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         // Acquire a reference to the system Location Manager
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         // Request location updates if possible.
-        try {
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 500, 0, this);
-        }
-        catch (SecurityException e) {
-            Log.e("service","Location security exception");
-        }
 
-        Log.d("service","STARTED!");
+
+        Log.d("service", "Database Service STARTED!");
 
         // If the OS runs out of memory, START_STICKY tells the OS to start this service back up
         // again once enough memory has been freed.
@@ -71,52 +73,29 @@ public class DatabaseService extends Service implements AmazonDynamoDBAsync {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-        // Remove location updates if possible.
-        try {
-            locationManager.removeUpdates(this);
-        }
-        catch (SecurityException e) {
-            Log.e("service","Location security exception");
-        }
     }
 
-    /**
-     * Runs every time a location update is requested. Interval is set through LocationManager.
-     * <p>
-     * This method determine the "freshness" of the location data and broadcast it app-wide if needed.
-     *
-     * @param location Construct holding latitude and longitude information.
-     */
-    @Override
-    public void onLocationChanged(Location location) {
+    public Responder getUserData(String userID) {
+        final UserDataDO targetUser = new UserDataDO();
+        targetUser.setUserId(userID);
 
-        Log.d("service","Latitude: " + location.getLatitude() + "\t" + "Longitude: " + location.getLongitude());
+        final DynamoDBQueryExpression<UserDataDO> queryExpr = new DynamoDBQueryExpression<UserDataDO>()
+                .withHashKeyValues(targetUser)
+                .withConsistentRead(false)
+                .withLimit(1);
 
-        // Put data into an intent and broadcast it.
-        Intent intent = new Intent(BROADCAST_ACTION);
-        intent.putExtra(KEY_LOCATION_LATITUDE, location.getLatitude());
-        intent.putExtra(KEY_LOCATION_LONGITUDE, location.getLongitude());
-        intent.putExtra(KEY_LOCATION_PROVIDER, location.getProvider());
-        sendBroadcast(intent);
-    }
+        final PaginatedQueryList<UserDataDO> resultList = mapper.query(UserDataDO.class, queryExpr);
+        UserDataDO foundUser = resultList.get(0);
 
-    @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-
-    }
-
-    public void doSampleTableThing() {
-        // 44444444 remove this
+        return new Responder(
+                foundUser.getUserId(),
+                foundUser.getName(), // 44444444 need to fix this, split name
+                foundUser.getName(), // 44444444 need to fix this, split name
+                foundUser.getCurrentIncidentId(),
+                Float.parseFloat(foundUser.getHeartbeatRecord().get(0)),
+                new LatLng(Double.parseDouble(foundUser.getLatitude()),
+                        Double.parseDouble(foundUser.getLongitude())),
+                "77"
+        );
     }
 }
