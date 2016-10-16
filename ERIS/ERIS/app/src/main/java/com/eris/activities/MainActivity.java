@@ -33,6 +33,7 @@ import com.eris.demo.DemoConfiguration;
 import com.eris.fragments.HomeFragment;
 import com.eris.navigation.NavigationDrawer;
 import com.eris.services.LocationService;
+import com.eris.services.DatabaseService;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     /** Class name for log messages. */
@@ -128,8 +129,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setupNavigationMenu(savedInstanceState);
 
-        // Run the location service.
+        // Run the location and database services.
         runLocationService();
+        runDatabaseService();
     }
 
     @Override
@@ -216,6 +218,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     REQUEST_CODE_ACCESS_FINE_LOCATION);
             return;
         }
+    }
+
+
+    /**
+     * This method performs all action needed to start the database background service.
+     */
+    private void runDatabaseService() {
+
+        startService(new Intent(this, DatabaseService.class));
     }
 
 
