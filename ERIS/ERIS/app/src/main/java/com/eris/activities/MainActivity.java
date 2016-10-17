@@ -227,6 +227,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void runDatabaseService() {
 
         startService(new Intent(this, DatabaseService.class));
+        return;
     }
 
 

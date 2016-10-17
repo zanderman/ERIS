@@ -27,6 +27,7 @@ import com.eris.R;
 import com.eris.activities.MainActivity;
 import com.eris.adapters.ResponderListAdapter;
 import com.eris.classes.Responder;
+import com.eris.services.DatabaseService;
 import com.eris.services.LocationService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -47,6 +48,10 @@ public class DemoLocationFragment extends Fragment implements OnMapReadyCallback
     private static final int ZOOM_LEVEL = 18;
     private final int REQUEST_CODE_ENABLE_MY_LOCATION = 222;
     private BroadcastReceiver receiver;
+
+    //DatabaseService db = (DatabaseService) getSystemService(DatabaseService.class);
+    //db.getUserData("4093820716");
+
 
     /*
      * Private Members
