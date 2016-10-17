@@ -54,6 +54,10 @@
             android:name=".services.LocationService"
             android:enabled="true"
             android:exported="true" />
+        <service
+            android:name=".services.DatabaseService"
+            android:enabled="true"
+            android:exported="true" />
 
         <activity android:name=".activities.LoginActivity"></activity>
     </application>

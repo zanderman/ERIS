@@ -21,7 +21,6 @@ public class DatabaseService extends Service {
     /*
      * Final Members
      */
-
     private final DynamoDBMapper mapper;  // Object mapper for accessing DynamoDB
 
     /*
@@ -29,7 +28,7 @@ public class DatabaseService extends Service {
      */
 
     /**
-     * Constructor for LocationService
+     * Constructor for DatabaseService
      */
     public DatabaseService() {
 
@@ -47,6 +46,7 @@ public class DatabaseService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        // TODO 44444444 look into creating a separate thread to do all network communications
     }
 
     @Override
@@ -57,11 +57,6 @@ public class DatabaseService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
-        // Acquire a reference to the system Location Manager
-
-        // Request location updates if possible.
-
 
         Log.d("service", "Database Service STARTED!");
 
@@ -75,7 +70,14 @@ public class DatabaseService extends Service {
         super.onDestroy();
     }
 
-    public Responder getUserData(String userID) {
+    /**
+     * Find in the system database the responder with the given userID.
+     *
+     * @param userID The ID string for the user whose data should be retrieved
+     * @return A Responder object with the requested user's data as found
+     * in the system database; null if no results were found for the given userID
+     */
+    public Responder getResponderData(String userID) {
         final UserDataDO targetUser = new UserDataDO();
         targetUser.setUserId(userID);
 
@@ -86,6 +88,10 @@ public class DatabaseService extends Service {
 
         final PaginatedQueryList<UserDataDO> resultList = mapper.query(UserDataDO.class, queryExpr);
         UserDataDO foundUser = resultList.get(0);
+
+        if (foundUser == null) {  // 44444444 needed?
+            return null;
+        }
 
         return new Responder(
                 foundUser.getUserId(),
