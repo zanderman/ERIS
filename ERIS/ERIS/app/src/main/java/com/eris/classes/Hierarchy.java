@@ -98,6 +98,35 @@ public class Hierarchy {
         }
     }
 
+    /**
+     * Gets the command chain starting with this responder and working up to root
+     * @param r The responder a the bottom of the command chain
+     * @return An ArrayList of Responders in increasing order of superiority, starting with r and
+     * ending with root
+     */
+    public ArrayList<Responder> getCommandChain(Responder r) {
+        Node node = map.get(r.getID());
+        ArrayList<Responder> chain = new ArrayList<Responder>();
+        while (node != null) {
+            chain.add(node.responder);
+            node = node.parent;
+        }
+    }
+
+    public Responder getSuperior(Responder r) {
+        Node node = map.get(r.getID());
+        return node.getParent().responder;
+    }
+
+    public ArrayList<Responder> getSubordinates(Responder r) {
+        Node node = map.get(r.getID());
+        ArrayList<Responder> subs = new ArrayList<Responder>();
+        for (Node child : node.getChildren()) {
+            subs.add(child.responder);
+        }
+        return subs;
+    }
+
     // TODO better logic for this
     private static int determineIntRank(String rank, Branch branch) {
         return Integer.parseInt(rank);
