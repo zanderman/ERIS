@@ -149,7 +149,6 @@ public class DemoLocationFragment extends Fragment implements OnMapReadyCallback
                 return true;
             }
         });
-
         // Setup button onClick method.
         buttonAddResponder.setOnClickListener(new View.OnClickListener() {
             @Override

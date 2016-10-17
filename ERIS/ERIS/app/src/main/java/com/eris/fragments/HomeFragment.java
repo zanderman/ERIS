@@ -1,19 +1,15 @@
 package com.eris.fragments;
 
-import android.app.Activity;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.eris.R;
 import com.eris.activities.MainActivity;
@@ -25,6 +21,8 @@ public class HomeFragment extends Fragment {
      */
     private Button buttonDemoLocation;
     private Button buttonDemoScene;
+    private Button buttonDemoResponderDatabase;
+    private Button buttonDemoSceneDatabase;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -44,6 +42,8 @@ public class HomeFragment extends Fragment {
         // Initialize buttons.
         buttonDemoLocation = (Button) root.findViewById(R.id.buttonDemoLocation);
         buttonDemoScene = (Button) root.findViewById(R.id.buttonDemoScene);
+        buttonDemoResponderDatabase = (Button) root.findViewById(R.id.buttonDemoResponderDatabase);
+        buttonDemoSceneDatabase = (Button) root.findViewById(R.id.buttonDemoSceneDatabase);
 
         // Return the root view.
         return root;
@@ -83,6 +83,38 @@ public class HomeFragment extends Fragment {
 
                 // Set the title for the fragment.
                 ((MainActivity) getActivity()).setActionBarTitle("Demo: Scene");
+            }
+        });
+
+        // Instantiate the responder database demo.
+        buttonDemoResponderDatabase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                final Fragment fragment = Fragment.instantiate(getActivity(),DemoResponderDatabaseFragment.class.getName());
+                fragmentManager.beginTransaction()
+                        .replace(R.id.main_fragment_container, fragment,DemoResponderDatabaseFragment.class.getSimpleName())
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+
+                // Set the title for the fragment.
+                ((MainActivity) getActivity()).setActionBarTitle("Demo: Responder Database");
+            }
+        });     
+
+        // Instantiate the scene database demo.
+        buttonDemoSceneDatabase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                final Fragment fragment = Fragment.instantiate(getActivity(),DemoIncidentDatabaseFragment.class.getName());
+                fragmentManager.beginTransaction()
+                        .replace(R.id.main_fragment_container, fragment,DemoIncidentDatabaseFragment.class.getSimpleName())
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+
+                // Set the title for the fragment.
+                ((MainActivity) getActivity()).setActionBarTitle("Demo: Incident Database");
             }
         });
     }
