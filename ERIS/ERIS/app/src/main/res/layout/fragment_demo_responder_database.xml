@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.eris.fragments.DemoResponderDatabaseFragment">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        android:id="@+id/responderDatabaseListView"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"
+        android:orientation="vertical"
+        android:background="@drawable/card_bg_shadow">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fastScrollEnabled="false">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.7"
+        android:orientation="vertical"
+        android:background="@drawable/card_bg_shadow">
+
+        <TextView
+            android:text="Id"
+            android:layout_width="352dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/responderIdField"
+            android:layout_weight="0.05"
+            tools:text="Id" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Name"
+            android:ems="10"
+            android:id="@+id/responderNameField"
+            android:layout_weight="0.05"
+            tools:text="Name" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Organization"
+            android:ems="10"
+            android:id="@+id/responderOrganizationField"
+            android:layout_weight="0.04"
+            tools:text="Organization" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="OrgSuperior"
+            android:ems="10"
+            android:id="@+id/responderOrgSuperiorField"
+            android:layout_weight="0.05"
+            tools:text="OrgSuperior" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Latitude"
+            android:ems="10"
+            android:id="@+id/responderLatitudeField"
+            android:layout_weight="0.05"
+            tools:text="Latitude" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Longitude"
+            android:ems="10"
+            android:id="@+id/responderLongitudeField"
+            android:layout_weight="0.05"
+            tools:text="Longitude" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Heartbeat"
+            android:ems="10"
+            android:id="@+id/responderHeartbeatField"
+            android:layout_weight="0.05"
+            tools:text="Heartbeat" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="OrgSubordinates"
+            android:ems="10"
+            android:id="@+id/responderOrgSubordinatesField"
+            android:layout_weight="0.05"
+            tools:text="OrgSubordinates" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="IncidentId"
+            android:ems="10"
+            android:id="@+id/responderIncidentIdField"
+            android:layout_weight="0.05"
+            tools:text="IncidentId" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="IncidentSuperior"
+            android:ems="10"
+            android:id="@+id/responderIncidentSuperiorField"
+            android:layout_weight="0.05"
+            tools:text="IncidentSuperior" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="IncidentSubordinates"
+            android:ems="10"
+            android:id="@+id/responderIncidentSubordinatesField"
+            android:layout_weight="0.05"
+            tools:text="IncidentSubordinates" />
+
+    </LinearLayout>
+    </ScrollView>
+    </LinearLayout>
+
+</LinearLayout>
