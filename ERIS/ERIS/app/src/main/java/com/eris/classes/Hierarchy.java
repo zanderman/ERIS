@@ -25,6 +25,46 @@ public class Hierarchy {
         Node node = new Node(responder,
                 determineIntRank(responder.getRank(), responder.getBranch()), responder.getBranch());
         map.put(responder.getID(), node);
+        addExistingNode(node);
+    }
+
+    /**
+     * Gets the command chain starting with this responder and working up to root
+     * @param r The responder a the bottom of the command chain
+     * @return An ArrayList of Responders in increasing order of superiority, starting with r and
+     * ending with root
+     */
+    public ArrayList<Responder> getCommandChain(Responder r) {
+        Node node = map.get(r.getID());
+        ArrayList<Responder> chain = new ArrayList<Responder>();
+        while (node != null) {
+            chain.add(node.responder);
+            node = node.parent;
+        }
+        return chain;
+    }
+
+    public Responder getSuperior(Responder r) {
+        Node node = map.get(r.getID());
+        return node.getParent().responder;
+    }
+
+    public ArrayList<Responder> getSubordinates(Responder r) {
+        Node node = map.get(r.getID());
+        ArrayList<Responder> subs = new ArrayList<Responder>();
+        for (Node child : node.getChildren()) {
+            subs.add(child.responder);
+        }
+        return subs;
+    }
+
+    /**
+     * A method to add an existing node to the tree. This node is assumed to already exist in the
+     * HashMap and may already have children
+     * @param node
+     */
+    private void addExistingNode(Node node) {
+        Responder responder = node.responder;
         // if there are no responders present, the new responder becomes the root
         if (root == null) {
             root = node;
@@ -77,7 +117,7 @@ public class Hierarchy {
                             // count the total subordinates under each child and select the lesser
                             // value
                             else if (bestMatch.rank == child.rank
-                                && child.totalBeneath() < bestMatch.totalBeneath()) {
+                                    && child.totalBeneath() < bestMatch.totalBeneath()) {
                                 bestMatch = child;
                             }
                         }
@@ -98,34 +138,6 @@ public class Hierarchy {
         }
     }
 
-    /**
-     * Gets the command chain starting with this responder and working up to root
-     * @param r The responder a the bottom of the command chain
-     * @return An ArrayList of Responders in increasing order of superiority, starting with r and
-     * ending with root
-     */
-    public ArrayList<Responder> getCommandChain(Responder r) {
-        Node node = map.get(r.getID());
-        ArrayList<Responder> chain = new ArrayList<Responder>();
-        while (node != null) {
-            chain.add(node.responder);
-            node = node.parent;
-        }
-    }
-
-    public Responder getSuperior(Responder r) {
-        Node node = map.get(r.getID());
-        return node.getParent().responder;
-    }
-
-    public ArrayList<Responder> getSubordinates(Responder r) {
-        Node node = map.get(r.getID());
-        ArrayList<Responder> subs = new ArrayList<Responder>();
-        for (Node child : node.getChildren()) {
-            subs.add(child.responder);
-        }
-        return subs;
-    }
 
     // TODO better logic for this
     private static int determineIntRank(String rank, Branch branch) {
