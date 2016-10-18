@@ -7,6 +7,9 @@
     <!--API Keys-->
     <string name="google_maps_key">AIzaSyBzlpKfR4TtnHXbUMYulC01oQGTCTfLvcY</string>
 
+    <!--IDs-->
+    <string name="server_client_id">669425803052-u00tm3b6dh837uguap6875nvt20sf3o8.apps.googleusercontent.com</string>
+
     <!-- REQUIRED FOR GENERAL APP FUNCTIONALITY - YOU MAY WANT TO KEEP THESE -->
 
     <string name="main_nav_menu_item_home">Home</string>
@@ -151,8 +154,5 @@
     <string name="nosql_dialog_message_confirm_update_item_text">Are you sure you want to update the selected item?</string>
     <string name="nosql_dialog_title_confirm_delete_item_text">Confirm Delete</string>
     <string name="nosql_dialog_message_confirm_delete_item_text">Are you sure you want to delete the selected item?</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

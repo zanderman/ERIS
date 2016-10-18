@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "669425803052",
+    "project_id": "eris-146017"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:669425803052:android:b20e9ad4289d9bad",
+        "android_client_info": {
+          "package_name": "com.eris"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "669425803052-au0dekvbbfbh93pbg6ppj557etslg7k6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.eris",
+            "certificate_hash": "B69919DF9616BA8FECCF290E84A7FD2B4BC95DC9"
+          }
+        },
+        {
+          "client_id": "669425803052-u00tm3b6dh837uguap6875nvt20sf3o8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDBUuUsdvgObE7Ttk9587bkPmd6XcLyS_o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
