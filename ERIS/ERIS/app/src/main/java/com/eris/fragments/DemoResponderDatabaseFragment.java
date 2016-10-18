@@ -8,15 +8,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.ScrollView;
+import android.widget.Toast;
 
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.models.nosql.UserDataDO;
 import com.eris.R;
-import com.eris.classes.PrototypeDatabaseHelper;
+import com.eris.adapters.ResponderListAdapter;
 import com.eris.classes.Responder;
 
 
@@ -27,13 +30,12 @@ import com.eris.classes.Responder;
 public class DemoResponderDatabaseFragment extends Fragment{
     private final String TAG = DemoResponderDatabaseFragment.class.getSimpleName();
 
-    private UserDataDO result = new UserDataDO();
     private final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-    private TextView userIdKeyTextView;
 
-    /*
-     * Private Members
-     */
+
+    private ResponderListAdapter responderListAdapter;
+    private ListView responderListView;
+    private TextView userIdKeyTextView;
     private EditText responderNameField;
     private EditText responderOrganizationField;
     private EditText responderOrgSuperiorField;
@@ -69,6 +71,19 @@ public class DemoResponderDatabaseFragment extends Fragment{
         View root = inflater.inflate(R.layout.fragment_demo_responder_database, container, false);
 
         // Initialize UI elements
+        responderListView = (ListView) root.findViewById(R.id.responderListView);
+        responderListView.setAdapter(responderListAdapter);
+        responderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // Show responder location on map.
+                final Responder responder = responderListAdapter.getItem(i);
+                //Toast.makeText(getActivity(),"Clicked: " + responder.firstName + " " + responder.lastName,Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        userIdKeyTextView = (TextView) root.findViewById(R.id.responderIdField);
         responderNameField = (EditText) root.findViewById(R.id.responderNameField);
         responderOrganizationField = (EditText) root.findViewById(R.id.responderOrganizationField);
         responderOrgSuperiorField = (EditText) root.findViewById(R.id.responderOrgSuperiorField);
