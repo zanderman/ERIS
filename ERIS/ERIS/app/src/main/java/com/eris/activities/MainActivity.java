@@ -30,7 +30,7 @@ import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobile.user.IdentityManager;
 import com.eris.R;
 import com.eris.demo.DemoConfiguration;
-import com.eris.demo.HomeDemoFragment;
+import com.eris.fragments.HomeFragment;
 import com.eris.navigation.NavigationDrawer;
 import com.eris.services.LocationService;
 
@@ -176,8 +176,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         if (fragmentManager.getBackStackEntryCount() == 0) {
-            if (fragmentManager.findFragmentByTag(HomeDemoFragment.class.getSimpleName()) == null) {
-                final Class fragmentClass = HomeDemoFragment.class;
+            if (fragmentManager.findFragmentByTag(HomeFragment.class.getSimpleName()) == null) {
+                final Class fragmentClass = HomeFragment.class;
                 // if we aren't on the home fragment, navigate home.
                 final Fragment fragment = Fragment.instantiate(this, fragmentClass.getName());
 
@@ -188,10 +188,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .commit();
 
                 // Set the title for the fragment.
-                final ActionBar actionBar = this.getSupportActionBar();
-                if (actionBar != null) {
-                    actionBar.setTitle(getString(R.string.app_name));
-                }
+                setActionBarTitle(getString(R.string.app_name));
+
                 return;
             }
         }
@@ -227,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * This method processes all request results.
      *
      * @param requestCode ID of request that was processed.
-     * @param permissions
+     * @param permissions Array of string permissions.
      * @param grantResults Array of result codes from processing the different requests.
      */
     @Override
@@ -244,6 +242,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+
+    /**
+     * Sets the title of the ActionBar.
+     * <p>
+     * This method is necessary for altering the title of the ActionBar from within fragments.
+     *
+     * @param title New title string.
+     */
+    public void setActionBarTitle(String title) {
+        final ActionBar actionBar = this.getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(title);
         }
     }
 }

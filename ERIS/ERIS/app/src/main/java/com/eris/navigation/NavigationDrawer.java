@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.eris.R;
 import com.eris.demo.DemoConfiguration;
 import com.eris.demo.DemoInstructionFragment;
-import com.eris.demo.HomeDemoFragment;
+import com.eris.fragments.HomeFragment;
 
 import static com.eris.R.string.app_name;
 
@@ -118,11 +118,11 @@ public class NavigationDrawer {
     }
 
     public void showHome() {
-        final Fragment fragment = new HomeDemoFragment();
+        final Fragment fragment = new HomeFragment();
 
         containingActivity.getSupportFragmentManager()
                 .beginTransaction()
-                .replace(fragmentContainerId, fragment, HomeDemoFragment.class.getSimpleName())
+                .replace(fragmentContainerId, fragment, HomeFragment.class.getSimpleName())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
 
