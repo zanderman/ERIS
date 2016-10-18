@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.amazonaws.models.nosql.ScenesDO;
 import com.amazonaws.models.nosql.UserDataDO;
 
 import java.util.Set;

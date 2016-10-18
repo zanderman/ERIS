@@ -44,14 +44,15 @@ public class DemoNoSQLTableUserData extends DemoNoSQLTableBase {
         private DemoGetWithPartitionKey(final Context context) {
             super(context.getString(R.string.nosql_operation_get_by_partition_text),
                 String.format(context.getString(R.string.nosql_operation_example_get_by_partition_text),
-                    "userId", AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID()));
+                        "userId", "4093820716"));
+                //    "userId", AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID()));
         }
 
         /* Blocks until result is retrieved, should be called in the background. */
         @Override
         public boolean executeOperation() throws AmazonClientException {
             // Retrieve an item by passing the partition key using the object mapper.
-            result = mapper.load(UserDataDO.class, AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+            result = mapper.load(UserDataDO.class, "4093820716");//AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
 
             if (result != null) {
                 resultRetrieved = false;
