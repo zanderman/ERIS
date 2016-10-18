@@ -46,7 +46,7 @@ public class SplashActivity extends Activity {
             }
         });
         thread.start();
-        goMain();
+        goLogin();
     }
 
     @Override
@@ -84,8 +84,8 @@ public class SplashActivity extends Activity {
     /**
      * Go to the main activity after the splash timeout has expired.
      */
-    protected void goMain() {
-        Log.d(LOG_TAG, "Launching Main Activity...");
-        goAfterSplashTimeout(new Intent(this, MainActivity.class));
+    protected void goLogin() {
+        Log.d(LOG_TAG, "Launching Login Activity...");
+        goAfterSplashTimeout(new Intent(this, LoginActivity.class));
     }
 }
