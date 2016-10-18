@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.ScrollView;
 
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
@@ -27,6 +29,20 @@ public class DemoResponderDatabaseFragment extends Fragment{
     private final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
     private TextView userIdKeyTextView;
 
+    /*
+     * Private Members
+     */
+    private EditText responderNameField;
+    private EditText responderOrganizationField;
+    private EditText responderOrgSuperiorField;
+    private EditText responderLatitudeField;
+    private EditText responderLongitudeField;
+    private EditText responderHeartbeatField;
+    private EditText responderOrgSubordinatesField;
+    private EditText responderIncidentIdField;
+    private EditText responderIncidentSuperiorField;
+    private EditText responderIncidentSubordinatesField;
+
     public DemoResponderDatabaseFragment() {
         //Required?
     }
@@ -43,12 +59,24 @@ public class DemoResponderDatabaseFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_demo_responder_database, container, false);
-        userIdKeyTextView = (TextView) view.findViewById(R.id.responderIdField);
-        userIdKeyTextView.setText(result.getUserId());
 
         // Inflate the layout for this fragment
-        return view;
+        View root = inflater.inflate(R.layout.fragment_demo_responder_database, container, false);
+        // Initialize UI elements
+        userIdKeyTextView = (TextView) root.findViewById(R.id.responderIdField);
+        responderNameField = (EditText) root.findViewById(R.id.responderNameField);
+        responderOrganizationField = (EditText) root.findViewById(R.id.responderOrganizationField);
+        responderOrgSuperiorField = (EditText) root.findViewById(R.id.responderOrgSuperiorField);
+        responderLatitudeField = (EditText) root.findViewById(R.id.responderLatitudeField);
+        responderLongitudeField = (EditText) root.findViewById(R.id.responderLongitudeField);
+        responderHeartbeatField = (EditText) root.findViewById(R.id.responderHeartbeatField);
+        responderOrgSubordinatesField = (EditText) root.findViewById(R.id.responderOrgSubordinatesField);
+        responderIncidentIdField = (EditText) root.findViewById(R.id.responderIncidentIdField);
+        responderIncidentSuperiorField = (EditText) root.findViewById(R.id.responderIncidentSuperiorField);
+        responderIncidentSubordinatesField = (EditText) root.findViewById(R.id.responderIncidentSubordinatesField);
+
+        // Return the root view
+        return root;
     }
 
     @Override
@@ -73,6 +101,16 @@ public class DemoResponderDatabaseFragment extends Fragment{
                 @Override
                 public void run() {
                     userIdKeyTextView.setText(item.getUserId());
+                    responderNameField.setText(item.getName());
+                    responderOrganizationField.setText(item.getOrganization());
+                    responderOrgSuperiorField.setText(item.getOrgSuperior());
+                    responderLatitudeField.setText(item.getLatitude());
+                    responderLongitudeField.setText(item.getLongitude());
+                    responderHeartbeatField.setText(item.getHeartbeatRecord().toString());
+                    responderOrgSubordinatesField.setText(item.getOrgSubordinates().toString());
+                    responderIncidentIdField.setText(item.getCurrentIncidentId());
+                    responderIncidentSuperiorField.setText(item.getIncidentSuperior());
+                    responderIncidentSubordinatesField.setText(item.getIncidentSubordinates().toString());
                 }
             });
             return null;
