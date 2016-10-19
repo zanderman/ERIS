@@ -95,13 +95,16 @@ public class Responder {
     public String getUserID() {
         return this.userID;
     }
+    public String getName() {
+        return this.name;
+    }
     public String getSceneID() {
         return this.sceneID;
     }
     public String getOrganization() {return  this.organization;}
     public List<String> getHeartrateRecord() {return this.heartrateRecord;}
     public String getOrgSuperior() {return  this.orgSuperior;}
-    public List<String> getOrgSubordinates() {return this.getOrgSubordinates();}
+    public List<String> getOrgSubordinates() {return this.orgSubordinates;}
     public String getLatitude() {return this.latitude;}
     public String getLongitude() {return  this.longitude;}
     public String getIncidentSuperior() {return  this.incidentSuperior;}
