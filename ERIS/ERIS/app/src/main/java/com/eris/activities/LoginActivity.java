@@ -1,6 +1,8 @@
 package com.eris.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +28,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
      * Private members
      */
     private GoogleApiClient googleApiClient;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         // Setup listeners for UI elements.
         findViewById(R.id.sign_in_button).setOnClickListener(this);
         findViewById(R.id.skip_button).setOnClickListener(this);
+
+        // Create shared preferences
+        sharedPreferences = getSharedPreferences(getResources()
+                .getString(R.string.sharedpreferences_curr_user_account_info), Context.MODE_PRIVATE);
     }
 
     @Override
@@ -70,6 +77,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             // Skip login for development purposes.
             // TODO: Remove this option upon release.
             case R.id.skip_button:
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(getResources()
+                        .getString(R.string.sharedpreferences_entry_userID), "4093842287");
+                editor.commit();
+
                 startActivity(new Intent(this,MainActivity.class));
                 finish();
                 break;
@@ -112,6 +124,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             // Obtain access to the user's account.
             GoogleSignInAccount acct = result.getSignInAccount();
             Toast.makeText(this, "Welcome " + acct.getDisplayName() + " (ID token: " + acct.getIdToken() + ")", Toast.LENGTH_SHORT).show();
+
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString(getResources()
+                    .getString(R.string.sharedpreferences_entry_userID), acct.getIdToken());
+            editor.commit();
 
             // Go to the Main activity.
             startActivity(new Intent(this, MainActivity.class));

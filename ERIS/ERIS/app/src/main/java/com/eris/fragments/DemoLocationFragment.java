@@ -5,8 +5,11 @@ import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,6 +26,13 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.mobile.AWSMobileClient;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapperConfig;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpression;
+import com.amazonaws.models.nosql.UserDataDO;
+import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.eris.R;
 import com.eris.activities.MainActivity;
 import com.eris.adapters.ResponderListAdapter;
@@ -37,6 +47,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 
@@ -48,6 +61,7 @@ public class DemoLocationFragment extends Fragment implements OnMapReadyCallback
     private static final int ZOOM_LEVEL = 18;
     private final int REQUEST_CODE_ENABLE_MY_LOCATION = 222;
     private BroadcastReceiver receiver;
+    private DynamoDBMapper mapper;
 
     //DatabaseService db = (DatabaseService) getSystemService(DatabaseService.class);
     //db.getUserData("4093820716");
@@ -69,6 +83,12 @@ public class DemoLocationFragment extends Fragment implements OnMapReadyCallback
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
+
+        // Create an intent filter
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(LocationService.BROADCAST_ACTION_LOCATION_UPDATE);
+
         // Create broadcast receiver object.
         this.receiver = new BroadcastReceiver() {
             @Override
@@ -79,18 +99,34 @@ public class DemoLocationFragment extends Fragment implements OnMapReadyCallback
 
                     // Updated Location
                     case LocationService.BROADCAST_ACTION_LOCATION_UPDATE:
-                        LatLng location = new LatLng(
-                                intent.getDoubleExtra(LocationService.KEY_LOCATION_LATITUDE,0.0),
-                                intent.getDoubleExtra(LocationService.KEY_LOCATION_LONGITUDE,0.0)
-                        );
+                        double latitude = intent.getDoubleExtra(LocationService.KEY_LOCATION_LATITUDE,0.0);
+                        double longitude = intent.getDoubleExtra(LocationService.KEY_LOCATION_LONGITUDE,0.0);
+                        LatLng location = new LatLng(latitude, longitude);
                         Log.d("location","UPDATE: " + location);
-                        centerMapOnLocation(location);
+//                        centerMapOnLocation(location);
+
+                        SharedPreferences preferences = getActivity().getSharedPreferences(
+                                getResources().getString(R.string.sharedpreferences_curr_user_account_info),
+                                Context.MODE_PRIVATE
+                        );
+                        String savedUserIDToken = preferences.getString(
+                                getResources().getString(R.string.sharedpreferences_entry_userID), "");
+
+                        Log.d("blah blah", savedUserIDToken);
+                        UserDataDO currUser = new UserDataDO();
+                        currUser.setUserId(savedUserIDToken);
+                        currUser.setLatitude(Double.toString(latitude));
+                        currUser.setLongitude(Double.toString(longitude));
+
+                        UpdateMyLocationTask task = new UpdateMyLocationTask();
+                        task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, currUser);
                         break;
                     default:
                         break;
                 }
             }
         };
+        this.getActivity().registerReceiver(receiver, filter);
     }
 
     @Override
@@ -168,6 +204,14 @@ public class DemoLocationFragment extends Fragment implements OnMapReadyCallback
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        // Unregister location updates broadcast receiver.
+        this.getActivity().unregisterReceiver(receiver);
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
     }
@@ -242,5 +286,21 @@ public class DemoLocationFragment extends Fragment implements OnMapReadyCallback
     public void centerMapOnLocation(LatLng location) {
         Log.d("demo","HEY: "+this.googleMap);
         this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, ZOOM_LEVEL));
+    }
+
+    private class UpdateMyLocationTask extends AsyncTask<UserDataDO, Void, Void> {
+
+        @Override
+        protected Void doInBackground(UserDataDO... users) {
+            // Attempt to update the user in the database with the new latitude and longitude.
+            UserDataDO user = users[0];
+            try {
+                mapper.save(user, new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES));
+            } catch (final AmazonClientException ex) {
+                // Restore original data if save fails, and re-throw.
+                //throw ex;
+            }
+            return null;
+        }
     }
 }

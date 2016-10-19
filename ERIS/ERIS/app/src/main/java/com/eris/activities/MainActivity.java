@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Run the location and database services.
         runLocationService();
-        runDatabaseService();
+        //runDatabaseService();
     }
 
     @Override

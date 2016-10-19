@@ -20,6 +20,10 @@
     <string name="button_text_sign_in">SIGN IN</string>
     <string name="button_text_sign_out">SIGN OUT</string>
 
+    <!-- For local storage for shared preferences -->
+    <string name="sharedpreferences_curr_user_account_info">UserAccountInfo</string>
+    <string name="sharedpreferences_entry_userID">UserID</string>
+
     <!-- USED BY DEMO FEATURES ONLY - YOU CAN DISCARD THESE WITH THE DEMO FOLDER -->
 
     <string name="fragment_demo_instruction_overview_header">Overview</string>
