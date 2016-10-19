@@ -39,7 +39,7 @@ import java.util.List;
 public class DemoResponderDatabaseFragment extends Fragment{
     private final String TAG = DemoResponderDatabaseFragment.class.getSimpleName();
 
-    private final DynamoDBMapper mapper;
+    private DynamoDBMapper mapper;
 
     private ResponderDatabaseListAdapter responderDatabaseListAdapter;
     private ListView responderDatabaseListView;
@@ -56,12 +56,13 @@ public class DemoResponderDatabaseFragment extends Fragment{
     private EditText responderIncidentSubordinatesField;
 
     public DemoResponderDatabaseFragment() {
-        mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
     }
 
     @Override
