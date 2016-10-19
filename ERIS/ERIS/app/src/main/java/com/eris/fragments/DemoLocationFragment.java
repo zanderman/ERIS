@@ -103,7 +103,7 @@ public class DemoLocationFragment extends Fragment implements OnMapReadyCallback
                         double longitude = intent.getDoubleExtra(LocationService.KEY_LOCATION_LONGITUDE,0.0);
                         LatLng location = new LatLng(latitude, longitude);
                         Log.d("location","UPDATE: " + location);
-                        centerMapOnLocation(location);
+//                        centerMapOnLocation(location);
 
                         SharedPreferences preferences = getActivity().getSharedPreferences(
                                 getResources().getString(R.string.sharedpreferences_curr_user_account_info),
@@ -118,7 +118,7 @@ public class DemoLocationFragment extends Fragment implements OnMapReadyCallback
                         currUser.setLatitude(Double.toString(latitude));
                         currUser.setLongitude(Double.toString(longitude));
 
-                        FetchTask task = new FetchTask();
+                        UpdateMyLocationTask task = new UpdateMyLocationTask();
                         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, currUser);
                         break;
                     default:
@@ -204,6 +204,14 @@ public class DemoLocationFragment extends Fragment implements OnMapReadyCallback
     }
 
     @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        // Unregister location updates broadcast receiver.
+        this.getActivity().unregisterReceiver(receiver);
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
     }
@@ -280,7 +288,7 @@ public class DemoLocationFragment extends Fragment implements OnMapReadyCallback
         this.googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, ZOOM_LEVEL));
     }
 
-    private class FetchTask extends AsyncTask<UserDataDO, Void, Void> {
+    private class UpdateMyLocationTask extends AsyncTask<UserDataDO, Void, Void> {
 
         @Override
         protected Void doInBackground(UserDataDO... users) {
