@@ -5,7 +5,7 @@
 // copy, distribute and modify it.
 //
 // Source code generated from template: aws-my-sample-app-android v0.9
-//
+// 
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 

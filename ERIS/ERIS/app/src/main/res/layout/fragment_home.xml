@@ -38,9 +38,19 @@
             android:layout_height="wrap_content"
             android:id="@+id/buttonDemoScene" />
 
+        <Button
+            android:text="Responder Database Demo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonDemoResponderDatabase" />
+
+        <Button
+            android:text="Scene Database Demo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonDemoSceneDatabase" />
+
     </LinearLayout>
-
-
 
 
 </LinearLayout>

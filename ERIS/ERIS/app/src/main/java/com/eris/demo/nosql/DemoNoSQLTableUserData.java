@@ -44,14 +44,15 @@ public class DemoNoSQLTableUserData extends DemoNoSQLTableBase {
         private DemoGetWithPartitionKey(final Context context) {
             super(context.getString(R.string.nosql_operation_get_by_partition_text),
                 String.format(context.getString(R.string.nosql_operation_example_get_by_partition_text),
-                    "userId", AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID()));
+                        "userId", "4093820716"));
+                //    "userId", AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID()));
         }
 
         /* Blocks until result is retrieved, should be called in the background. */
         @Override
         public boolean executeOperation() throws AmazonClientException {
             // Retrieve an item by passing the partition key using the object mapper.
-            result = mapper.load(UserDataDO.class, AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
+            result = mapper.load(UserDataDO.class, "4093820716");//AWSMobileClient.defaultMobileClient().getIdentityManager().getCachedUserID());
 
             if (result != null) {
                 resultRetrieved = false;
@@ -90,14 +91,14 @@ public class DemoNoSQLTableUserData extends DemoNoSQLTableBase {
             super(
                 context.getString(R.string.nosql_operation_title_index_query_by_partition_and_sort_condition_text),
                 context.getString(R.string.nosql_operation_example_index_query_by_partition_and_sort_condition_text,
-                    "orginization", "demo-orginization-3",
+                    "organization", "demo-organization-3",
                     "orgSuperior", "demo-orgSuperior-500000"));
         }
 
         public boolean executeOperation() {
             // Perform a query using a partition key and sort key condition.
             final UserDataDO itemToFind = new UserDataDO();
-            itemToFind.setOrginization("demo-orginization-3");
+            itemToFind.setOrganization("demo-organization-2");
             final Condition sortKeyCondition = new Condition()
                 .withComparisonOperator(ComparisonOperator.LT.toString())
 
@@ -137,13 +138,13 @@ public class DemoNoSQLTableUserData extends DemoNoSQLTableBase {
             super(
                 context.getString(R.string.nosql_operation_title_index_query_by_partition_text),
                 context.getString(R.string.nosql_operation_example_index_query_by_partition_text,
-                    "orginization", "demo-orginization-3"));
+                    "organization", "demo-organization-3"));
         }
 
         public boolean executeOperation() {
             // Perform a query using a partition key and filter condition.
             final UserDataDO itemToFind = new UserDataDO();
-            itemToFind.setOrginization("demo-orginization-3");
+            itemToFind.setOrganization("demo-organization-3");
 
             // Perform get using Partition key
             DynamoDBQueryExpression<UserDataDO> queryExpression = new DynamoDBQueryExpression<UserDataDO>()
@@ -179,14 +180,14 @@ public class DemoNoSQLTableUserData extends DemoNoSQLTableBase {
             super(
                 context.getString(R.string.nosql_operation_title_index_query_by_partition_and_filter_text),
                 context.getString(R.string.nosql_operation_example_index_query_by_partition_and_filter_text,
-                    "orginization","demo-orginization-3",
+                    "organization","demo-organization-3",
                     "currentIncidentId", "demo-currentIncidentId-500000"));
         }
 
         public boolean executeOperation() {
             // Perform a query using a partition key and filter condition.
             final UserDataDO itemToFind = new UserDataDO();
-            itemToFind.setOrginization("demo-orginization-3");
+            itemToFind.setOrganization("demo-organization-3");
 
             // Use an expression names Map to avoid the potential for attribute names
             // colliding with DynamoDB reserved words.
@@ -234,7 +235,7 @@ public class DemoNoSQLTableUserData extends DemoNoSQLTableBase {
             super(
                 context.getString(R.string.nosql_operation_title_index_query_by_partition_sort_condition_and_filter_text),
                 context.getString(R.string.nosql_operation_example_index_query_by_partition_sort_condition_and_filter_text,
-                    "orginization", "demo-orginization-3",
+                    "organization", "demo-organization-3",
                     "orgSuperior", "demo-orgSuperior-500000",
                     "currentIncidentId", "demo-currentIncidentId-500000"));
         }
@@ -242,7 +243,7 @@ public class DemoNoSQLTableUserData extends DemoNoSQLTableBase {
         public boolean executeOperation() {
             // Perform a query using a partition key, sort condition, and filter.
             final UserDataDO itemToFind = new UserDataDO();
-            itemToFind.setOrginization("demo-orginization-3");
+            itemToFind.setOrganization("demo-organization-3");
             final Condition sortKeyCondition = new Condition()
                 .withComparisonOperator(ComparisonOperator.LT.toString())
                 .withAttributeValueList(new AttributeValue().withS("demo-orgSuperior-500000"));
@@ -446,13 +447,14 @@ public class DemoNoSQLTableUserData extends DemoNoSQLTableBase {
         firstItem.setIncidentSubordinates(DemoSampleDataGenerator.getSampleList());
         firstItem.setIncidentSuperior(
             DemoSampleDataGenerator.getRandomSampleString("incidentSuperior"));
-        firstItem.setLocation(DemoSampleDataGenerator.getSampleList());
+        firstItem.setLatitude(DemoSampleDataGenerator.getRandomSampleString("latitude"));
+        firstItem.setLongitude(DemoSampleDataGenerator.getRandomSampleString("longitude"));
         firstItem.setName(
             DemoSampleDataGenerator.getRandomSampleString("name"));
         firstItem.setOrgSubordinates(DemoSampleDataGenerator.getSampleList());
         firstItem.setOrgSuperior(
             DemoSampleDataGenerator.getRandomSampleString("orgSuperior"));
-        firstItem.setOrginization(DemoSampleDataGenerator.getRandomPartitionSampleString("orginization"));
+        firstItem.setOrganization(DemoSampleDataGenerator.getRandomPartitionSampleString("organization"));
         AmazonClientException lastException = null;
 
         try {
@@ -470,11 +472,12 @@ public class DemoNoSQLTableUserData extends DemoNoSQLTableBase {
             item.setHeartbeatRecord(DemoSampleDataGenerator.getSampleList());
             item.setIncidentSubordinates(DemoSampleDataGenerator.getSampleList());
             item.setIncidentSuperior(DemoSampleDataGenerator.getRandomSampleString("incidentSuperior"));
-            item.setLocation(DemoSampleDataGenerator.getSampleList());
+            item.setLatitude(DemoSampleDataGenerator.getRandomPartitionSampleString("latitude"));
+            item.setLongitude(DemoSampleDataGenerator.getRandomPartitionSampleString("longitude"));
             item.setName(DemoSampleDataGenerator.getRandomSampleString("name"));
             item.setOrgSubordinates(DemoSampleDataGenerator.getSampleList());
             item.setOrgSuperior(DemoSampleDataGenerator.getRandomSampleString("orgSuperior"));
-            item.setOrginization(DemoSampleDataGenerator.getRandomPartitionSampleString("orginization"));
+            item.setOrganization(DemoSampleDataGenerator.getRandomPartitionSampleString("organization"));
 
             items[count] = item;
         }
