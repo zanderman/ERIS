@@ -32,6 +32,11 @@ android {
     lintOptions {
         abortOnError false
     }
+    signingConfigs {
+        debug {
+            storeFile file('./keystores/debug.keystore')
+        }
+    }
     sourceCompatibility = 1.7
     targetCompatibility = 1.7
 }
