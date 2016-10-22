@@ -23,6 +23,7 @@ public class HomeFragment extends Fragment {
     private Button buttonDemoScene;
     private Button buttonDemoResponderDatabase;
     private Button buttonDemoSceneDatabase;
+    private Button buttonIncidentList;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -44,6 +45,7 @@ public class HomeFragment extends Fragment {
         buttonDemoScene = (Button) root.findViewById(R.id.buttonDemoScene);
         buttonDemoResponderDatabase = (Button) root.findViewById(R.id.buttonDemoResponderDatabase);
         buttonDemoSceneDatabase = (Button) root.findViewById(R.id.buttonDemoSceneDatabase);
+        buttonIncidentList = (Button) root.findViewById(R.id.button_incident_list);
 
         // Return the root view.
         return root;
@@ -115,6 +117,21 @@ public class HomeFragment extends Fragment {
 
                 // Set the title for the fragment.
                 ((MainActivity) getActivity()).setActionBarTitle("Demo: Incident Database");
+            }
+        });
+
+        buttonIncidentList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                final Fragment fragment = Fragment.instantiate(getActivity(),IncidentListFragment.class.getName());
+                fragmentManager.beginTransaction()
+                        .replace(R.id.main_fragment_container, fragment,IncidentListFragment.class.getSimpleName())
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+
+                // Set the title for the fragment.
+                ((MainActivity) getActivity()).setActionBarTitle("Incident List");
             }
         });
     }
