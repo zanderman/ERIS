@@ -67,6 +67,8 @@ public class IncidentListFragment extends Fragment {
 
                 // Toast the ID.
                 Toast.makeText(getActivity(),"ID: " + incident.id, Toast.LENGTH_SHORT).show();
+
+                // TODO: Create new IncidentInfoFragment here.
             }
         });
 
