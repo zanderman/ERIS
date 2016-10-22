@@ -40,7 +40,7 @@ public class IncidentListAdapter extends ArrayAdapter<Incident> {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         // Obtain reference to the root view.
-        View root = super.getView(position, convertView, parent);
+        View root = inflater.inflate(R.layout.list_item_incident, parent, false);
 
         // TODO: Manipulate the root here.
 
