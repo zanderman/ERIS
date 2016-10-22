@@ -1,8 +1,10 @@
 package com.eris.classes;
 
 /**
- * Created by derieux on 10/22/16.
+ * Incident
+ *
+ * Description:
+ *  Represents an incident. Contains all pertinent information regarding the incident.
  */
-
 public class Incident {
 }
