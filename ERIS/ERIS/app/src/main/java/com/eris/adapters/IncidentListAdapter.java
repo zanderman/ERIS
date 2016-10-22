@@ -38,6 +38,13 @@ public class IncidentListAdapter extends ArrayAdapter<Incident> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return super.getView(position, convertView, parent);
+
+        // Obtain reference to the root view.
+        View root = super.getView(position, convertView, parent);
+
+        // TODO: Manipulate the root here.
+
+        // Return the modified root view.
+        return root;
     }
 }
