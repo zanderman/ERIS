@@ -3,7 +3,10 @@ package com.eris.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.eris.R;
+import com.eris.activities.MainActivity;
 import com.eris.adapters.IncidentListAdapter;
 import com.eris.classes.Incident;
 import com.google.android.gms.maps.model.LatLng;
@@ -68,11 +72,29 @@ public class IncidentListFragment extends Fragment {
                 // Toast the ID.
                 Toast.makeText(getActivity(),"ID: " + incident.id, Toast.LENGTH_SHORT).show();
 
-                // TODO: Create new IncidentInfoFragment here.
+                // Create new bundle for fragment arguments.
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("incident",incident); // Place incident into the bundle.
+
+                // Obtain reference to fragment manager.
+                final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
+                // Create a new instance of the fragment.
+                IncidentInfoFragment infoFragment = new IncidentInfoFragment();
+                infoFragment.setArguments(bundle); // Pass the incident to the fragment.
+
+                // Display the fragment.
+                fragmentManager.beginTransaction()
+                        .replace(R.id.main_fragment_container, infoFragment, IncidentInfoFragment.class.getSimpleName())
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+
+                // Set the title for the fragment.
+                ((MainActivity) getActivity()).setActionBarTitle("Incident Info");
             }
         });
 
         // Add some items to the adapter.
-        incidentListAdapter.add(new Incident("1234","A dummy incident for testing.",null,new LatLng(31.23,-80.34)));
+        incidentListAdapter.add(new Incident("1234","Requesting:\tEMS, FIRE, POLICE\nTime:\t\ta while","Middle Of Nowhere",new LatLng(31.23,-80.34)));
     }
 }
