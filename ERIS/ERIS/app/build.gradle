@@ -53,4 +53,5 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-ddb:2.2.18'
     compile 'com.amazonaws:aws-android-sdk-ddb-mapper:2.2.18'
     compile 'com.amazonaws:aws-android-sdk-lambda:2.2.18'
+    compile 'com.android.support:design:23.0.0'
 }
