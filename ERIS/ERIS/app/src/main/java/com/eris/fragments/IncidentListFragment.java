@@ -95,6 +95,6 @@ public class IncidentListFragment extends Fragment {
         });
 
         // Add some items to the adapter.
-        incidentListAdapter.add(new Incident("1234","Requesting:\tEMS, FIRE, POLICE\nTime:\t\ta while","Middle Of Nowhere",new LatLng(31.23,-80.34)));
+        incidentListAdapter.add(new Incident("1234","Requesting:\tEMS, FIRE, POLICE\nTime:\t\ta while","Middle Of Nowhere",new LatLng(37.2286649,-80.4190468)));
     }
 }
