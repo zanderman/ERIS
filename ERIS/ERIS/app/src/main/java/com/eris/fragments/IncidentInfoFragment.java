@@ -304,8 +304,8 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                     new CircleOptions()
                             .center(incident.location)
                             .radius(radius) /* meters */
-                            .strokeColor(0x20000000)
-                            .fillColor(0x55E57373) /* 0x55E57373, opaque red */
+                            .strokeColor(0x20000000) /* 20F44336, opaque red (500)*/
+                            .fillColor(0x05000000) /* 0x55E57373, opaque red */
                             .strokeWidth(5)
             );
         }
