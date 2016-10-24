@@ -2,13 +2,15 @@ package com.eris.classes;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.Serializable;
+
 /**
  * Incident
  *
  * Description:
  *  Represents an incident. Contains all pertinent information regarding the incident.
  */
-public class Incident {
+public class Incident implements Serializable {
 
     /*
      * Public Members
