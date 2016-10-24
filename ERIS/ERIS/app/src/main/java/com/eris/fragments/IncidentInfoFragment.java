@@ -173,8 +173,10 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
                 if (!checkin_flipflop) {
                     Toast.makeText(getActivity(), "checked-in", Toast.LENGTH_SHORT).show();
+                    checkinFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_cancel_white_24dp));
                 } else {
                     Toast.makeText(getActivity(), "checked-out", Toast.LENGTH_SHORT).show();
+                    checkinFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_white_24dp));
                 }
                 checkin_flipflop = !checkin_flipflop;
             }
