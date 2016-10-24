@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -31,6 +32,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -82,7 +84,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Set the resize flipflop.
+        // Initialize the flipflops.
         resize_flipflop = true;
         checkin_flipflop = false;
 
@@ -289,6 +291,22 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                         .snippet(incident.description)
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
         );
+
+        /*
+         * Create concentric circles around the incident.
+         */
+        for (int radius = 25; radius<=100; radius=radius+25) {
+
+            // Draw proximity circle around incident.
+            this.googleMap.addCircle(
+                    new CircleOptions()
+                            .center(incident.location)
+                            .radius(radius) /* meters */
+                            .strokeColor(0x20000000)
+                            .fillColor(0x55E57373) /* 0x55E57373, opaque red */
+                            .strokeWidth(5)
+            );
+        }
     }
 
     /**
