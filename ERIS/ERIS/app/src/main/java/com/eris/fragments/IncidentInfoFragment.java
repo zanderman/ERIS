@@ -167,10 +167,14 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
             }
         });
 
-        checkinFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+        checkinFloatingActionButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public void onClick(View view) {
+            public boolean onLongClick(View view) {
 
+                /*
+                 * User is not currently checked-in.
+                 * So check them in.
+                 */
                 if (!checkin_flipflop) {
                     Toast.makeText(getActivity(), "checked-in", Toast.LENGTH_SHORT).show();
                     checkinFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_cancel_white_24dp));
@@ -178,7 +182,12 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                     Toast.makeText(getActivity(), "checked-out", Toast.LENGTH_SHORT).show();
                     checkinFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_white_24dp));
                 }
+
+                // Alternate the flipflop value.
                 checkin_flipflop = !checkin_flipflop;
+
+                // The callback has consumed the long click.
+                return true;
             }
         });
     }
