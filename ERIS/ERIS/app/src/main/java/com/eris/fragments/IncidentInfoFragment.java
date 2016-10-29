@@ -57,7 +57,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
     /*
      * Private Members
      */
-    private FrameLayout infoFrameLayout;
+    private LinearLayout infoContainer;
     private FloatingActionButton resizeFloatingActionButton,
             incidentFloatingActionButton,
             checkinFloatingActionButton;
@@ -124,7 +124,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         View root = inflater.inflate(R.layout.fragment_incident_info, container, false);
 
         // Set references to FrameLayouts.
-        infoFrameLayout = (FrameLayout) root.findViewById(R.id.incident_info_container);
+        infoContainer = (LinearLayout) root.findViewById(R.id.incident_info_container);
         mapRelativeLayout = (RelativeLayout) root.findViewById(R.id.incident_map_layout);
 
         // Set references to FloatingActionButtons.
@@ -251,7 +251,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
         // Change parameters based on flipflop.
         if (resize_flipflop) {
-            infoFrameLayout.setVisibility(View.GONE);
+            infoContainer.setVisibility(View.GONE);
             mapRelativeLayout.setLayoutParams(
                     new LinearLayout.LayoutParams(
                             LinearLayout.LayoutParams.MATCH_PARENT,
@@ -266,7 +266,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                             (float)0.6
                     )
             );
-            infoFrameLayout.setVisibility(View.VISIBLE);
+            infoContainer.setVisibility(View.VISIBLE);
         }
 
         // Change the flipflop value.
