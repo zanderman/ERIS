@@ -56,14 +56,17 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
      */
     private boolean resize_flipflop;
     private boolean checkin_flipflop;
+    private boolean information_flipflop;
 
     /*
      * Private Members
      */
-    private LinearLayout infoContainer;
-    private FloatingActionButton resizeFloatingActionButton,
+    private LinearLayout infoContainer, hierarchyContainer;
+    private RelativeLayout mapContainer;
+    private FloatingActionButton hierarchyFloatingActionButton,
             incidentFloatingActionButton,
-            checkinFloatingActionButton;
+            checkinFloatingActionButton,
+            informationFloatingActionButton;
     private GoogleMap googleMap;
     private BroadcastReceiver receiver;
     private Incident incident;
@@ -94,6 +97,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         // Initialize the flipflops.
         resize_flipflop = true;
         checkin_flipflop = false;
+        information_flipflop = true;
 
         // Create an intent filter
         IntentFilter filter = new IntentFilter();
@@ -132,11 +136,14 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
         // Set references to FrameLayouts.
         infoContainer = (LinearLayout) root.findViewById(R.id.incident_info_container);
+        hierarchyContainer = (LinearLayout) root.findViewById(R.id.incident_hierarchy_layout);
+        mapContainer = (RelativeLayout) root.findViewById(R.id.incident_map_layout);
 
         // Set references to FloatingActionButtons.
-        resizeFloatingActionButton = (FloatingActionButton) root.findViewById(R.id.resize_floatingActionButton);
+        hierarchyFloatingActionButton = (FloatingActionButton) root.findViewById(R.id.hierarchy_floatingActionButton);
         incidentFloatingActionButton = (FloatingActionButton) root.findViewById(R.id.incident_floatingActionButton);
         checkinFloatingActionButton = (FloatingActionButton) root.findViewById(R.id.checkin_floatingActionButton);
+        informationFloatingActionButton = (FloatingActionButton) root.findViewById(R.id.information_floatingActionButton);
 
         // Set references to information display elements.
         addressTextView = (TextView) root.findViewById(R.id.info_address);
@@ -174,7 +181,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         /*
          * Set FloatingActionButton actions.
          */
-        resizeFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+        hierarchyFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 resizeMap(); // Resize the Google Map.
@@ -209,6 +216,14 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
                 // The callback has consumed the long click.
                 return true;
+            }
+        });
+
+        informationFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // show/hide information card.
+                displayInformation();
             }
         });
     }
@@ -272,6 +287,38 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
         // Change parameters based on flipflop.
         if (resize_flipflop) {
+//            infoContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.fade_out));
+            hierarchyContainer.setVisibility(View.GONE);
+            mapContainer.setLayoutParams(
+                    new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT
+                    )
+            );
+
+        } else {
+//            infoContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.fade_in));
+            mapContainer.setLayoutParams(
+                    new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            0,
+                            (float) 0.7
+                    )
+            );
+            infoContainer.setVisibility(View.VISIBLE);
+        }
+
+        // Change the flipflop value.
+        resize_flipflop = !resize_flipflop;
+    }
+
+    /**
+     * Helper method to show/hide information card over top of map.
+     */
+    private void displayInformation() {
+
+        // Change parameters based on flipflop.
+        if (information_flipflop) {
             infoContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.fade_out));
             infoContainer.setVisibility(View.INVISIBLE);
         } else {
@@ -280,7 +327,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         }
 
         // Change the flipflop value.
-        resize_flipflop = !resize_flipflop;
+        information_flipflop = !information_flipflop;
     }
 
 
