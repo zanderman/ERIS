@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,6 +71,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
     private GoogleMap googleMap;
     private BroadcastReceiver receiver;
     private Incident incident;
+    private ListView responderListView, subordinateListView;
 
     /*
      * Information Layout Members
@@ -150,6 +152,10 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         descriptionTextView = (TextView) root.findViewById(R.id.info_description);
         runtimeTextView = (TextView) root.findViewById(R.id.info_runtime);
         statusTextView = (TextView) root.findViewById(R.id.info_status);
+
+        // Get reference to ListView objects.
+        responderListView = (ListView) root.findViewById(R.id.incident_responder_list);
+        subordinateListView = (ListView) root.findViewById(R.id.incident_subordinate_list);
 
         // Add Google Map to fragment.
         final SupportMapFragment fragment = SupportMapFragment.newInstance();
