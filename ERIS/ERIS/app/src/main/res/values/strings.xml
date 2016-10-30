@@ -159,4 +159,7 @@
     <string name="nosql_dialog_title_confirm_delete_item_text">Confirm Delete</string>
     <string name="nosql_dialog_message_confirm_delete_item_text">Are you sure you want to delete the selected item?</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

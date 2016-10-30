@@ -1,0 +1,143 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.eris.fragments.IncidentInfoFragment">
+
+    <RelativeLayout
+        android:id="@+id/incident_map_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/incident_map_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </FrameLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:id="@+id/incident_info_container"
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.80"
+                android:background="@drawable/card_bg_shadow">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1">
+
+                    <ImageView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        app:srcCompat="@drawable/ic_location_on_black_24dp"
+                        android:id="@+id/imageView"
+                        android:layout_weight="0.1" />
+
+                    <TextView
+                        android:text="address"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:textStyle="italic"
+                        android:gravity="left|center"
+                        android:id="@+id/info_address"
+                        android:layout_weight="0.55" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="0.35">
+
+                        <TextView
+                            android:text="status"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/info_status"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:text="runtime"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/info_runtime"
+                            android:layout_weight="1" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:text="description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/info_description"
+                        android:layout_weight="1" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|top"
+                android:layout_marginRight="11dp"
+                android:layout_marginTop="60dp">
+
+                <android.support.design.widget.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    app:elevation="0dp"
+                    android:clickable="true"
+                    app:fabSize="mini"
+                    android:src="@drawable/ic_info_outline_white_24dp"
+                    app:backgroundTint="@color/md_blue_500"
+                    android:id="@+id/resize_floatingActionButton"/>
+
+                <android.support.design.widget.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    app:elevation="0dp"
+                    android:clickable="true"
+                    app:fabSize="mini"
+                    android:src="@drawable/ic_local_hospital_white_24dp"
+                    app:backgroundTint="@color/md_green_500"
+                    android:id="@+id/incident_floatingActionButton"/>
+
+                <android.support.design.widget.FloatingActionButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    app:elevation="0dp"
+                    android:clickable="true"
+                    app:fabSize="mini"
+                    android:src="@drawable/ic_done_white_24dp"
+                    app:backgroundTint="@color/md_red_500"
+                    android:id="@+id/checkin_floatingActionButton"/>
+            </LinearLayout>
+        </android.support.design.widget.CoordinatorLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

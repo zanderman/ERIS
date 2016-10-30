@@ -50,6 +50,12 @@
             android:layout_height="wrap_content"
             android:id="@+id/buttonDemoSceneDatabase" />
 
+        <Button
+            android:text="Incident List"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_incident_list" />
+
     </LinearLayout>
 
 
