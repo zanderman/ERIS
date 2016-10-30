@@ -29,7 +29,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eris.R;
+import com.eris.adapters.ResponderListAdapter;
 import com.eris.classes.Incident;
+import com.eris.classes.Responder;
 import com.eris.services.LocationService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,6 +42,8 @@ import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,6 +76,8 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
     private BroadcastReceiver receiver;
     private Incident incident;
     private ListView responderListView, subordinateListView;
+    private ResponderListAdapter responderAdapter, subordinateAdapter;
+    private ArrayList<Responder> subordinates, responders;
 
     /*
      * Information Layout Members
@@ -100,6 +106,11 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         resize_flipflop = true;
         checkin_flipflop = false;
         information_flipflop = true;
+
+        // Setup responder arrays.
+        subordinates = new ArrayList<Responder>();
+        responders= new ArrayList<Responder>();
+
 
         // Create an intent filter
         IntentFilter filter = new IntentFilter();
@@ -183,6 +194,28 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         statusTextView.setText("In Progress");
         statusTextView.setTextColor(getResources().getColor(R.color.md_red_800));
 
+        /*
+         * Set list adapters.
+         */
+        responderAdapter = new ResponderListAdapter(getActivity());
+        responderListView.setAdapter(responderAdapter);
+        subordinateAdapter = new ResponderListAdapter(getActivity());
+        subordinateListView.setAdapter(subordinateAdapter);
+
+        // add dummy items.
+        responders.add(new Responder("0","John", "Smith","0",(float) 77.7, null, null));
+        responders.add(new Responder("0","Johnny", "Johnson","0",(float) 86.7, null, null));
+        responders.add(new Responder("0","John", "Smith","0",(float) 77.7, null, null));
+        responders.add(new Responder("0","Johnny", "Johnson","0",(float) 86.7, null, null));
+        responders.add(new Responder("0","John", "Smith","0",(float) 77.7, null, null));
+        responders.add(new Responder("0","Johnny", "Johnson","0",(float) 86.7, null, null));
+        responderAdapter.addAll(responders);
+
+        subordinates.add(new Responder("0","Greg", "DaDubious","0",(float) 57.7, null, null));
+        subordinates.add(new Responder("0","Brian", "Yasar","0",(float) 67.7, null, null));
+        subordinates.add(new Responder("0","Greg", "DaDubious","0",(float) 57.7, null, null));
+        subordinates.add(new Responder("0","Brian", "Yasar","0",(float) 67.7, null, null));
+        subordinateAdapter.addAll(subordinates);
 
         /*
          * Set FloatingActionButton actions.
@@ -312,6 +345,10 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                     )
             );
             infoContainer.setVisibility(View.VISIBLE);
+
+            // Repopulate the lists with all stored responders.
+            responderAdapter.addAll(responders);
+            subordinateAdapter.addAll(subordinates);
         }
 
         // Change the flipflop value.
