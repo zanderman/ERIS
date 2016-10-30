@@ -29,7 +29,9 @@ import android.widget.Toast;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobile.user.IdentityManager;
 import com.eris.R;
+import com.eris.classes.NavigationDrawerMenuItem;
 import com.eris.demo.DemoConfiguration;
+import com.eris.fragments.DemoResponderDatabaseFragment;
 import com.eris.fragments.HomeFragment;
 import com.eris.navigation.NavigationDrawer;
 import com.eris.services.LocationService;
@@ -93,19 +95,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             R.id.main_fragment_container);
 
         // Add navigation drawer menu items.
-        // Home isn't a demo, but is fake as a demo.
-        DemoConfiguration.DemoFeature home = new DemoConfiguration.DemoFeature();
-        home.iconResId = R.mipmap.icon_home;
-        home.titleResId = R.string.main_nav_menu_item_home;
-        navigationDrawer.addDemoFeatureToMenu(home);
+        NavigationDrawerMenuItem homeItem = new NavigationDrawerMenuItem(
+                "Home", R.mipmap.ic_home_black_24dp,
+                HomeFragment.class.getName(), HomeFragment.class.getSimpleName()
+        );
+        NavigationDrawerMenuItem incidentListItem = new NavigationDrawerMenuItem(
+                "Incident List", R.mipmap.ic_explore_black_24dp,
+                DemoResponderDatabaseFragment.class.getName(), DemoResponderDatabaseFragment.class.getSimpleName()
+        );
+        NavigationDrawerMenuItem commandStructureItem = new NavigationDrawerMenuItem(
+                "Command Structure", R.mipmap.ic_line_style_black_24dp,
+                DemoResponderDatabaseFragment.class.getName(), DemoResponderDatabaseFragment.class.getSimpleName()
+        );
+        NavigationDrawerMenuItem settingsItem = new NavigationDrawerMenuItem(
+                "Settings", R.mipmap.ic_settings_black_24dp,
+                DemoResponderDatabaseFragment.class.getName(), DemoResponderDatabaseFragment.class.getSimpleName()
+        );
+        NavigationDrawerMenuItem loginItem = new NavigationDrawerMenuItem(
+                "Login", R.mipmap.ic_assignment_ind_black_24dp,
+                DemoResponderDatabaseFragment.class.getName(), DemoResponderDatabaseFragment.class.getSimpleName()
+        );
 
-        for (DemoConfiguration.DemoFeature demoFeature : DemoConfiguration.getDemoFeatureList()) {
-            navigationDrawer.addDemoFeatureToMenu(demoFeature);
-        }
+        navigationDrawer.addItemToMenu(homeItem);
+        navigationDrawer.addItemToMenu(incidentListItem);
+        navigationDrawer.addItemToMenu(commandStructureItem);
+        navigationDrawer.addItemToMenu(settingsItem);
+        navigationDrawer.addItemToMenu(loginItem);
 
         if (savedInstanceState == null) {
             // Add the home fragment to be displayed initially.
-            navigationDrawer.showHome();
+            navigationDrawer.showHome();  // Change this later if needed 44444444
         }
     }
 
@@ -116,8 +135,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // Obtain a reference to the mobile client. It is created in the Application class,
         // but in case a custom Application class is not used, we initialize it here if necessary.
         AWSMobileClient.initializeMobileClientIfNecessary(this);
-
-        // Obtain a reference to the mobile client. It is created in the Application class.
         final AWSMobileClient awsMobileClient = AWSMobileClient.defaultMobileClient();
 
         // Obtain a reference to the identity manager.
