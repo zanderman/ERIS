@@ -51,24 +51,24 @@
                         android:textStyle="italic"
                         android:gravity="left|center"
                         android:id="@+id/info_address"
-                        android:layout_weight="0.65" />
+                        android:layout_weight="0.55" />
 
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="0.25">
+                        android:layout_weight="0.35">
 
                         <TextView
                             android:text="status"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/info_status"
                             android:layout_weight="1" />
 
                         <TextView
                             android:text="runtime"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:id="@+id/info_runtime"
                             android:layout_weight="1" />
