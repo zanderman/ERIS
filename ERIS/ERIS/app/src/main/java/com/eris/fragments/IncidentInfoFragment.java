@@ -63,7 +63,6 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
     private FloatingActionButton resizeFloatingActionButton,
             incidentFloatingActionButton,
             checkinFloatingActionButton;
-    private RelativeLayout mapRelativeLayout;
     private GoogleMap googleMap;
     private BroadcastReceiver receiver;
     private Incident incident;
@@ -132,12 +131,17 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
         // Set references to FrameLayouts.
         infoContainer = (LinearLayout) root.findViewById(R.id.incident_info_container);
-        mapRelativeLayout = (RelativeLayout) root.findViewById(R.id.incident_map_layout);
 
         // Set references to FloatingActionButtons.
         resizeFloatingActionButton = (FloatingActionButton) root.findViewById(R.id.resize_floatingActionButton);
         incidentFloatingActionButton = (FloatingActionButton) root.findViewById(R.id.incident_floatingActionButton);
         checkinFloatingActionButton = (FloatingActionButton) root.findViewById(R.id.checkin_floatingActionButton);
+
+        // Set references to information display elements.
+        addressTextView = (TextView) root.findViewById(R.id.info_address);
+        descriptionTextView = (TextView) root.findViewById(R.id.info_description);
+        runtimeTextView = (TextView) root.findViewById(R.id.info_runtime);
+        statusTextView = (TextView) root.findViewById(R.id.info_status);
 
         // Add Google Map to fragment.
         final SupportMapFragment fragment = SupportMapFragment.newInstance();
@@ -157,9 +161,18 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         super.onViewCreated(view, savedInstanceState);
 
         /*
+         * Display incident information.
+         */
+        addressTextView.setText(this.incident.address);
+        descriptionTextView.setText(this.incident.description);
+        runtimeTextView.setText(5 + " minutes");
+        statusTextView.setText("In Progress");
+        statusTextView.setTextColor(getResources().getColor(R.color.md_red_800));
+
+
+        /*
          * Set FloatingActionButton actions.
          */
-
         resizeFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -259,20 +272,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         // Change parameters based on flipflop.
         if (resize_flipflop) {
             infoContainer.setVisibility(View.GONE);
-            mapRelativeLayout.setLayoutParams(
-                    new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.MATCH_PARENT
-                    )
-            );
         } else {
-            mapRelativeLayout.setLayoutParams(
-                    new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            0,
-                            (float)0.6
-                    )
-            );
             infoContainer.setVisibility(View.VISIBLE);
         }
 
