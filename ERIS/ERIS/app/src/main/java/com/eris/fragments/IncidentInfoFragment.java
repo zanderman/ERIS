@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.test.suitebuilder.TestMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eris.R;
@@ -65,6 +67,11 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
     private GoogleMap googleMap;
     private BroadcastReceiver receiver;
     private Incident incident;
+
+    /*
+     * Information Layout Members
+     */
+    private TextView addressTextView, descriptionTextView, runtimeTextView, statusTextView;
 
 
     public IncidentInfoFragment() {
