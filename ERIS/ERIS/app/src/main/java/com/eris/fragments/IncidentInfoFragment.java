@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -201,6 +202,22 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         responderListView.setAdapter(responderAdapter);
         subordinateAdapter = new ResponderListAdapter(getActivity());
         subordinateListView.setAdapter(subordinateAdapter);
+
+        /*
+         * Set ListView item actions.
+         */
+        responderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                centerMapOnLocation( responderAdapter.getItem(i).location ); // Center map on responder location.
+            }
+        });
+        responderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                centerMapOnLocation( responderAdapter.getItem(i).location ); // Center map on responder location.
+            }
+        });
 
         // add dummy items.
         responders.add(new Responder("0","John", "Smith","0",(float) 77.7, null, null));
