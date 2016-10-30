@@ -18,8 +18,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.eris.R;
-import com.eris.demo.DemoConfiguration;
-import com.eris.demo.DemoInstructionFragment;
+import com.eris.activities.MainActivity;
+import com.eris.classes.NavigationDrawerMenuItem;
+//import com.eris.demo.DemoConfiguration;
+//import com.eris.demo.DemoInstructionFragment;
 import com.eris.fragments.HomeFragment;
 
 import static com.eris.R.string.app_name;
@@ -35,7 +37,7 @@ public class NavigationDrawer {
 
     /** The view group that will contain the navigation drawer menu items. */
     private ListView drawerItems;
-    private ArrayAdapter<DemoConfiguration.DemoFeature> adapter;
+    private ArrayAdapter<NavigationDrawerMenuItem> adapter;
 
     /** The id of the fragment container. */
     private int fragmentContainerId;
@@ -55,17 +57,17 @@ public class NavigationDrawer {
         // Keep a reference to the activity containing this navigation drawer.
         this.containingActivity = activity;
         this.drawerItems = drawerItemsContainer;
-        adapter = new ArrayAdapter<DemoConfiguration.DemoFeature>(activity, R.layout.nav_drawer_item) {
+        adapter = new ArrayAdapter<NavigationDrawerMenuItem>(activity, R.layout.nav_drawer_menu_item) {
             @Override
             public View getView(final int position, final View convertView,
                                 final ViewGroup parent) {
                 View view = convertView;
                 if (view == null) {
-                    view = activity.getLayoutInflater().inflate(R.layout.nav_drawer_item, parent, false);
+                    view = activity.getLayoutInflater().inflate(R.layout.nav_drawer_menu_item, parent, false);
                 }
-                final DemoConfiguration.DemoFeature item = getItem(position);
-                ((ImageView) view.findViewById(R.id.drawer_item_icon)).setImageResource(item.iconResId);
-                ((TextView) view.findViewById(R.id.drawer_item_text)).setText(item.titleResId);
+                final NavigationDrawerMenuItem item = getItem(position);
+                ((ImageView) view.findViewById(R.id.drawer_item_icon)).setImageResource(item.iconResourceId);
+                ((TextView) view.findViewById(R.id.drawer_item_text)).setText(item.name);
                 return view;
             }
         };
@@ -79,22 +81,26 @@ public class NavigationDrawer {
                 // Clear back stack when navigating from the Nav Drawer.
                 fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-                if (position == 0) {
-                    // home
+                if (position == 0) { // Change this later if needed 44444444
+                    // Display the home fragment
                     showHome();
                     return;
                 }
 
-                DemoConfiguration.DemoFeature item = adapter.getItem(position);
-                final Fragment fragment = DemoInstructionFragment.newInstance(item.name);
+                NavigationDrawerMenuItem item = adapter.getItem(position);
+                final Fragment fragment =
+                        Fragment.instantiate(parent.getContext(), item.associatedFragmentClassName);
 
                 activity.getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(fragmentContainerId, fragment, item.name)
+                        .replace(fragmentContainerId, fragment, item.associatedFragmentClassSimpleName)
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
 
                 closeDrawer();
+
+                // Set the title for the fragment.
+                ((MainActivity) activity).setActionBarTitle(item.name);
             }
         });
         this.drawerLayout = layout;
@@ -132,8 +138,8 @@ public class NavigationDrawer {
         closeDrawer();
     }
 
-    public void addDemoFeatureToMenu(DemoConfiguration.DemoFeature demoFeature) {
-        adapter.add(demoFeature);
+    public void addItemToMenu(NavigationDrawerMenuItem menuItem) {
+        adapter.add(menuItem);
         adapter.notifyDataSetChanged();
     }
 
