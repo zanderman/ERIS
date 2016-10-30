@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,7 @@ public class HomeFragment extends Fragment {
      * Private Members
      */
     private Button buttonDemoLocation;
-    private Button buttonDemoScene;
+    private Button buttonResponderDatabase;
     private Button buttonDemoResponderDatabase;
     private Button buttonDemoSceneDatabase;
     private Button buttonIncidentList;
@@ -42,7 +41,7 @@ public class HomeFragment extends Fragment {
 
         // Initialize buttons.
         buttonDemoLocation = (Button) root.findViewById(R.id.buttonDemoLocation);
-        buttonDemoScene = (Button) root.findViewById(R.id.buttonDemoScene);
+        buttonResponderDatabase = (Button) root.findViewById(R.id.buttonResponderDatabase);
         buttonDemoResponderDatabase = (Button) root.findViewById(R.id.buttonDemoResponderDatabase);
         buttonDemoSceneDatabase = (Button) root.findViewById(R.id.buttonDemoSceneDatabase);
         buttonIncidentList = (Button) root.findViewById(R.id.button_incident_list);
@@ -73,13 +72,13 @@ public class HomeFragment extends Fragment {
         });
 
         // Instantiate the scene demo.
-        buttonDemoScene.setOnClickListener(new View.OnClickListener() {
+        buttonResponderDatabase.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                final Fragment fragment = Fragment.instantiate(getActivity(),DemoSceneFragment.class.getName());
+                final Fragment fragment = Fragment.instantiate(getActivity(),IncidentDatabaseFragment.class.getName());
                 fragmentManager.beginTransaction()
-                        .replace(R.id.main_fragment_container, fragment,DemoSceneFragment.class.getSimpleName())
+                        .replace(R.id.main_fragment_container, fragment,IncidentDatabaseFragment.class.getSimpleName())
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
 

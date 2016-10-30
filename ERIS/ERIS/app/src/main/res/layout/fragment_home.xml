@@ -33,10 +33,10 @@
             android:id="@+id/buttonDemoLocation" />
 
         <Button
-            android:text="Scene Demo"
+            android:text="Responder Database Real Thing"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/buttonDemoScene" />
+            android:id="@+id/buttonResponderDatabase" />
 
         <Button
             android:text="Responder Database Demo"

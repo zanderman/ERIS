@@ -8,9 +8,13 @@
 //
 package com.eris.activities;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -57,10 +61,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /** The helper class used to toggle the left navigation drawer open and closed. */
     private ActionBarDrawerToggle drawerToggle;
 
+    public LocationService locationService;
+    public DatabaseService databaseService;
+
     /*
      * Constants
      */
     final private int REQUEST_CODE_ACCESS_FINE_LOCATION = 123;
+
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            if (iBinder instanceof DatabaseService.DatabaseServiceBinder) {
+                databaseService = ((DatabaseService.DatabaseServiceBinder)iBinder).getService();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            //TODO idk what to do here.  How do I tell which service stopped?
+        }
+    };
+
+
 
 
     /**
@@ -149,7 +172,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         // Run the location and database services.
         runLocationService();
-        //runDatabaseService();
+        runDatabaseService();
+        bindService(new Intent(this, DatabaseService.class), serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -243,7 +267,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * This method performs all action needed to start the database background service.
      */
     private void runDatabaseService() {
-
         startService(new Intent(this, DatabaseService.class));
         return;
     }

@@ -1,12 +1,20 @@
 package com.eris.classes;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+import java.util.Arrays;
 import java.util.List;
 
 
-public class Responder {
+public class Responder implements Parcelable {
+
+    public static final String NO_ERROR = "no_error";
+    public static final String RESPONDER_NOT_FOUND = "responder_not_found";
 
     /*
      * Public Members
@@ -97,6 +105,53 @@ public class Responder {
         this.incidentSubordinates = incidentSubordinates;
     }
 
+    private Responder(Parcel in) {
+        userID = in.readString();
+        name = in.readString();
+        organization = in.readString();
+        heartrateRecord = in.createStringArrayList();
+        orgSuperior = in.readString();
+        orgSubordinates = in.createStringArrayList();
+        latitude = in.readString();
+        longitude = in.readString();
+        sceneID = in.readString();
+        incidentSuperior = in.readString();
+        incidentSubordinates = in.createStringArrayList();
+    }
+
+    //Override function, has no other use.
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel outParcel, int flags) {
+        outParcel.writeString(userID);
+        outParcel.writeString(name);
+        outParcel.writeString(organization);
+        outParcel.writeStringList(heartrateRecord);
+        outParcel.writeString(orgSuperior);
+        outParcel.writeStringList(orgSubordinates);
+        outParcel.writeString(latitude);
+        outParcel.writeString(longitude);
+        outParcel.writeString(sceneID);
+        outParcel.writeString(incidentSuperior);
+        outParcel.writeStringList(incidentSubordinates);
+    }
+
+    public static final Parcelable.Creator<Responder> CREATOR = new Parcelable.Creator<Responder>() {
+        public Responder createFromParcel(Parcel in) {
+            return new Responder(in);
+        }
+
+        public Responder[] newArray(int size) {
+            return new Responder[size];
+        }
+    };
+
+
+
     public String getUserID() {
         return this.userID;
     }
@@ -114,5 +169,4 @@ public class Responder {
     public String getLongitude() {return  this.longitude;}
     public String getIncidentSuperior() {return  this.incidentSuperior;}
     public List<String> getIncidentSubordinates() {return this.incidentSubordinates;}
-
 }
