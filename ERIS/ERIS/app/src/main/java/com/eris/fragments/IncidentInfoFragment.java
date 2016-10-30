@@ -334,6 +334,8 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                             LinearLayout.LayoutParams.MATCH_PARENT
                     )
             );
+            responderAdapter.clear();
+            subordinateAdapter.clear();
 
         } else {
 //            infoContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.fade_in));
@@ -344,7 +346,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                             (float) 0.7
                     )
             );
-            infoContainer.setVisibility(View.VISIBLE);
+            hierarchyContainer.setVisibility(View.VISIBLE);
 
             // Repopulate the lists with all stored responders.
             responderAdapter.addAll(responders);
