@@ -12,8 +12,8 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:layout_width="70px"
-            android:layout_height="70px"
+            android:layout_width="100px"
+            android:layout_height="100px"
             app:srcCompat="@mipmap/ic_donut_large_black_24dp"
             android:paddingLeft="20px"
             android:id="@+id/responder_image"/>
