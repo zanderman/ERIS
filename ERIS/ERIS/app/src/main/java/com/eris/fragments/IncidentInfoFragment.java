@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -271,15 +272,15 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
         // Change parameters based on flipflop.
         if (resize_flipflop) {
-            infoContainer.setVisibility(View.GONE);
+            infoContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.fade_out));
+            infoContainer.setVisibility(View.INVISIBLE);
         } else {
+            infoContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.fade_in));
             infoContainer.setVisibility(View.VISIBLE);
         }
 
         // Change the flipflop value.
         resize_flipflop = !resize_flipflop;
-
-        Toast.makeText(getActivity(), "resized", Toast.LENGTH_SHORT).show();
     }
 
 
