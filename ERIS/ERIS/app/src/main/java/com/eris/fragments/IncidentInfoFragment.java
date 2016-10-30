@@ -325,6 +325,9 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                             .strokeWidth(5)
             );
         }
+
+        // Center map on incident location.
+        centerMapOnLocation(incident.location);
     }
 
     /**
