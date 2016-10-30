@@ -33,6 +33,7 @@ import com.eris.classes.NavigationDrawerMenuItem;
 import com.eris.demo.DemoConfiguration;
 import com.eris.fragments.DemoResponderDatabaseFragment;
 import com.eris.fragments.HomeFragment;
+import com.eris.fragments.IncidentListFragment;
 import com.eris.navigation.NavigationDrawer;
 import com.eris.services.LocationService;
 import com.eris.services.DatabaseService;
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         );
         NavigationDrawerMenuItem incidentListItem = new NavigationDrawerMenuItem(
                 "Incident List", R.mipmap.ic_explore_black_24dp,
-                DemoResponderDatabaseFragment.class.getName(), DemoResponderDatabaseFragment.class.getSimpleName()
+                IncidentListFragment.class.getName(), IncidentListFragment.class.getSimpleName()
         );
         NavigationDrawerMenuItem commandStructureItem = new NavigationDrawerMenuItem(
                 "Command Structure", R.mipmap.ic_line_style_black_24dp,
