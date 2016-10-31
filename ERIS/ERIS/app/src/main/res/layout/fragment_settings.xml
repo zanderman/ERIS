@@ -48,7 +48,7 @@
                     android:text="Phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/checkBox5"
+                    android:id="@+id/phoneCheck"
                     android:layout_weight="0.01"
                     android:checked="true" />
 
@@ -56,17 +56,23 @@
                     android:text="Watch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/checkBox4"
+                    android:id="@+id/watchCheck"
                     android:layout_weight="0.01" />
 
                 <CheckBox
                     android:text="Headset"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/checkBox3"
+                    android:id="@+id/glassesCheck"
                     android:layout_weight="0.06"
                     android:checked="false" />
             </LinearLayout>
+
+            <Button
+                android:text="Send Test Alert"
+                android:layout_width="382dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/testAlert" />
 
         </LinearLayout>
     </ScrollView>

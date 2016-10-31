@@ -1,12 +1,15 @@
 package com.eris.activities;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -20,6 +23,7 @@ import com.eris.R;
 public class SettingsFragment extends Fragment {
     private SeekBar broadcastBar;
     private TextView broadcastLabel;
+    private Button testAlertButton;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -45,6 +49,7 @@ public class SettingsFragment extends Fragment {
 
         broadcastBar = (SeekBar) view.findViewById(R.id.broadcastBar);
         broadcastLabel = (TextView) view.findViewById(R.id.broadcastLabel);
+        testAlertButton = (Button) view.findViewById(R.id.testAlert);
 
         broadcastLabel.setText(broadcastLabelText(broadcastBar.getProgress()));
         broadcastBar.setMax(9);
@@ -62,6 +67,19 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
+            }
+        });
+
+        testAlertButton.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(getContext())
+                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setContentTitle("ERIS Alert")
+                                .setContentText("Test notification");
+                NotificationManager mNotificationManager =
+                        (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                mNotificationManager.notify(0, mBuilder.build());
             }
         });
         return view;
