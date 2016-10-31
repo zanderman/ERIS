@@ -79,6 +79,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
     private ListView responderListView, subordinateListView;
     private ResponderListAdapter responderAdapter, subordinateAdapter;
     private ArrayList<Responder> subordinates, responders;
+    private ArrayList<Marker> markers; // List of Google Map markers.
 
     /*
      * Information Layout Members
