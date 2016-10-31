@@ -20,14 +20,53 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/broadcastLabel"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:paddingLeft="5sp" />
 
             <SeekBar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/broadcastBar"
                 android:max="10"
-                android:progress="3" />
+                android:progress="3"
+                android:paddingLeft="5sp" />
+
+            <TextView
+                android:text="Alerts on:"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/alertLabel"
+                android:textSize="18sp"
+                android:paddingLeft="5sp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <CheckBox
+                    android:text="Phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/checkBox5"
+                    android:layout_weight="0.01"
+                    android:checked="true" />
+
+                <CheckBox
+                    android:text="Watch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/checkBox4"
+                    android:layout_weight="0.01" />
+
+                <CheckBox
+                    android:text="Headset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/checkBox3"
+                    android:layout_weight="0.06"
+                    android:checked="false" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
