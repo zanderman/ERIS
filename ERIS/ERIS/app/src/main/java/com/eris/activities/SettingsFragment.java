@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -24,6 +25,9 @@ public class SettingsFragment extends Fragment {
     private SeekBar broadcastBar;
     private TextView broadcastLabel;
     private Button testAlertButton;
+    private CheckBox phoneCheck;
+    private CheckBox watchCheck;
+    private CheckBox glassesCheck;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -50,6 +54,10 @@ public class SettingsFragment extends Fragment {
         broadcastBar = (SeekBar) view.findViewById(R.id.broadcastBar);
         broadcastLabel = (TextView) view.findViewById(R.id.broadcastLabel);
         testAlertButton = (Button) view.findViewById(R.id.testAlert);
+        phoneCheck = (CheckBox) view.findViewById(R.id.phoneCheck);
+        watchCheck = (CheckBox) view.findViewById(R.id.watchCheck);
+        glassesCheck = (CheckBox) view.findViewById(R.id.glassesCheck);
+
 
         broadcastLabel.setText(broadcastLabelText(broadcastBar.getProgress()));
         broadcastBar.setMax(9);
@@ -72,14 +80,16 @@ public class SettingsFragment extends Fragment {
 
         testAlertButton.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
-                NotificationCompat.Builder mBuilder =
-                        new NotificationCompat.Builder(getContext())
-                                .setSmallIcon(R.mipmap.ic_launcher)
-                                .setContentTitle("ERIS Alert")
-                                .setContentText("Test notification");
-                NotificationManager mNotificationManager =
-                        (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                mNotificationManager.notify(0, mBuilder.build());
+                if (phoneCheck.isChecked()) {
+                    NotificationCompat.Builder mBuilder =
+                            new NotificationCompat.Builder(getContext())
+                                    .setSmallIcon(R.mipmap.ic_launcher)
+                                    .setContentTitle("ERIS Alert")
+                                    .setContentText("Test notification");
+                    NotificationManager mNotificationManager =
+                            (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                    mNotificationManager.notify(0, mBuilder.build());
+                }
             }
         });
         return view;
