@@ -33,6 +33,7 @@ import com.eris.R;
 import com.eris.adapters.ResponderListAdapter;
 import com.eris.classes.Incident;
 import com.eris.classes.Responder;
+import com.eris.services.DatabaseService;
 import com.eris.services.LocationService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -79,6 +80,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
     private ListView responderListView, subordinateListView;
     private ResponderListAdapter responderAdapter, subordinateAdapter;
     private ArrayList<Responder> subordinates, responders;
+    private Responder supervisor;
     private ArrayList<Marker> markers; // List of Google Map markers.
 
     /*
@@ -132,6 +134,10 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                         double longitude = intent.getDoubleExtra(LocationService.KEY_LOCATION_LONGITUDE, 0.0);
                         LatLng location = new LatLng(latitude, longitude);
                         Log.d("location", "UPDATE: " + location);
+                        break;
+
+                    // Database query result.
+                    case DatabaseService.BROADCAST_ACTION_QUERY_RESULT:
                         break;
 
                     // Unhandled broadcast.
