@@ -51,6 +51,7 @@ public class SettingsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         String settingsFile = getResources().getString(R.string.sharedpreferences_user_settings);
         settings = getContext().getSharedPreferences(settingsFile, 0);
+        SharedPreferences.Editor editor = settings.edit();
     }
 
     @Override
@@ -67,18 +68,20 @@ public class SettingsFragment extends Fragment {
         glassesCheck = (CheckBox) view.findViewById(R.id.glassesCheck);
 
         // Load current settings from memory
-        broadcastBar.setProgress(settings.getInt(BROADCAST_PREF, 3));
+        broadcastBar.setProgress(
+                convertSecondsToBroadcastBar(settings.getInt(BROADCAST_PREF, 20)));
         phoneCheck.setChecked(settings.getBoolean(PHONE_PREF, true));
         watchCheck.setChecked(settings.getBoolean(WATCH_PREF, false));
         glassesCheck.setChecked(settings.getBoolean(GLASSES_PREF, false));
 
-        broadcastLabel.setText(broadcastLabelText(broadcastBar.getProgress()));
+        broadcastLabel.setText(broadcastLabelText(settings.getInt(BROADCAST_PREF, 20)));
         broadcastBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int newProg, boolean b) {
-                broadcastLabel.setText(broadcastLabelText(newProg));
+                int seconds = convertBroadcastBarToSeconds(newProg);
+                broadcastLabel.setText(broadcastLabelText(seconds));
                 SharedPreferences.Editor editor = settings.edit();
-                editor.putInt(BROADCAST_PREF, newProg);
+                editor.putInt(BROADCAST_PREF, seconds);
                 editor.commit();
             }
 
@@ -112,8 +115,7 @@ public class SettingsFragment extends Fragment {
     }
 
     private String broadcastLabelText(int val) {
-        return "Broadcast interval: " + (val + 1)
-                + (val == 0 ? " second." : " seconds.");
+        return "Broadcast interval: " + val + " seconds.";
     }
 
     private CompoundButton.OnCheckedChangeListener createCheckedChangeListener(final String name) {
@@ -125,5 +127,13 @@ public class SettingsFragment extends Fragment {
                 editor.commit();
             }
         };
+    }
+
+    private int convertBroadcastBarToSeconds(int bar) {
+        return (bar + 1) * 5;
+    }
+
+    private int convertSecondsToBroadcastBar(int seconds) {
+        return (seconds / 5) - 1;
     }
 }
