@@ -40,6 +40,9 @@ public class ResponderListAdapter extends ArrayAdapter<Responder> {
         heartRateTextView.setText(Float.toString(responder.heartRate) + " bpm");
         userPhotoImageView.setImageResource(R.mipmap.ic_donut_large_black_24dp);
 
+        // Make name TextView scroll if marque is enabled.
+        nameTextView.setSelected(true);
+
         // Return the altered view.
         return root;
 
