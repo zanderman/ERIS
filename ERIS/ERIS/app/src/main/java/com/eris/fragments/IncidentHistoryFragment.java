@@ -28,7 +28,7 @@ public class IncidentHistoryFragment extends Fragment {
      * Private Members
      */
     private ListView incidentListView;
-    private IncidentListAdapter incidentListAdapter;
+    private IncidentListAdapter incidentHistoryAdapter;
 
 
     public IncidentHistoryFragment() {
@@ -55,10 +55,10 @@ public class IncidentHistoryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Create new adapter object.
-        incidentListAdapter = new IncidentListAdapter(getActivity());
+        incidentHistoryAdapter = new IncidentListAdapter(getActivity());
 
         // Set the adapter for the ListView of incidents.
-        incidentListView.setAdapter(incidentListAdapter);
+        incidentListView.setAdapter(incidentHistoryAdapter);
 
         // Set OnItemClickListener for items within the ListView.
         incidentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -66,7 +66,7 @@ public class IncidentHistoryFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 // Get the incident that was clicked.
-                final Incident incident = incidentListAdapter.getItem(i);
+                final Incident incident = incidentHistoryAdapter.getItem(i);
 
                 // Toast the ID.
                 Toast.makeText(getActivity(),"showing history for incident " + incident.id, Toast.LENGTH_SHORT).show();
@@ -94,8 +94,8 @@ public class IncidentHistoryFragment extends Fragment {
         });
 
         // Add some items to the adapter.
-        incidentListAdapter.add(new Incident("1234","Structure Fire","42 Wallaby Way, Sydney",new LatLng(37.2286649,-80.4190468)));
-        incidentListAdapter.add(new Incident("5678","Flooding on highway","i-460 at Virginia Tech front gate",new LatLng(37.2286,-80.4190)));
+        incidentHistoryAdapter.add(new Incident("1234","Structure Fire","42 Wallaby Way, Sydney",new LatLng(37.2286649,-80.4190468)));
+        incidentHistoryAdapter.add(new Incident("5678","Flooding on highway","i-460 at Virginia Tech front gate",new LatLng(37.2286,-80.4190)));
     }
 
 }
