@@ -24,6 +24,16 @@
     <string name="sharedpreferences_curr_user_account_info">UserAccountInfo</string>
     <string name="sharedpreferences_entry_userID">UserID</string>
     <string name="sharedpreferences_user_settings">Settings</string>
+    <string name="sharedpreferences_notification_info">Notifications</string>
+
+    <!-- Preference names in notification table -->
+    <string name="preferences_notification_id">LastID</string>
+
+    <!-- Preference names in settings table -->
+    <string name="preferences_broadcast">BroadcastPref"</string>
+    <string name="preferences_phone_alerts">PhonePref</string>
+    <string name="preferences_watch_alerts">WatchPref</string>
+    <string name="preferences_glass_alerts">GlassPref</string>
 
     <!-- USED BY DEMO FEATURES ONLY - YOU CAN DISCARD THESE WITH THE DEMO FOLDER -->
 
