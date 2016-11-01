@@ -69,27 +69,27 @@ public class IncidentHistoryFragment extends Fragment {
                 final Incident incident = incidentListAdapter.getItem(i);
 
                 // Toast the ID.
-                Toast.makeText(getActivity(),"ID: " + incident.id, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"showing history for incident " + incident.id, Toast.LENGTH_SHORT).show();
 
-                // Create new bundle for fragment arguments.
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("incident",incident); // Place incident into the bundle.
-
-                // Obtain reference to fragment manager.
-                final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-
-                // Create a new instance of the fragment.
-                IncidentInfoFragment infoFragment = new IncidentInfoFragment();
-                infoFragment.setArguments(bundle); // Pass the incident to the fragment.
-
-                // Display the fragment.
-                fragmentManager.beginTransaction()
-                        .replace(R.id.main_fragment_container, infoFragment, IncidentInfoFragment.class.getSimpleName())
-                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                        .commit();
-
-                // Set the title for the fragment.
-                ((MainActivity) getActivity()).setActionBarTitle("Incident Info");
+//                // Create new bundle for fragment arguments.
+//                Bundle bundle = new Bundle();
+//                bundle.putSerializable("incident",incident); // Place incident into the bundle.
+//
+//                // Obtain reference to fragment manager.
+//                final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//
+//                // Create a new instance of the fragment.
+//                IncidentInfoFragment infoFragment = new IncidentInfoFragment();
+//                infoFragment.setArguments(bundle); // Pass the incident to the fragment.
+//
+//                // Display the fragment.
+//                fragmentManager.beginTransaction()
+//                        .replace(R.id.main_fragment_container, infoFragment, IncidentInfoFragment.class.getSimpleName())
+//                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+//                        .commit();
+//
+//                // Set the title for the fragment.
+//                ((MainActivity) getActivity()).setActionBarTitle("Incident Info");
             }
         });
 
