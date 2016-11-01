@@ -154,11 +154,6 @@
     </RelativeLayout>
 
     <!-- Black Divider -->
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:background="@color/black_overlay"></View>
-
     <LinearLayout
         android:id="@+id/incident_hierarchy_layout"
         android:orientation="horizontal"
@@ -177,8 +172,7 @@
             <ListView
                 android:id="@+id/incident_superior_list"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.22">
+                android:layout_height="100px">
             </ListView>
 
             <!-- Black Divider -->
@@ -191,7 +185,7 @@
                 android:id="@+id/incident_subordinate_list"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.78"/>
+                android:layout_weight="1"/>
         </LinearLayout>
 
         <!-- Black Divider -->
@@ -206,5 +200,10 @@
             android:layout_height="match_parent"
             android:layout_weight="0.5"/>
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        android:background="@color/black_overlay"></View>
 
 </LinearLayout>
