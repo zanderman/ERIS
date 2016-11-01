@@ -16,6 +16,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.eris.R;
+import com.eris.classes.NotificationDispatcher;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,10 +33,10 @@ public class SettingsFragment extends Fragment {
 
     private SharedPreferences settings;
 
-    public static final String BROADCAST_PREF = "BroadcastPref";
-    public static final String PHONE_PREF = "PhonePref";
-    public static final String WATCH_PREF = "WatchPref";
-    public static final String GLASSES_PREF = "GlassesPref";
+    public String broadcastPref;
+    public String phonePref;
+    public String watchPref;
+    public String glassPref;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -51,7 +52,11 @@ public class SettingsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         String settingsFile = getResources().getString(R.string.sharedpreferences_user_settings);
         settings = getContext().getSharedPreferences(settingsFile, 0);
-        SharedPreferences.Editor editor = settings.edit();
+
+        broadcastPref = getResources().getString(R.string.preferences_broadcast);
+        phonePref = getResources().getString(R.string.preferences_phone_alerts);
+        watchPref = getResources().getString(R.string.preferences_watch_alerts);
+        glassPref = getResources().getString(R.string.preferences_glass_alerts);
     }
 
     @Override
@@ -69,19 +74,19 @@ public class SettingsFragment extends Fragment {
 
         // Load current settings from memory
         broadcastBar.setProgress(
-                convertSecondsToBroadcastBar(settings.getInt(BROADCAST_PREF, 20)));
-        phoneCheck.setChecked(settings.getBoolean(PHONE_PREF, true));
-        watchCheck.setChecked(settings.getBoolean(WATCH_PREF, false));
-        glassesCheck.setChecked(settings.getBoolean(GLASSES_PREF, false));
+                convertSecondsToBroadcastBar(settings.getInt(broadcastPref, 20)));
+        phoneCheck.setChecked(settings.getBoolean(phonePref, true));
+        watchCheck.setChecked(settings.getBoolean(watchPref, false));
+        glassesCheck.setChecked(settings.getBoolean(glassPref, false));
 
-        broadcastLabel.setText(broadcastLabelText(settings.getInt(BROADCAST_PREF, 20)));
+        broadcastLabel.setText(broadcastLabelText(settings.getInt(broadcastPref, 20)));
         broadcastBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int newProg, boolean b) {
                 int seconds = convertBroadcastBarToSeconds(newProg);
                 broadcastLabel.setText(broadcastLabelText(seconds));
                 SharedPreferences.Editor editor = settings.edit();
-                editor.putInt(BROADCAST_PREF, seconds);
+                editor.putInt(broadcastPref, seconds);
                 editor.commit();
             }
 
@@ -92,23 +97,14 @@ public class SettingsFragment extends Fragment {
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
 
-        phoneCheck.setOnCheckedChangeListener(createCheckedChangeListener(PHONE_PREF));
-        watchCheck.setOnCheckedChangeListener(createCheckedChangeListener(WATCH_PREF));
-        glassesCheck.setOnCheckedChangeListener(createCheckedChangeListener(GLASSES_PREF));
+        phoneCheck.setOnCheckedChangeListener(createCheckedChangeListener(phonePref));
+        watchCheck.setOnCheckedChangeListener(createCheckedChangeListener(watchPref));
+        glassesCheck.setOnCheckedChangeListener(createCheckedChangeListener(glassPref));
 
         testAlertButton.setOnClickListener(new Button.OnClickListener() {
             public void onClick(View v) {
                 // placeholder code for sending notifications
-                if (settings.getBoolean(PHONE_PREF, true)) {
-                    NotificationCompat.Builder mBuilder =
-                            new NotificationCompat.Builder(getContext())
-                                    .setSmallIcon(R.mipmap.ic_launcher)
-                                    .setContentTitle("ERIS Alert")
-                                    .setContentText("Test notification");
-                    NotificationManager mNotificationManager =
-                            (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                    mNotificationManager.notify((int) (Math.random() * 10000), mBuilder.build());
-                }
+                NotificationDispatcher.send("ERIS Alert", "Test Notification", getContext());
             }
         });
         return view;
