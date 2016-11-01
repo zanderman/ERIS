@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         );
         NavigationDrawerMenuItem incidentHistoryItem = new NavigationDrawerMenuItem(
                 "Incident History", R.drawable.ic_history_black_24dp,
-                IncidentListFragment.class.getName(), IncidentHistoryFragment.class.getSimpleName()
+                IncidentHistoryFragment.class.getName(), IncidentHistoryFragment.class.getSimpleName()
         );
         NavigationDrawerMenuItem commandStructureItem = new NavigationDrawerMenuItem(
                 "Command Structure", R.mipmap.ic_line_style_black_24dp,
