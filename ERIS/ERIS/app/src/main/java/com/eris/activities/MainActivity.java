@@ -36,6 +36,7 @@ import com.eris.R;
 import com.eris.classes.NavigationDrawerMenuItem;
 import com.eris.fragments.DemoResponderDatabaseFragment;
 import com.eris.fragments.HomeFragment;
+import com.eris.fragments.IncidentInfoFragment;
 import com.eris.fragments.IncidentListFragment;
 import com.eris.fragments.IncidentDatabaseFragment;
 import com.eris.fragments.SettingsFragment;
@@ -123,6 +124,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         NavigationDrawerMenuItem incidentListItem = new NavigationDrawerMenuItem(
                 "Incident List", R.mipmap.ic_explore_black_24dp,
                 IncidentListFragment.class.getName(), IncidentListFragment.class.getSimpleName()
+        );
+        NavigationDrawerMenuItem incidentInfoItem = new NavigationDrawerMenuItem(
+                "Incident List", R.drawable.ic_local_hospital_black_24dp,
+                IncidentListFragment.class.getName(), IncidentInfoFragment.class.getSimpleName()
+        );
+        NavigationDrawerMenuItem incidentHistoryItem = new NavigationDrawerMenuItem(
+                "Incident List", R.drawable.ic_history_black_24dp,
+                IncidentListFragment.class.getName(), IncidentInfoFragment.class.getSimpleName()
         );
         NavigationDrawerMenuItem commandStructureItem = new NavigationDrawerMenuItem(
                 "Command Structure", R.mipmap.ic_line_style_black_24dp,
