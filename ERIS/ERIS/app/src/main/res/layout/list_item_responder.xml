@@ -23,7 +23,7 @@
             android:text="name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="0.7"
+            android:layout_weight="1"
             android:paddingLeft="10px"
             android:maxLines="1"
             android:ellipsize="marquee"
@@ -32,12 +32,10 @@
 
         <TextView
             android:text="__.__ bpm"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.3"
+            android:paddingLeft="10px"
             android:paddingRight="20px"
-            android:maxLines="1"
-            android:ellipsize="marquee"
             android:id="@+id/responder_heart_rate"
             android:layout_gravity="center"
             android:gravity="right"/>
