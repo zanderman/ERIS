@@ -5,10 +5,41 @@
     tools:context="com.eris.fragments.IncidentDatabaseFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Scene demo"
-        android:id="@+id/scene_main_text" />
+        android:layout_height="match_parent">
+
+        <Button
+            android:text="Get Responder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_get_responder" />
+
+        <Button
+            android:text="Get Org Subordinates"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_get_org_subordinates" />
+
+        <Button
+            android:text="Get Org Members (EMS)"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_get_org_responders" />
+
+        <Button
+            android:text="Get All Responders"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_get_all_responders" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Scene demo"
+            android:id="@+id/scene_main_text" />
+    </LinearLayout>
 
 </FrameLayout>

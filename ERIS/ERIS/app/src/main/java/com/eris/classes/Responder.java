@@ -14,11 +14,12 @@ import java.util.List;
 public class Responder implements Parcelable {
 
     public static final String NO_ERROR = "no_error";
-    public static final String RESPONDER_NOT_FOUND = "responder_not_found";
+    public static final String QUERY_FAILED = "query_failed";
 
     /*
      * Public Members
      */
+    //Why are these all public?  seems bad.
     public String userID;
     public String sceneID;
     public float heartRate;
@@ -29,10 +30,10 @@ public class Responder implements Parcelable {
     public String name;
     public Marker marker;
 
-    private String organization;
+    public String organization;
     private List<String> heartrateRecord;
     private String orgSuperior;
-    private List<String> orgSubordinates;
+    public List<String> orgSubordinates;
     private String latitude;
     private String longitude;
     private String incidentSuperior;
@@ -87,6 +88,8 @@ public class Responder implements Parcelable {
                      String orgSuperior,  List<String> orgSubordinates, String latitude,
                      String longitude, String sceneID, String incidentSuperior,
                      List<String> incidentSubordinates) {
+        //Should do null checks.
+
         this.userID = userID;
         this.name = name;
         String[] splitName = name.split(",");

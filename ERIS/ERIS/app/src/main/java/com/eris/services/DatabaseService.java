@@ -10,14 +10,17 @@ import android.util.Log;
 import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBMapper;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExpression;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpression;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedQueryList;
+import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedScanList;
 import com.amazonaws.models.nosql.UserDataDO;
 
 import com.eris.classes.Incident;
 import com.eris.classes.Responder;
-import com.eris.fragments.IncidentDatabaseFragment;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 
 //Uses the local service model.
@@ -25,7 +28,7 @@ public class DatabaseService extends Service {
 
     private static final String TAG = DatabaseService.class.getSimpleName();
 
-    public static final String CALLING_METHOD_INFO = "calling_method_info";
+    public static final String CALLING_METHOD_IDENTIFIER = "calling_method_identifier";
     public static final String ERROR_STATUS = "error_status";
     public static final String DATA = "data";
     public static final String DATABASE_SERVICE_ACTION = "android.intent.action.database.service";
@@ -86,38 +89,46 @@ public class DatabaseService extends Service {
     }
 
     /**
-     * Find in the system database the responder with the given userID.
+     * Find in the system database the responder with the given userId.
      *
-     * @param userID The ID string for the user whose data should be retrieved
-     * @param requestID A unique request ID to identify this call
+     * @param userId The ID string for the user whose data should be retrieved
+     * @param callingMethodIdentifier A unique request ID to identify this call
      * @return A Responder object with the requested user's data as found
-     * in the system database; null if no results were found for the given userID
-     * You must wait for a broadcast to come back with the unique requestID
+     * in the system database; null if no results were found for the given userId
+     * You must wait for a broadcast to come back with the unique callingMethodIdentifier
      * that you provided.  If the data in this is null, this method failed.
+     *
+     * The extras returned are in the form:
+     * Responder DATA,
+     * String ERROR_STATUS
+     * String CALLING_METHOD_IDENTIFIER;
      */
-    public void getResponderData(final String userID, final String requestID) {
-        (new Thread(new GetResponderDataThread(userID, requestID))).start();
+    public void getResponderData(final String userId, final String callingMethodIdentifier) {
+        if (userId == null) {
+            throw new IllegalArgumentException("superior cannot be null");
+        } else if (callingMethodIdentifier == null) {
+            throw new IllegalArgumentException("callingMethodInfo cannot be null");
+        }
+        (new Thread(new GetResponderDataThread(userId, callingMethodIdentifier))).start();
     }
 
     private class GetResponderDataThread implements Runnable {
-        String callingMethodInfo;
-        String userID;
+        String callingMethodIdentifier;
+        String userId;
 
-        public GetResponderDataThread(String userID, String callingMethodInfo) {
-            this.callingMethodInfo = callingMethodInfo;
-            this.userID = userID;
+        public GetResponderDataThread(String userId, String callingMethodIdentifier) {
+            this.callingMethodIdentifier = callingMethodIdentifier;
+            this.userId = userId;
         }
 
         public void run() {
             Intent intent = new Intent();
-            //TODO this is wrong.  there needs to be one for thing calling/ID, and one for the
-            //method called.
             intent.setAction(DATABASE_SERVICE_ACTION);
-            intent.putExtra(CALLING_METHOD_INFO, callingMethodInfo);
+            intent.putExtra(CALLING_METHOD_IDENTIFIER, callingMethodIdentifier);
 
 
             final UserDataDO targetUser = new UserDataDO();
-            targetUser.setUserId(userID);
+            targetUser.setUserId(userId);
 
             final DynamoDBQueryExpression<UserDataDO> queryExpr = new DynamoDBQueryExpression<UserDataDO>()
                     .withHashKeyValues(targetUser)
@@ -127,7 +138,7 @@ public class DatabaseService extends Service {
             final PaginatedQueryList<UserDataDO> resultList = mapper.query(UserDataDO.class, queryExpr);
 
             if (resultList.size() < 1) {
-                intent.putExtra(ERROR_STATUS, Responder.RESPONDER_NOT_FOUND);
+                intent.putExtra(ERROR_STATUS, Responder.QUERY_FAILED);
                 sendBroadcast(intent);
                 Log.d(TAG, "Sent broadcast for responder not found.");
                 return;
@@ -147,36 +158,180 @@ public class DatabaseService extends Service {
         }
     }
 
-
-    public Responder[] getSubordinates(Responder superior) {
-        return null;
+    //TODO if people want to call this by ID, might put that in here also.
+    public void getOrgSubordinates(Responder superior, String callingMethodIdentifier) {
+        if (superior == null) {
+            throw new IllegalArgumentException("superior cannot be null");
+        } else if (callingMethodIdentifier == null) {
+            throw new IllegalArgumentException("callingMethodInfo cannot be null");
+        }
+        (new Thread(new GetOrgSubordinatesDataThread(superior, callingMethodIdentifier))).start();
     }
 
-    public Responder[] getDepartmentResponders(Incident.Department dept) {
-        PaginatedQueryList<UserDataDO> results;
-        Iterator<UserDataDO> resultsIterator;
-        final UserDataDO itemToFind = new UserDataDO();
-        itemToFind.setOrganization(dept.getName());
+    private class GetOrgSubordinatesDataThread implements Runnable {
+        String callingMethodIdentifier;
+        Responder superior;
 
-        DynamoDBQueryExpression<UserDataDO> queryExpression = new DynamoDBQueryExpression<UserDataDO>()
-                .withHashKeyValues(itemToFind)
-                .withConsistentRead(false);
-        results = mapper.query(UserDataDO.class, queryExpression);
-        if (results != null) {
-            resultsIterator = results.iterator();
-            if (resultsIterator.hasNext()) {
-                //return all the things in the iterator.
-            }
+        public GetOrgSubordinatesDataThread(Responder superior, String callingMethodIdentifier) {
+            this.callingMethodIdentifier = callingMethodIdentifier;
+            this.superior = superior;
         }
 
-        return null;
+        @Override
+        public void run() {
+            Responder orgSubordinates[] = new Responder[superior.getOrgSubordinates().size()];
+            Intent intent = new Intent();
+            intent.setAction(DATABASE_SERVICE_ACTION);
+            intent.putExtra(CALLING_METHOD_IDENTIFIER, callingMethodIdentifier);
+            //There may be errors, but I don't think this should say so.
+            intent.putExtra(ERROR_STATUS, Responder.NO_ERROR);
+            int i = 0;
+
+            for (String subordinateId : superior.getOrgSubordinates()) {
+                //TODO this gets remade a bunch, will this be a problem?
+                final UserDataDO targetUser = new UserDataDO();
+                targetUser.setUserId(subordinateId);
+                final DynamoDBQueryExpression<UserDataDO> queryExpr = new DynamoDBQueryExpression<UserDataDO>()
+                        .withHashKeyValues(targetUser)
+                        .withConsistentRead(false)
+                        .withLimit(1);
+                final PaginatedQueryList<UserDataDO> resultList = mapper.query(UserDataDO.class, queryExpr);
+
+                if (resultList.size() > 0) {
+                    UserDataDO foundUser = resultList.get(0);
+                    Responder subordinate = new Responder(foundUser.getUserId(), foundUser.getName(),  foundUser.getOrganization(),
+                            foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
+                            foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
+                            foundUser.getCurrentIncidentId(), foundUser.getOrgSuperior(),
+                            foundUser.getOrgSubordinates());
+                    orgSubordinates[i] = subordinate;
+                } else {
+                    Log.e(TAG, "Failed to find responder " + subordinateId);
+                    List<String> emptyList = new ArrayList<String>();
+                    Responder subordinate = new Responder(subordinateId, "unknown", superior.getOrganization(),
+                            emptyList, "unknown",
+                            emptyList, "unknown", "unknown",
+                            "unknown", superior.getUserID(),
+                            emptyList);
+                    orgSubordinates[i] = subordinate;
+                }
+                i++;
+            }
+            intent.putExtra(DATA, orgSubordinates);
+            sendBroadcast(intent);
+        }
     }
 
-    public Responder[] getAllResponders() {
-        //private PaginatedQueryList<UserDataDO> results;
-        //private Iterator<UserDataDO> resultsIterator;
-        //Don't
-        return null;
+    /*
+    We don't hash for this key.  We need to do that before this method works.
+    public void getOrgResponders(Incident.Department dept, String callingMethodIdentifier) {
+        if (dept == null) {
+            throw new IllegalArgumentException("dept cannot be null");
+        } else if (callingMethodIdentifier == null) {
+            throw new IllegalArgumentException("callingMethodInfo cannot be null");
+        }
+        (new Thread(new GetOrgRespondersDataThread(dept.getName(), callingMethodIdentifier))).start();
+    }
+    */
+
+    private class GetOrgRespondersDataThread implements Runnable {
+        String callingMethodIdentifier;
+        String department;
+
+        public GetOrgRespondersDataThread(String department, String callingMethodIdentifier) {
+            this.callingMethodIdentifier = callingMethodIdentifier;
+            this.department = department;
+        }
+
+        @Override
+        public void run() {
+            ArrayList<Responder> responders = new ArrayList<>();
+            Responder responder;
+            UserDataDO foundUser;
+            Intent intent = new Intent();
+            intent.setAction(DATABASE_SERVICE_ACTION);
+            intent.putExtra(CALLING_METHOD_IDENTIFIER, callingMethodIdentifier);
+
+            PaginatedQueryList<UserDataDO> results;
+            Iterator<UserDataDO> resultsIterator;
+            final UserDataDO itemToFind = new UserDataDO();
+            itemToFind.setOrganization(department);
+
+            DynamoDBQueryExpression<UserDataDO> queryExpression = new DynamoDBQueryExpression<UserDataDO>()
+                    .withHashKeyValues(itemToFind)
+                    .withConsistentRead(false);
+            results = mapper.query(UserDataDO.class, queryExpression);
+            if (results != null) {
+                resultsIterator = results.iterator();
+                if (resultsIterator.hasNext()) {
+                    while(resultsIterator.hasNext()) {
+                        foundUser = resultsIterator.next();
+                        responder = new Responder(foundUser.getUserId(), foundUser.getName(),  foundUser.getOrganization(),
+                                foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
+                                foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
+                                foundUser.getCurrentIncidentId(), foundUser.getOrgSuperior(),
+                                foundUser.getOrgSubordinates());
+                        responders.add(responder);
+                    }
+                }
+                intent.putExtra(ERROR_STATUS, Responder.NO_ERROR);
+                intent.putExtra(DATA, responders.toArray(new Responder[responders.size()]));
+            } else {
+                //TODO this should be a different error, like no_things_found.
+                intent.putExtra(ERROR_STATUS, Responder.QUERY_FAILED);
+            }
+            sendBroadcast(intent);
+        }
+    }
+
+
+/*
+This doesn't work yet.  TODO debug.
+    public void getAllResponders(String callingMethodIdentifier) {
+        if (callingMethodIdentifier == null) {
+            throw new IllegalArgumentException("callingMethodInfo cannot be null");
+        }
+        (new Thread(new GetAllRespondersDataThread(callingMethodIdentifier))).start();
+    }
+*/
+
+    private class GetAllRespondersDataThread implements Runnable {
+        String callingMethodIdentifier;
+        private PaginatedScanList<UserDataDO> results;
+        private Iterator<UserDataDO> resultsIterator;
+        ArrayList<Responder> responders = new ArrayList<Responder>();
+        Responder responder;
+        UserDataDO foundUser;
+        Intent intent = new Intent();
+
+        public GetAllRespondersDataThread(String callingMethodIdentifier) {
+            this.callingMethodIdentifier = callingMethodIdentifier;
+        }
+
+        @Override
+        public void run() {
+            final DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
+            results = mapper.scan(UserDataDO.class, scanExpression);
+            if (results != null) {
+                resultsIterator = results.iterator();
+                if (resultsIterator.hasNext()) {
+                    while(resultsIterator.hasNext()) {
+                        foundUser = resultsIterator.next();
+                        responder = new Responder(foundUser.getUserId(), foundUser.getName(),  foundUser.getOrganization(),
+                                foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
+                                foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
+                                foundUser.getCurrentIncidentId(), foundUser.getOrgSuperior(),
+                                foundUser.getOrgSubordinates());
+                        responders.add(responder);
+                    }
+                }
+                intent.putExtra(ERROR_STATUS, Responder.NO_ERROR);
+                intent.putExtra(DATA, responders.toArray(new Responder[responders.size()]));
+            } else {
+                intent.putExtra(ERROR_STATUS, Responder.QUERY_FAILED);
+            }
+            sendBroadcast(intent);
+        }
     }
 
     public Incident[] getAllIncidents() {
