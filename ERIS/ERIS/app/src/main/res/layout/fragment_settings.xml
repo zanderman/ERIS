@@ -4,8 +4,6 @@
     android:layout_height="match_parent"
     tools:context="com.eris.fragments.SettingsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -27,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/broadcastBar"
-                android:max="10"
+                android:max="9"
                 android:progress="3"
                 android:paddingLeft="5sp" />
 
@@ -70,7 +68,7 @@
 
             <Button
                 android:text="Send Test Alert"
-                android:layout_width="382dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/testAlert" />
 
