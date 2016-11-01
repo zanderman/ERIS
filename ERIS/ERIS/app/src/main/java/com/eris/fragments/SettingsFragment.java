@@ -107,7 +107,7 @@ public class SettingsFragment extends Fragment {
                                     .setContentText("Test notification");
                     NotificationManager mNotificationManager =
                             (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                    mNotificationManager.notify(0, mBuilder.build());
+                    mNotificationManager.notify((int) (Math.random() * 10000), mBuilder.build());
                 }
             }
         });
