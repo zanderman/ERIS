@@ -38,7 +38,7 @@ public class ResponderListAdapter extends ArrayAdapter<Responder> {
         // Set content of view elements.
         nameTextView.setText(responder.lastName + ", " + responder.firstName.charAt(0));
         heartRateTextView.setText(Float.toString(responder.heartRate) + " bpm");
-        userPhotoImageView.setImageResource(R.mipmap.ic_donut_large_black_24dp);
+        userPhotoImageView.setImageResource(R.drawable.ic_account_circle_black_24dp);
 
         // Make name TextView scroll if marque is enabled.
         nameTextView.setSelected(true);
