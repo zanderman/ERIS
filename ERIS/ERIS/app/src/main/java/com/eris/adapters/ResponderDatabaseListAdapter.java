@@ -29,22 +29,22 @@ public class ResponderDatabaseListAdapter extends ArrayAdapter<Responder> {
         // Gain access to view.
         View root = inflater.inflate(R.layout.list_item_responder, parent, false);
 
-        // Get view elements.
-        TextView nameTextView = (TextView) root.findViewById(R.id.nameTextView);
-        TextView uidTextView = (TextView) root.findViewById(R.id.uidTextView);
-        TextView healthTextView = (TextView) root.findViewById(R.id.healthTextView);
-        TextView locationTextView = (TextView) root.findViewById(R.id.locationTextView);
-
-        // Set content of view elements.
-        nameTextView.setText(responder.firstName + " " + responder.lastName);
-        uidTextView.setText(responder.userID);
-        healthTextView.setText(responder.heartRate + " bpm");
-        if (responder.location != null) {
-            locationTextView.setText(responder.location.latitude + ", " + responder.location.longitude);
-        }
-        else {
-            locationTextView.setText("location unknown");
-        }
+//        // Get view elements.
+//        TextView nameTextView = (TextView) root.findViewById(R.id.nameTextView);
+//        TextView uidTextView = (TextView) root.findViewById(R.id.uidTextView);
+//        TextView healthTextView = (TextView) root.findViewById(R.id.healthTextView);
+//        TextView locationTextView = (TextView) root.findViewById(R.id.locationTextView);
+//
+//        // Set content of view elements.
+//        nameTextView.setText(responder.firstName + " " + responder.lastName);
+//        uidTextView.setText(responder.userID);
+//        healthTextView.setText(responder.heartRate + " bpm");
+//        if (responder.location != null) {
+//            locationTextView.setText(responder.location.latitude + ", " + responder.location.longitude);
+//        }
+//        else {
+//            locationTextView.setText("location unknown");
+//        }
 
         // Return the altered view.
         return root;

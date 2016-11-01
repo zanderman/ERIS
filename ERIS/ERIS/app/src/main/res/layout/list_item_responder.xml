@@ -1,50 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/card_bg_shadow"
     android:weightSum="1.0">
+
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="1.0">
+        android:weightSum="1">
+
+        <ImageView
+            android:layout_width="100px"
+            android:layout_height="100px"
+            app:srcCompat="@mipmap/ic_donut_large_black_24dp"
+            android:paddingLeft="20px"
+            android:id="@+id/responder_image"/>
 
         <TextView
-            android:hint="Name"
+            android:text="name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/nameTextView"
-            android:layout_weight="0.8" />
+            android:layout_weight="0.7"
+            android:paddingLeft="10px"
+            android:maxLines="1"
+            android:ellipsize="marquee"
+            android:id="@+id/responder_name"
+            android:layout_gravity="center" />
 
         <TextView
-            android:hint="UID"
-            android:layout_width="wrap_content"
+            android:text="__.__ bpm"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/uidTextView"
-            android:layout_weight="0.2" />
+            android:layout_weight="0.3"
+            android:paddingRight="20px"
+            android:maxLines="1"
+            android:ellipsize="marquee"
+            android:id="@+id/responder_heart_rate"
+            android:layout_gravity="center"
+            android:gravity="right"/>
     </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:weightSum="1.0">
-
-        <TextView
-            android:hint="Health"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/healthTextView"
-            android:layout_weight="0.3" />
-
-        <TextView
-            android:hint="Latitude"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/locationTextView"
-            android:layout_weight="0.7" />
-    </LinearLayout>
-
 </LinearLayout>
