@@ -39,6 +39,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -46,6 +47,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,11 +79,11 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
     private GoogleMap googleMap;
     private BroadcastReceiver receiver;
     private Incident incident;
-    private ListView responderListView, subordinateListView;
-    private ResponderListAdapter responderAdapter, subordinateAdapter;
-    private ArrayList<Responder> subordinates, responders;
-    private Responder supervisor;
-    private ArrayList<Marker> markers; // List of Google Map markers.
+    private Responder currentUser;
+    private ListView responderListView, subordinateListView, superiorListView;
+    private ResponderListAdapter responderAdapter, subordinateAdapter, superiorAdapter;
+    private ArrayList<Responder> subordinates, responders, superiors;
+    private HashMap<String, Marker> markers; // HashMap of Google Map markers.
 
     /*
      * Information Layout Members
@@ -114,7 +116,23 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         // Setup responder arrays.
         subordinates = new ArrayList<Responder>();
         responders= new ArrayList<Responder>();
+        superiors = new ArrayList<Responder>();
 
+        // Setup the map markers hash map
+        markers = new HashMap<String, Marker>();
+
+        // Get the reference to the Responder object for the current user
+        // TODO 44444444 update this to use actual user pulled from database on login
+        ArrayList<String> heartrates = new ArrayList<String>();
+        heartrates.add("72.4");
+        heartrates.add("75.1");
+        heartrates.add("80.2");
+        ArrayList<String> currSubordinates = new ArrayList<String>();
+        currSubordinates.add("2");
+        currSubordinates.add("3");
+        currSubordinates.add("4");
+        currentUser = new Responder("1", "Albertson,Al", "EMS", heartrates, "11",
+                currSubordinates, "37.229601", "-80.417308", "5842", "11", currSubordinates);
 
         // Create an intent filter
         IntentFilter filter = new IntentFilter();
@@ -137,8 +155,11 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                         break;
 
                     // Database query result.
-                    case DatabaseService.BROADCAST_ACTION_QUERY_RESULT:
-                        break;
+                    // TODO 44444444 implement this using database service broadcast
+//                    case DatabaseService.BROADCAST_ACTION_QUERY_RESULT:
+//                        ArrayList<Responder> updatedResponders = intent.getParcelableArrayListExtra("currentResponders");
+//                        respondToUpdatedResponderBroadcast(updatedResponders);
+//                        break;
 
                     // Unhandled broadcast.
                     default:
@@ -147,6 +168,62 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
             }
         };
         this.getActivity().registerReceiver(receiver, filter);
+    }
+
+    private void respondToUpdatedResponderBroadcast(ArrayList<Responder> updatedResponders) {
+
+        responders.clear();
+        subordinates.clear();
+        superiors.clear();
+        for (String key : markers.keySet()) {
+            markers.get(key).remove();
+        }
+        markers.clear();
+        responderAdapter.clear();
+        subordinateAdapter.clear();
+        superiorAdapter.clear();
+
+        for (Responder responder : updatedResponders) {
+            if (currentUser.getIncidentSuperior().equals(responder.getUserID())) {
+                superiors.add(responder);
+            }
+            else if (currentUser.getIncidentSubordinates().contains(responder.getUserID())) {
+                subordinates.add(responder);
+            }
+            else if (!currentUser.getUserID().equals(responder.getUserID())) {
+                responders.add(responder);
+            }
+            BitmapDescriptor bitmapDescriptor;
+            switch (responder.getOrganization()) {
+                case "EMS":
+                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+                    break;
+                case "POLICE":
+                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
+                    break;
+                case "FIRE":
+                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+                    break;
+                default:
+                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+            }
+            Marker marker = googleMap.addMarker(
+                    new MarkerOptions()
+                            .position(new LatLng(Double.parseDouble(responder.getLatitude()),
+                                    Double.parseDouble(responder.getLongitude())))
+                            .title(responder.lastName + ", " + responder.firstName)
+                            .snippet(responder.getOrganization() + "  //  "
+                                    + responder.getHeartrateRecord().get(0))
+                            .icon(bitmapDescriptor)
+            );
+            markers.put(responder.getUserID(), marker);
+        }
+        responderAdapter.addAll(responders);
+        responderAdapter.notifyDataSetChanged();
+        subordinateAdapter.addAll(subordinates);
+        subordinateAdapter.notifyDataSetChanged();
+        superiorAdapter.addAll(superiors);
+        superiorAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -175,6 +252,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         // Get reference to ListView objects.
         responderListView = (ListView) root.findViewById(R.id.incident_responder_list);
         subordinateListView = (ListView) root.findViewById(R.id.incident_subordinate_list);
+        superiorListView = (ListView) root.findViewById(R.id.incident_superior_list);
 
         // Add Google Map to fragment.
         final SupportMapFragment fragment = SupportMapFragment.newInstance();
@@ -209,6 +287,8 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         responderListView.setAdapter(responderAdapter);
         subordinateAdapter = new ResponderListAdapter(getActivity());
         subordinateListView.setAdapter(subordinateAdapter);
+        superiorAdapter = new ResponderListAdapter(getActivity());
+        superiorListView.setAdapter(superiorAdapter);
 
         /*
          * Set ListView item actions.
@@ -217,29 +297,23 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 centerMapOnLocation( responderAdapter.getItem(i).location ); // Center map on responder location.
+                markers.get(responderAdapter.getItem(i).getUserID()).showInfoWindow();
             }
         });
-        responderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        subordinateListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                centerMapOnLocation( responderAdapter.getItem(i).location ); // Center map on responder location.
+                centerMapOnLocation( subordinateAdapter.getItem(i).location ); // Center map on responder location.
+                markers.get(subordinateAdapter.getItem(i).getUserID()).showInfoWindow();
             }
         });
-
-        // add dummy items.
-        responders.add(new Responder("0","John", "Smith","0",(float) 77.7, null, null));
-        responders.add(new Responder("0","Johnny", "Johnson","0",(float) 86.7, null, null));
-        responders.add(new Responder("0","John", "Smith","0",(float) 77.7, null, null));
-        responders.add(new Responder("0","Johnny", "Johnson","0",(float) 86.7, null, null));
-        responders.add(new Responder("0","John", "Smith","0",(float) 77.7, null, null));
-        responders.add(new Responder("0","Johnny", "Johnson","0",(float) 86.7, null, null));
-        responderAdapter.addAll(responders);
-
-        subordinates.add(new Responder("0","Greg", "DaDubious","0",(float) 57.7, null, null));
-        subordinates.add(new Responder("0","Brian", "Yasar","0",(float) 67.7, null, null));
-        subordinates.add(new Responder("0","Greg", "DaDubious","0",(float) 57.7, null, null));
-        subordinates.add(new Responder("0","Brian", "Yasar","0",(float) 67.7, null, null));
-        subordinateAdapter.addAll(subordinates);
+        superiorListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                centerMapOnLocation( superiorAdapter.getItem(i).location ); // Center map on responder location.
+                markers.get(superiorAdapter.getItem(i).getUserID()).showInfoWindow();
+            }
+        });
 
         /*
          * Set FloatingActionButton actions.
@@ -358,8 +432,6 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                             LinearLayout.LayoutParams.MATCH_PARENT
                     )
             );
-            responderAdapter.clear();
-            subordinateAdapter.clear();
 
         } else {
 //            infoContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.fade_in));
@@ -371,10 +443,6 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                     )
             );
             hierarchyContainer.setVisibility(View.VISIBLE);
-
-            // Repopulate the lists with all stored responders.
-            responderAdapter.addAll(responders);
-            subordinateAdapter.addAll(subordinates);
         }
 
         // Change the flipflop value.
@@ -406,6 +474,65 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
     @Override
     public void onMapLongClick(LatLng latLng) {
+        // TODO 44444444 remove dummy values & update response call, only here to simulate update from database
+        ArrayList<String> heartrates2 = new ArrayList<String>();
+        ArrayList<String> heartrates3 = new ArrayList<String>();
+        ArrayList<String> heartrates4 = new ArrayList<String>();
+        ArrayList<String> heartrates5 = new ArrayList<String>();
+        ArrayList<String> heartrates6 = new ArrayList<String>();
+        ArrayList<String> heartrates7 = new ArrayList<String>();
+        ArrayList<String> heartrates8 = new ArrayList<String>();
+        ArrayList<String> heartrates9 = new ArrayList<String>();
+        ArrayList<String> heartrates10 = new ArrayList<String>();
+        ArrayList<String> heartrates11 = new ArrayList<String>();
+        heartrates2.add("86.7");
+        heartrates3.add("82.3");
+        heartrates4.add("84.1");
+        heartrates5.add("78.3");
+        heartrates6.add("74.2");
+        heartrates7.add("83.5");
+        heartrates8.add("87.1");
+        heartrates9.add("81.4");
+        heartrates10.add("79.8");
+        heartrates11.add("71.2");
+        ArrayList<Responder> respondersTestList2 = new ArrayList<Responder>();
+
+        ArrayList<String> heartrates = new ArrayList<String>();
+        heartrates.add("72.4");
+        heartrates.add("75.1");
+        heartrates.add("80.2");
+        ArrayList<String> currSubordinates = new ArrayList<String>();
+        currSubordinates.add("2");
+        currSubordinates.add("3");
+        currSubordinates.add("4");
+        currSubordinates.add("5");
+        currentUser = new Responder("1", "Albertson,Al", "EMS", heartrates, "11",
+                currSubordinates, "37.229601", "-80.417308", "5842", "11", currSubordinates);
+
+        respondersTestList2.add(currentUser);
+        respondersTestList2.add(new Responder("2", "Johnson,Johnny", "EMS", heartrates2, "1",
+                null, "37.209601", "-80.429308", "5842", "1", null));
+        respondersTestList2.add(new Responder("3", "Doe,John", "EMS", heartrates3, "1",
+                null, "37.304601", "-80.507308", "5842", "1", null));
+        respondersTestList2.add(new Responder("4", "James,Jim", "EMS", heartrates4, "1",
+                null, "37.247601", "-80.399308", "5842", "1", null));
+        respondersTestList2.add(new Responder("5", "Mathews,Robby", "EMS", heartrates5, "1",
+                null, "37.419601", "-80.319308", "5842", "1", null));
+        respondersTestList2.add(new Responder("6", "Smith,Emma", "EMS", heartrates6, "11",
+                null, "37.519601", "-80.479308", "5842", "11", null));
+
+        respondersTestList2.add(new Responder("7", "DaDubious,Greg", "EMS", heartrates7, "11",
+                null, "37.389601", "-80.389308", "5842", "11", null));
+        respondersTestList2.add(new Responder("8", "Yasar,Brian", "EMS", heartrates8, "11",
+                null, "37.429601", "-80.549308", "5842", "11", null));
+        respondersTestList2.add(new Responder("9", "McFubious,Dan", "EMS", heartrates9, "11",
+                null, "37.419601", "-80.519308", "5842", "11", null));
+        respondersTestList2.add(new Responder("10", "Watson,Ally", "EMS", heartrates10, "11",
+                null, "37.439601", "-80.509308", "5842", "11", null));
+
+        respondersTestList2.add(new Responder("11", "Dr,T", "EMS", heartrates11, null,
+                null, "37.409601", "-80.529308", "5842", null, null));
+        respondToUpdatedResponderBroadcast(respondersTestList2);
     }
 
     @Override
@@ -424,7 +551,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                         .position(incident.location)
                         .title(incident.address)
                         .snippet(incident.description)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
         );
 
         /*
@@ -445,6 +572,53 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
         // Center map on incident location.
         centerMapOnLocation(incident.location);
+
+        // add dummy items.
+        ArrayList<String> heartrates2 = new ArrayList<String>();
+        ArrayList<String> heartrates3 = new ArrayList<String>();
+        ArrayList<String> heartrates4 = new ArrayList<String>();
+        ArrayList<String> heartrates5 = new ArrayList<String>();
+        ArrayList<String> heartrates6 = new ArrayList<String>();
+        ArrayList<String> heartrates7 = new ArrayList<String>();
+        ArrayList<String> heartrates8 = new ArrayList<String>();
+        ArrayList<String> heartrates9 = new ArrayList<String>();
+        ArrayList<String> heartrates10 = new ArrayList<String>();
+        ArrayList<String> heartrates11 = new ArrayList<String>();
+        heartrates2.add("86.7");
+        heartrates3.add("82.3");
+        heartrates4.add("84.1");
+        heartrates5.add("78.3");
+        heartrates6.add("74.2");
+        heartrates7.add("83.5");
+        heartrates8.add("87.1");
+        heartrates9.add("81.4");
+        heartrates10.add("79.8");
+        heartrates11.add("71.2");
+        ArrayList<Responder> respondersTestList1 = new ArrayList<Responder>();
+        respondersTestList1.add(currentUser);
+        respondersTestList1.add(new Responder("2", "Johnson,Johnny", "EMS", heartrates2, "1",
+                null, "37.209601", "-80.429308", "5842", "1", null));
+        respondersTestList1.add(new Responder("3", "Doe,John", "EMS", heartrates3, "1",
+                null, "37.304601", "-80.507308", "5842", "1", null));
+        respondersTestList1.add(new Responder("4", "James,Jim", "EMS", heartrates4, "1",
+                null, "37.247601", "-80.399308", "5842", "1", null));
+        respondersTestList1.add(new Responder("5", "Mathews,Robby", "EMS", heartrates5, "11",
+                null, "37.519601", "-80.529308", "5842", "11", null));
+        respondersTestList1.add(new Responder("6", "Smith,Emma", "EMS", heartrates6, "11",
+                null, "37.489601", "-80.499308", "5842", "11", null));
+
+        respondersTestList1.add(new Responder("7", "DaDubious,Greg", "EMS", heartrates7, "11",
+                null, "37.389601", "-80.389308", "5842", "11", null));
+        respondersTestList1.add(new Responder("8", "Yasar,Brian", "EMS", heartrates8, "11",
+                null, "37.429601", "-80.549308", "5842", "11", null));
+        respondersTestList1.add(new Responder("9", "McFubious,Dan", "EMS", heartrates9, "11",
+                null, "37.419601", "-80.519308", "5842", "11", null));
+        respondersTestList1.add(new Responder("10", "Watson,Ally", "EMS", heartrates10, "11",
+                null, "37.439601", "-80.509308", "5842", "11", null));
+
+        respondersTestList1.add(new Responder("11", "Dr,T", "EMS", heartrates11, null,
+                null, "37.409601", "-80.529308", "5842", null, null));
+        respondToUpdatedResponderBroadcast(respondersTestList1);
     }
 
     /**

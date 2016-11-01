@@ -81,12 +81,17 @@ public class Responder {
                      List<String> incidentSubordinates) {
         this.userID = userID;
         this.name = name;
+        String[] splitName = name.split(",");
+        this.firstName = splitName[1];
+        this.lastName = splitName[0];
         this.organization = organization;
         this.heartrateRecord = heartrateRecord;
+        this.heartRate = Float.parseFloat(heartrateRecord.get(0));
         this.orgSuperior = orgSuperior;
         this.orgSubordinates = orgSubordinates;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.location = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
         this.sceneID = sceneID;
         this.incidentSuperior = incidentSuperior;
         this.incidentSubordinates = incidentSubordinates;
