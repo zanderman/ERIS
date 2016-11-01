@@ -96,10 +96,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             R.id.main_fragment_container);
 
         // Add navigation drawer menu items.
-        NavigationDrawerMenuItem homeItem = new NavigationDrawerMenuItem(
-                "Home", R.mipmap.ic_home_black_24dp,
-                HomeFragment.class.getName(), HomeFragment.class.getSimpleName()
-        );
         NavigationDrawerMenuItem incidentListItem = new NavigationDrawerMenuItem(
                 "Incident List", R.mipmap.ic_explore_black_24dp,
                 IncidentListFragment.class.getName(), IncidentListFragment.class.getSimpleName()
@@ -112,16 +108,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 "Settings", R.mipmap.ic_settings_black_24dp,
                 SettingsFragment.class.getName(), SettingsFragment.class.getSimpleName()
         );
-        NavigationDrawerMenuItem loginItem = new NavigationDrawerMenuItem(
-                "Login", R.mipmap.ic_assignment_ind_black_24dp,
-                DemoResponderDatabaseFragment.class.getName(), DemoResponderDatabaseFragment.class.getSimpleName()
-        );
 
-        navigationDrawer.addItemToMenu(homeItem);
         navigationDrawer.addItemToMenu(incidentListItem);
         navigationDrawer.addItemToMenu(commandStructureItem);
         navigationDrawer.addItemToMenu(settingsItem);
-        navigationDrawer.addItemToMenu(loginItem);
 
         if (savedInstanceState == null) {
             // Add the home fragment to be displayed initially.
