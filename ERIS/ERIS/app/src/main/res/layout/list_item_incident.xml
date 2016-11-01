@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <!-- Black Divider -->
+        <!-- Status Bar-->
         <View
             android:id="@+id/incident_status_bar"
             android:layout_width="7dip"
