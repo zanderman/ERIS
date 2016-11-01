@@ -23,6 +23,7 @@
     <!-- For local storage for shared preferences -->
     <string name="sharedpreferences_curr_user_account_info">UserAccountInfo</string>
     <string name="sharedpreferences_entry_userID">UserID</string>
+    <string name="sharedpreferences_user_settings">Settings</string>
 
     <!-- USED BY DEMO FEATURES ONLY - YOU CAN DISCARD THESE WITH THE DEMO FOLDER -->
 

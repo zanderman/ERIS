@@ -30,10 +30,10 @@ import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobile.user.IdentityManager;
 import com.eris.R;
 import com.eris.classes.NavigationDrawerMenuItem;
-import com.eris.demo.DemoConfiguration;
 import com.eris.fragments.DemoResponderDatabaseFragment;
 import com.eris.fragments.HomeFragment;
 import com.eris.fragments.IncidentListFragment;
+import com.eris.fragments.SettingsFragment;
 import com.eris.navigation.NavigationDrawer;
 import com.eris.services.LocationService;
 import com.eris.services.DatabaseService;
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         );
         NavigationDrawerMenuItem settingsItem = new NavigationDrawerMenuItem(
                 "Settings", R.mipmap.ic_settings_black_24dp,
-                DemoResponderDatabaseFragment.class.getName(), DemoResponderDatabaseFragment.class.getSimpleName()
+                SettingsFragment.class.getName(), SettingsFragment.class.getSimpleName()
         );
         NavigationDrawerMenuItem loginItem = new NavigationDrawerMenuItem(
                 "Login", R.mipmap.ic_assignment_ind_black_24dp,
