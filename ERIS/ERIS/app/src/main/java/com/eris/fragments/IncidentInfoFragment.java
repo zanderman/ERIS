@@ -88,7 +88,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
     /*
      * Information Layout Members
      */
-    private TextView addressTextView, descriptionTextView, runtimeTextView, statusTextView;
+    private TextView addressTextView, descriptionTextView, runtimeTextView;
 
 
     public IncidentInfoFragment() {
@@ -247,7 +247,6 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         addressTextView = (TextView) root.findViewById(R.id.info_address);
         descriptionTextView = (TextView) root.findViewById(R.id.info_description);
         runtimeTextView = (TextView) root.findViewById(R.id.info_runtime);
-        statusTextView = (TextView) root.findViewById(R.id.info_status);
 
         // Get reference to ListView objects.
         responderListView = (ListView) root.findViewById(R.id.incident_responder_list);
@@ -276,9 +275,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
          */
         addressTextView.setText(this.incident.address);
         descriptionTextView.setText(this.incident.description);
-        runtimeTextView.setText(5 + " minutes");
-        statusTextView.setText("In Progress");
-        statusTextView.setTextColor(getResources().getColor(R.color.md_red_800));
+        runtimeTextView.setText("00:00");
 
         /*
          * Set list adapters.
