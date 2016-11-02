@@ -43,6 +43,8 @@ public class IncidentDatabaseFragment extends Fragment {
     public static final String GET_ORG_SUBORDINATES = TAG + ".get_org_subordinates";
     public static final String GET_ALL_RESPONDERS = TAG + ".get_all_responders";
     public static final String GET_ORG_RESPONDERS = TAG + ".get_org_responders";
+    public static final String GET_INCIDENT_RESPONDERS = TAG + ".get_incident_responders";
+    public static final String GET_ALL_INCIDENTS = TAG + ".get_all_incidents";
 
     private BroadcastReceiver receiver;
     private View root;
@@ -50,6 +52,8 @@ public class IncidentDatabaseFragment extends Fragment {
     private Button buttonGetOrgSubordinates;
     private Button buttonGetOrgResponders;
     private Button buttonGetAllResponders;
+    private Button buttonGetRespondersByIncident;
+    private Button buttonGetAllIncidents;
 
 //    private OnFragmentInteractionListener mListener;
 
@@ -91,6 +95,8 @@ public class IncidentDatabaseFragment extends Fragment {
         buttonGetOrgSubordinates = (Button) root.findViewById(R.id.button_get_org_subordinates);
         buttonGetOrgResponders = (Button) root.findViewById(R.id.button_get_org_responders);
         buttonGetAllResponders = (Button) root.findViewById(R.id.button_get_all_responders);
+        buttonGetRespondersByIncident = (Button) root.findViewById(R.id.button_get_responders_by_incident);
+        buttonGetAllIncidents = (Button) root.findViewById(R.id.button_get_all_incidents);
 
         return root;
     }
@@ -121,8 +127,7 @@ public class IncidentDatabaseFragment extends Fragment {
         buttonGetOrgResponders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //We don't have the hash for this.  TODO get it.
-                //((MainActivity)getActivity()).databaseService.getOrgResponders(Incident.Department.EMT, GET_ORG_SUBORDINATES);
+                ((MainActivity)getActivity()).databaseService.getOrgResponders(Incident.Department.EMS, GET_ORG_SUBORDINATES);
             }
         });
 
@@ -130,6 +135,20 @@ public class IncidentDatabaseFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 ((MainActivity)getActivity()).databaseService.getAllResponders(GET_ALL_RESPONDERS);
+            }
+        });
+
+        buttonGetRespondersByIncident.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)getActivity()).databaseService.getRespondersByIncident("5842", GET_INCIDENT_RESPONDERS);
+            }
+        });
+
+        buttonGetAllIncidents.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity)getActivity()).databaseService.getAllIncidents(GET_ALL_INCIDENTS);
             }
         });
     }
@@ -212,6 +231,7 @@ public class IncidentDatabaseFragment extends Fragment {
                 tv.setText(builder.toString());
 
             } else if (callingMethodIdentifier.equals(GET_ALL_RESPONDERS)) {
+                Log.d(TAG, "Get all responders intent.");
                 Parcelable parcelables[] = intent.getParcelableArrayExtra(DatabaseService.DATA);
                 Responder responderArray[] = new Responder[parcelables.length];
                 for(int i = 0; i < parcelables.length; i++) {
@@ -219,6 +239,33 @@ public class IncidentDatabaseFragment extends Fragment {
                 }
                 //TODO this is not robust.  But it's a demo method.
                 tv.setText(responderArray[0].getUserID() + responderArray[0].getOrganization() + responderArray[0].getLatitude() + responderArray[1].getUserID() + responderArray[1].getOrganization() + responderArray[1].getLatitude() + responderArray[2].getUserID());
+            } else if (callingMethodIdentifier.equals(GET_INCIDENT_RESPONDERS)) {
+                Log.d(TAG, "Get all responders by incident intent.");
+                Parcelable parcelables[] = intent.getParcelableArrayExtra(DatabaseService.DATA);
+                Log.d(TAG, "Items: " + parcelables.length);
+                Responder responderArray[] = new Responder[parcelables.length];
+                for(int i = 0; i < parcelables.length; i++) {
+                    responderArray[i] = (Responder) parcelables[i];
+                }
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < responderArray.length; i++) {
+                    builder.append(responderArray[i].getName());
+                }
+                tv.setText(builder.toString());
+            } else if (callingMethodIdentifier.equals(GET_ALL_INCIDENTS)) {
+                Log.d(TAG, "Get all incidents intent.");
+                Parcelable parcelables[] = intent.getParcelableArrayExtra(DatabaseService.DATA);
+                Log.d(TAG, "Items: " + parcelables.length);
+                Incident incidents[] = new Incident[parcelables.length];
+                for(int i = 0; i < parcelables.length; i++) {
+                    incidents[i] = (Incident) parcelables[i];
+                }
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < incidents.length; i++) {
+                    builder.append(incidents[i].getSceneId());
+                }
+                tv.setText(builder.toString());
+
             } else {
                 Log.e(TAG, "Unexpected method data: " + intent.getStringExtra(DatabaseService.CALLING_METHOD_IDENTIFIER));
             }

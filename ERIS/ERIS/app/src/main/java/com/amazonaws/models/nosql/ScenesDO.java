@@ -15,10 +15,13 @@ import java.util.Set;
 
 public class ScenesDO {
     private String _sceneId;
+    private String _address;
     private List<String> _assignedOrginizations;
     private String _description;
     private String _latitude;
     private String _longitude;
+    private String _time;
+    private String _title;
 
     @DynamoDBHashKey(attributeName = "sceneId")
     @DynamoDBAttribute(attributeName = "sceneId")
@@ -28,6 +31,14 @@ public class ScenesDO {
 
     public void setSceneId(final String _sceneId) {
         this._sceneId = _sceneId;
+    }
+    @DynamoDBAttribute(attributeName = "address")
+    public String getAddress() {
+        return _address;
+    }
+
+    public void setAddress(final String _address) {
+        this._address = _address;
     }
     @DynamoDBAttribute(attributeName = "assigned_orginizations")
     public List<String> getAssignedOrginizations() {
@@ -60,6 +71,22 @@ public class ScenesDO {
 
     public void setLongitude(final String _longitude) {
         this._longitude = _longitude;
+    }
+    @DynamoDBAttribute(attributeName = "time")
+    public String getTime() {
+        return _time;
+    }
+
+    public void setTime(final String _time) {
+        this._time = _time;
+    }
+    @DynamoDBAttribute(attributeName = "title")
+    public String getTitle() {
+        return _title;
+    }
+
+    public void setTitle(final String _title) {
+        this._title = _title;
     }
 
 }

@@ -13,6 +13,7 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBQueryExp
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.DynamoDBScanExpression;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedQueryList;
 import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedScanList;
+import com.amazonaws.models.nosql.ScenesDO;
 import com.amazonaws.models.nosql.UserDataDO;
 
 import com.eris.classes.Incident;
@@ -32,7 +33,7 @@ public class DatabaseService extends Service {
     public static final String ERROR_STATUS = "error_status";
     public static final String DATA = "data";
     public static final String DATABASE_SERVICE_ACTION = "android.intent.action.database.service";
-    public static final String BROADCAST_ACTION_DATABASE_INCIDENT_RESPONDERS = "broadcast_action_database_incident_responders";
+    //public static final String BROADCAST_ACTION_DATABASE_INCIDENT_RESPONDERS = "broadcast_action_database_incident_responders";
 
     /*
      * Final Members
@@ -226,7 +227,7 @@ public class DatabaseService extends Service {
 
     /**
      *
-     * @param sceneId
+     * @param incidentId
      * @param callingMethodIdentifier
      *
      * Sends out a broadcast with the following fields:
@@ -234,33 +235,67 @@ public class DatabaseService extends Service {
      * ERROR_STATUS: a string with error codes.
      * CALLING_METHOD_IDENTIFIER: the string you passed in.
      */
-    public void getRespondersByIncident(String sceneId, String callingMethodIdentifier) {
-        if (sceneId == null) {
-            throw new IllegalArgumentException("sceneId cannot be null");
+    public void getRespondersByIncident(String incidentId, String callingMethodIdentifier) {
+        if (incidentId == null) {
+            throw new IllegalArgumentException("incidentId cannot be null");
         } else if (callingMethodIdentifier == null) {
             throw new IllegalArgumentException("callingMethodInfo cannot be null");
         }
-        //(new Thread(new GetOrgRespondersDataThread(dept.getName(), callingMethodIdentifier))).start();
+        (new Thread(new GetRespondersByIncidentDataThread(incidentId, callingMethodIdentifier))).start();
     }
 
     private class GetRespondersByIncidentDataThread implements Runnable {
         String callingMethodIdentifier;
-        String sceneId;
+        String incidentId;
 
-        public GetRespondersByIncidentDataThread(String sceneId, String callingMethodIdentifier) {
+        public GetRespondersByIncidentDataThread(String incidentId, String callingMethodIdentifier) {
             this.callingMethodIdentifier = callingMethodIdentifier;
-            this.sceneId = sceneId;
+            this.incidentId = incidentId;
         }
 
         @Override
         public void run() {
-            //Return an array in DATA.
+            ArrayList<Responder> responders = new ArrayList<>();
+            Responder responder;
+            UserDataDO foundUser;
+            Intent intent = new Intent();
+            intent.setAction(DATABASE_SERVICE_ACTION);
+            intent.putExtra(CALLING_METHOD_IDENTIFIER, callingMethodIdentifier);
+
+            PaginatedQueryList<UserDataDO> results;
+            Iterator<UserDataDO> resultsIterator;
+            final UserDataDO itemToFind = new UserDataDO();
+            itemToFind.setCurrentIncidentId(incidentId);
+
+            DynamoDBQueryExpression<UserDataDO> queryExpression = new DynamoDBQueryExpression<UserDataDO>()
+                    .withHashKeyValues(itemToFind)
+                    .withConsistentRead(false);
+            results = mapper.query(UserDataDO.class, queryExpression);
+            if (results != null) {
+                resultsIterator = results.iterator();
+                if (resultsIterator.hasNext()) {
+                    while(resultsIterator.hasNext()) {
+                        foundUser = resultsIterator.next();
+                        responder = new Responder(foundUser.getUserId(), foundUser.getName(),  foundUser.getOrganization(),
+                                foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
+                                foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
+                                foundUser.getCurrentIncidentId(), foundUser.getOrgSuperior(),
+                                foundUser.getOrgSubordinates());
+                        responders.add(responder);
+                    }
+                }
+                intent.putExtra(ERROR_STATUS, Responder.NO_ERROR);
+                intent.putExtra(DATA, responders.toArray(new Responder[responders.size()]));
+            } else {
+                //TODO this should be a different error, like no_things_found.
+                intent.putExtra(ERROR_STATUS, Responder.QUERY_FAILED);
+            }
+            sendBroadcast(intent);
         }
     }
 
 
-    /*
-    We don't hash for this key.  We need to do that before this method works.
+
     public void getOrgResponders(Incident.Department dept, String callingMethodIdentifier) {
         if (dept == null) {
             throw new IllegalArgumentException("dept cannot be null");
@@ -269,7 +304,7 @@ public class DatabaseService extends Service {
         }
         (new Thread(new GetOrgRespondersDataThread(dept.getName(), callingMethodIdentifier))).start();
     }
-    */
+
 
     private class GetOrgRespondersDataThread implements Runnable {
         String callingMethodIdentifier;
@@ -345,6 +380,8 @@ public class DatabaseService extends Service {
 
         @Override
         public void run() {
+            intent.setAction(DATABASE_SERVICE_ACTION);
+            intent.putExtra(CALLING_METHOD_IDENTIFIER, callingMethodIdentifier);
             final DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
             results = mapper.scan(UserDataDO.class, scanExpression);
             if (results != null) {
@@ -379,9 +416,55 @@ public class DatabaseService extends Service {
      * CALLING_METHOD_IDENTIFIER: the string you passed in.
      */
     public void getAllIncidents(String callingMethodIdentifier) {
-
+        if (callingMethodIdentifier == null) {
+            throw new IllegalArgumentException("callingMethodInfo cannot be null");
+        }
+        (new Thread(new GetAllIncidentsDataThread(callingMethodIdentifier))).start();
     }
 
+    private class GetAllIncidentsDataThread implements Runnable {
+        String callingMethodIdentifier;
+        private PaginatedScanList<ScenesDO> results;
+        private Iterator<ScenesDO> resultsIterator;
+        ArrayList<Incident> incidents = new ArrayList<>();
+        Incident incident;
+        ScenesDO foundIncident;
+        Intent intent = new Intent();
+
+        public GetAllIncidentsDataThread(String callingMethodIdentifier) {
+            this.callingMethodIdentifier = callingMethodIdentifier;
+        }
+
+        @Override
+        public void run() {
+            intent.setAction(DATABASE_SERVICE_ACTION);
+            intent.putExtra(CALLING_METHOD_IDENTIFIER, callingMethodIdentifier);
+            final DynamoDBScanExpression scanExpression = new DynamoDBScanExpression();
+            results = mapper.scan(ScenesDO.class, scanExpression);
+            if (results != null) {
+                resultsIterator = results.iterator();
+                if (resultsIterator.hasNext()) {
+                    while(resultsIterator.hasNext()) {
+                        foundIncident = resultsIterator.next();
+                        //TODO add a thing to the scene.
+                        incident = new Incident(foundIncident.getSceneId(), foundIncident.getDescription(),  foundIncident.getAddress(),
+                                foundIncident.getLatitude(), foundIncident.getLongitude(),
+                                foundIncident.getTime(), foundIncident.getTitle(), foundIncident.getAssignedOrginizations());
+                        incidents.add(incident);
+                    }
+                }
+                //TODO should be seperate enum, or in this class, or in Incident.
+                intent.putExtra(ERROR_STATUS, Responder.NO_ERROR);
+                intent.putExtra(DATA, incidents.toArray(new Incident[incidents.size()]));
+            } else {
+                intent.putExtra(ERROR_STATUS, Responder.QUERY_FAILED);
+            }
+            sendBroadcast(intent);
+        }
+    }
+
+
+//TODO this is the last thing tonight.
     public void pushResponderData(Responder responder) {
 
     }

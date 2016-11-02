@@ -3,11 +3,8 @@ package com.eris.classes;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Intent;
-import android.location.Location;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -25,7 +22,7 @@ public class Incident implements Parcelable, Serializable{
      * Public Members
      */
     public enum Department {
-        POLICE ("POLICE"), FIRE_RESCUE ("FIRE_RESCUE"), EMT ("EMT");
+        POLICE ("POLICE"), FIRE_RESCUE ("FIRE_RESCUE"), EMS ("EMS");
 
         //TODO this string seems not needed.
         public String Name;
@@ -38,6 +35,7 @@ public class Incident implements Parcelable, Serializable{
             return this.Name;
         }
     }
+    //TODO really, these should be private.
     public String time;
     public String title;
     public String description;
@@ -82,6 +80,7 @@ public class Incident implements Parcelable, Serializable{
         outParcel.writeStringList(organizations);
     }
 
+
     public static final Parcelable.Creator<Incident> CREATOR = new Parcelable.Creator<Incident>() {
         public Incident createFromParcel(Parcel in) {
             return new Incident(in);
@@ -92,13 +91,11 @@ public class Incident implements Parcelable, Serializable{
         }
     };
 
-
     @Override
     //Useless override method required.
     public int describeContents() {
         return 0;
     }
-
 
     public List<String> getOrganizations() {
         return this.organizations;
