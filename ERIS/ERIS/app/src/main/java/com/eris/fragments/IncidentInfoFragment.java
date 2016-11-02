@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eris.R;
+import com.eris.activities.MainActivity;
 import com.eris.adapters.ResponderListAdapter;
 import com.eris.classes.Incident;
 import com.eris.classes.Responder;
@@ -78,6 +79,9 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
             informationFloatingActionButton;
     private GoogleMap googleMap;
     private BroadcastReceiver receiver;
+    private Thread incidentResponderUpdateThread;
+    private boolean responderListUpdateFlag;
+    private String respondersByIncidentRequestMethodIdentifier;
     private Incident incident;
     private Responder currentUser;
     private ListView responderListView, subordinateListView, superiorListView;
@@ -154,19 +158,55 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                         Log.d("location", "UPDATE: " + location);
                         break;
 
-//                    // Database query result.
-//                    case DatabaseService.BROADCAST_ACTION_DATABASE_INCIDENT_RESPONDERS:
-//                        ArrayList<Responder> updatedResponders = intent.getParcelableArrayListExtra(DatabaseService.DATA);
-//                        respondToUpdatedResponderBroadcast(updatedResponders);
-//                        break;
-
-                    // Unhandled broadcast.
+                    // Unhandled broadcast
                     default:
                         break;
+                }
+
+                String callingMethodIdentifier = intent.getStringExtra(DatabaseService.CALLING_METHOD_IDENTIFIER);
+                if (callingMethodIdentifier.equals(respondersByIncidentRequestMethodIdentifier)) {
+                    ArrayList<Responder> updatedResponders = intent.getParcelableArrayListExtra(DatabaseService.DATA);
+                    respondToUpdatedResponderBroadcast(updatedResponders);
                 }
             }
         };
         this.getActivity().registerReceiver(receiver, filter);
+
+        this.responderListUpdateFlag = true;
+        respondersByIncidentRequestMethodIdentifier = this.getClass().getSimpleName()
+                + "broadcast_action_database_incident_responders"
+                + incident.getSceneId();
+        incidentResponderUpdateThread = new Thread(
+                new PeriodicCallToDatabaseServiceForIncidentResponders(incident.getSceneId(),
+                        respondersByIncidentRequestMethodIdentifier)
+        );
+        incidentResponderUpdateThread.start();
+    }
+
+    private class PeriodicCallToDatabaseServiceForIncidentResponders implements Runnable {
+        String callingMethodIdentifier;
+        String incidentId;
+        boolean flag;
+
+        public PeriodicCallToDatabaseServiceForIncidentResponders(String incidentId, String callingMethodIdentifier) {
+            this.callingMethodIdentifier = callingMethodIdentifier;
+            this.incidentId = incidentId;
+        }
+
+        @Override
+        public void run() {
+            DatabaseService databaseService = ((MainActivity) getActivity()).databaseService;
+            databaseService.getRespondersByIncident(incidentId, callingMethodIdentifier);
+            while (responderListUpdateFlag) {
+                try {
+                    Thread.sleep(30000);
+                } catch (Exception e) {
+                    // oops
+                } finally {
+                    databaseService.getRespondersByIncident(incidentId, callingMethodIdentifier);
+                }
+            }
+        }
     }
 
     private void respondToUpdatedResponderBroadcast(ArrayList<Responder> updatedResponders) {
@@ -367,6 +407,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
         // Unregister location updates broadcast receiver.
         this.getActivity().unregisterReceiver(receiver);
+        this.responderListUpdateFlag = false;
     }
 
     /**

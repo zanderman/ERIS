@@ -192,4 +192,8 @@ public class Responder implements Parcelable {
     public String getLongitude() {return  this.longitude;}
     public String getIncidentSuperior() {return  this.incidentSuperior;}
     public List<String> getIncidentSubordinates() {return this.incidentSubordinates;}
+
+    public void setLocation(LatLng location) {this.location = location;}
+    public void setIncidentSuperior(String superiorID) {this.incidentSuperior = superiorID;}
+    public void setIncidentSubordinates(List<String> subordinateIDs) {this.incidentSubordinates = subordinateIDs;}
 }
