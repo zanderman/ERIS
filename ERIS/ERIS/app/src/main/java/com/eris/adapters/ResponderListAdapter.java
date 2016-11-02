@@ -36,7 +36,7 @@ public class ResponderListAdapter extends ArrayAdapter<Responder> {
         ImageView userPhotoImageView = (ImageView) root.findViewById(R.id.responder_image);
 
         // Set content of view elements.
-        nameTextView.setText(responder.lastName + ", " + responder.firstName.charAt(0));
+        nameTextView.setText(responder.name);
         heartRateTextView.setText(Float.toString(responder.heartRate) + " bpm");
         userPhotoImageView.setImageResource(R.drawable.ic_account_circle_black_24dp);
 

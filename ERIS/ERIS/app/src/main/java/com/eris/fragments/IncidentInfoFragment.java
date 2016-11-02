@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -79,6 +80,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
             informationFloatingActionButton;
     private GoogleMap googleMap;
     private BroadcastReceiver receiver;
+    private IntentFilter receiverFilter;
     private Thread incidentResponderUpdateThread;
     private boolean responderListUpdateFlag;
     private String respondersByIncidentRequestMethodIdentifier;
@@ -139,8 +141,9 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                 currSubordinates, "37.229601", "-80.417308", "5842", "11", currSubordinates);
 
         // Create an intent filter
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(LocationService.BROADCAST_ACTION_LOCATION_UPDATE);
+        receiverFilter = new IntentFilter();
+        receiverFilter.addAction(LocationService.BROADCAST_ACTION_LOCATION_UPDATE);
+        receiverFilter.addAction(DatabaseService.DATABASE_SERVICE_ACTION);
 
         // Create broadcast receiver object.
         this.receiver = new BroadcastReceiver() {
@@ -148,30 +151,35 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
             public void onReceive(Context context, Intent intent) {
 
                 // Determine which broadcast was sent.
-                switch ( intent.getAction() ) {
-
-                    // Updated Location
-                    case LocationService.BROADCAST_ACTION_LOCATION_UPDATE:
-                        double latitude = intent.getDoubleExtra(LocationService.KEY_LOCATION_LATITUDE, 0.0);
-                        double longitude = intent.getDoubleExtra(LocationService.KEY_LOCATION_LONGITUDE, 0.0);
-                        LatLng location = new LatLng(latitude, longitude);
-                        Log.d("location", "UPDATE: " + location);
-                        break;
-
-                    // Unhandled broadcast
-                    default:
-                        break;
-                }
-
                 String callingMethodIdentifier = intent.getStringExtra(DatabaseService.CALLING_METHOD_IDENTIFIER);
-                if (callingMethodIdentifier.equals(respondersByIncidentRequestMethodIdentifier)) {
-                    ArrayList<Responder> updatedResponders = intent.getParcelableArrayListExtra(DatabaseService.DATA);
-                    respondToUpdatedResponderBroadcast(updatedResponders);
+                if (callingMethodIdentifier != null) {
+                    if (callingMethodIdentifier.equals(respondersByIncidentRequestMethodIdentifier)) {
+                        Parcelable updatedResponders[] = intent.getParcelableArrayExtra(DatabaseService.DATA);
+                        Log.d("receiving responders", "got response :" + updatedResponders);
+                        respondToUpdatedResponderBroadcast(updatedResponders);
+                    }
+                } else {
+                    switch ( intent.getAction() ) {
+
+                        // Updated Location
+                        case LocationService.BROADCAST_ACTION_LOCATION_UPDATE:
+                            double latitude = intent.getDoubleExtra(LocationService.KEY_LOCATION_LATITUDE, 0.0);
+                            double longitude = intent.getDoubleExtra(LocationService.KEY_LOCATION_LONGITUDE, 0.0);
+                            LatLng location = new LatLng(latitude, longitude);
+                            Log.d("location", "UPDATE: " + location);
+                            break;
+
+                        // Unhandled broadcast
+                        default:
+                            break;
+                    }
                 }
+
             }
         };
-        this.getActivity().registerReceiver(receiver, filter);
+        //this.getActivity().registerReceiver(receiver, receiverFilter);
 
+        // Create a thread to request updates from the database periodically
         this.responderListUpdateFlag = true;
         respondersByIncidentRequestMethodIdentifier = this.getClass().getSimpleName()
                 + "broadcast_action_database_incident_responders"
@@ -186,7 +194,6 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
     private class PeriodicCallToDatabaseServiceForIncidentResponders implements Runnable {
         String callingMethodIdentifier;
         String incidentId;
-        boolean flag;
 
         public PeriodicCallToDatabaseServiceForIncidentResponders(String incidentId, String callingMethodIdentifier) {
             this.callingMethodIdentifier = callingMethodIdentifier;
@@ -196,20 +203,33 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         @Override
         public void run() {
             DatabaseService databaseService = ((MainActivity) getActivity()).databaseService;
-            databaseService.getRespondersByIncident(incidentId, callingMethodIdentifier);
+            try {
+                Thread.sleep(5000);
+            } catch (Exception e) {
+                // oops
+            } finally {
+                databaseService.getRespondersByIncident("5842", callingMethodIdentifier);
+            }
+
             while (responderListUpdateFlag) {
                 try {
                     Thread.sleep(30000);
                 } catch (Exception e) {
                     // oops
                 } finally {
-                    databaseService.getRespondersByIncident(incidentId, callingMethodIdentifier);
+                    databaseService.getRespondersByIncident("5842", callingMethodIdentifier);
                 }
             }
         }
     }
 
-    private void respondToUpdatedResponderBroadcast(ArrayList<Responder> updatedResponders) {
+    /**
+     * Helper method used to update markers on the map and responders listed in in the
+     * IncidentInfoFragment's associated view.
+     *
+     * @param updatedResponders
+     */
+    private void respondToUpdatedResponderBroadcast(Parcelable[] updatedResponders) {
 
         responders.clear();
         subordinates.clear();
@@ -222,7 +242,9 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         subordinateAdapter.clear();
         superiorAdapter.clear();
 
-        for (Responder responder : updatedResponders) {
+        for (Parcelable parcelableResponder : updatedResponders) {
+            Responder responder = (Responder) parcelableResponder;
+            responder.location = new LatLng(Double.parseDouble(responder.getLatitude()), Double.parseDouble(responder.getLongitude()));
             if (currentUser.getIncidentSuperior().equals(responder.getUserID())) {
                 superiors.add(responder);
             }
@@ -250,7 +272,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                     new MarkerOptions()
                             .position(new LatLng(Double.parseDouble(responder.getLatitude()),
                                     Double.parseDouble(responder.getLongitude())))
-                            .title(responder.lastName + ", " + responder.firstName)
+                            .title(responder.name)
                             .snippet(responder.getOrganization() + "  //  "
                                     + responder.getHeartrateRecord().get(0))
                             .icon(bitmapDescriptor)
@@ -511,65 +533,65 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-        // TODO 44444444 remove dummy values & update response call, only here to simulate update from database
-        ArrayList<String> heartrates2 = new ArrayList<String>();
-        ArrayList<String> heartrates3 = new ArrayList<String>();
-        ArrayList<String> heartrates4 = new ArrayList<String>();
-        ArrayList<String> heartrates5 = new ArrayList<String>();
-        ArrayList<String> heartrates6 = new ArrayList<String>();
-        ArrayList<String> heartrates7 = new ArrayList<String>();
-        ArrayList<String> heartrates8 = new ArrayList<String>();
-        ArrayList<String> heartrates9 = new ArrayList<String>();
-        ArrayList<String> heartrates10 = new ArrayList<String>();
-        ArrayList<String> heartrates11 = new ArrayList<String>();
-        heartrates2.add("86.7");
-        heartrates3.add("82.3");
-        heartrates4.add("84.1");
-        heartrates5.add("78.3");
-        heartrates6.add("74.2");
-        heartrates7.add("83.5");
-        heartrates8.add("87.1");
-        heartrates9.add("81.4");
-        heartrates10.add("79.8");
-        heartrates11.add("71.2");
-        ArrayList<Responder> respondersTestList2 = new ArrayList<Responder>();
-
-        ArrayList<String> heartrates = new ArrayList<String>();
-        heartrates.add("72.4");
-        heartrates.add("75.1");
-        heartrates.add("80.2");
-        ArrayList<String> currSubordinates = new ArrayList<String>();
-        currSubordinates.add("2");
-        currSubordinates.add("3");
-        currSubordinates.add("4");
-        currSubordinates.add("5");
-        currentUser = new Responder("1", "Albertson,Al", "EMS", heartrates, "11",
-                currSubordinates, "37.229601", "-80.417308", "5842", "11", currSubordinates);
-
-        respondersTestList2.add(currentUser);
-        respondersTestList2.add(new Responder("2", "Johnson,Johnny", "EMS", heartrates2, "1",
-                null, "37.209601", "-80.429308", "5842", "1", null));
-        respondersTestList2.add(new Responder("3", "Doe,John", "EMS", heartrates3, "1",
-                null, "37.304601", "-80.507308", "5842", "1", null));
-        respondersTestList2.add(new Responder("4", "James,Jim", "EMS", heartrates4, "1",
-                null, "37.247601", "-80.399308", "5842", "1", null));
-        respondersTestList2.add(new Responder("5", "Mathews,Robby", "EMS", heartrates5, "1",
-                null, "37.419601", "-80.319308", "5842", "1", null));
-        respondersTestList2.add(new Responder("6", "Smith,Emma", "EMS", heartrates6, "11",
-                null, "37.519601", "-80.479308", "5842", "11", null));
-
-        respondersTestList2.add(new Responder("7", "DaDubious,Greg", "EMS", heartrates7, "11",
-                null, "37.389601", "-80.389308", "5842", "11", null));
-        respondersTestList2.add(new Responder("8", "Yasar,Brian", "EMS", heartrates8, "11",
-                null, "37.429601", "-80.549308", "5842", "11", null));
-        respondersTestList2.add(new Responder("9", "McFubious,Dan", "EMS", heartrates9, "11",
-                null, "37.419601", "-80.519308", "5842", "11", null));
-        respondersTestList2.add(new Responder("10", "Watson,Ally", "EMS", heartrates10, "11",
-                null, "37.439601", "-80.509308", "5842", "11", null));
-
-        respondersTestList2.add(new Responder("11", "Dr,T", "EMS", heartrates11, null,
-                null, "37.409601", "-80.529308", "5842", null, null));
-        respondToUpdatedResponderBroadcast(respondersTestList2);
+//        // TODO 44444444 remove dummy values & update response call, only here to simulate update from database
+//        ArrayList<String> heartrates2 = new ArrayList<String>();
+//        ArrayList<String> heartrates3 = new ArrayList<String>();
+//        ArrayList<String> heartrates4 = new ArrayList<String>();
+//        ArrayList<String> heartrates5 = new ArrayList<String>();
+//        ArrayList<String> heartrates6 = new ArrayList<String>();
+//        ArrayList<String> heartrates7 = new ArrayList<String>();
+//        ArrayList<String> heartrates8 = new ArrayList<String>();
+//        ArrayList<String> heartrates9 = new ArrayList<String>();
+//        ArrayList<String> heartrates10 = new ArrayList<String>();
+//        ArrayList<String> heartrates11 = new ArrayList<String>();
+//        heartrates2.add("86.7");
+//        heartrates3.add("82.3");
+//        heartrates4.add("84.1");
+//        heartrates5.add("78.3");
+//        heartrates6.add("74.2");
+//        heartrates7.add("83.5");
+//        heartrates8.add("87.1");
+//        heartrates9.add("81.4");
+//        heartrates10.add("79.8");
+//        heartrates11.add("71.2");
+//        ArrayList<Responder> respondersTestList2 = new ArrayList<Responder>();
+//
+//        ArrayList<String> heartrates = new ArrayList<String>();
+//        heartrates.add("72.4");
+//        heartrates.add("75.1");
+//        heartrates.add("80.2");
+//        ArrayList<String> currSubordinates = new ArrayList<String>();
+//        currSubordinates.add("2");
+//        currSubordinates.add("3");
+//        currSubordinates.add("4");
+//        currSubordinates.add("5");
+//        currentUser = new Responder("1", "Albertson,Al", "EMS", heartrates, "11",
+//                currSubordinates, "37.229601", "-80.417308", "5842", "11", currSubordinates);
+//
+//        respondersTestList2.add(currentUser);
+//        respondersTestList2.add(new Responder("2", "Johnson,Johnny", "EMS", heartrates2, "1",
+//                null, "37.209601", "-80.429308", "5842", "1", null));
+//        respondersTestList2.add(new Responder("3", "Doe,John", "EMS", heartrates3, "1",
+//                null, "37.304601", "-80.507308", "5842", "1", null));
+//        respondersTestList2.add(new Responder("4", "James,Jim", "EMS", heartrates4, "1",
+//                null, "37.247601", "-80.399308", "5842", "1", null));
+//        respondersTestList2.add(new Responder("5", "Mathews,Robby", "EMS", heartrates5, "1",
+//                null, "37.419601", "-80.319308", "5842", "1", null));
+//        respondersTestList2.add(new Responder("6", "Smith,Emma", "EMS", heartrates6, "11",
+//                null, "37.519601", "-80.479308", "5842", "11", null));
+//
+//        respondersTestList2.add(new Responder("7", "DaDubious,Greg", "EMS", heartrates7, "11",
+//                null, "37.389601", "-80.389308", "5842", "11", null));
+//        respondersTestList2.add(new Responder("8", "Yasar,Brian", "EMS", heartrates8, "11",
+//                null, "37.429601", "-80.549308", "5842", "11", null));
+//        respondersTestList2.add(new Responder("9", "McFubious,Dan", "EMS", heartrates9, "11",
+//                null, "37.419601", "-80.519308", "5842", "11", null));
+//        respondersTestList2.add(new Responder("10", "Watson,Ally", "EMS", heartrates10, "11",
+//                null, "37.439601", "-80.509308", "5842", "11", null));
+//
+//        respondersTestList2.add(new Responder("11", "Dr,T", "EMS", heartrates11, null,
+//                null, "37.409601", "-80.529308", "5842", null, null));
+//        respondToUpdatedResponderBroadcast(respondersTestList2);
     }
 
     @Override
@@ -610,52 +632,54 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         // Center map on incident location.
         centerMapOnLocation(incident.location);
 
-        // add dummy items.
-        ArrayList<String> heartrates2 = new ArrayList<String>();
-        ArrayList<String> heartrates3 = new ArrayList<String>();
-        ArrayList<String> heartrates4 = new ArrayList<String>();
-        ArrayList<String> heartrates5 = new ArrayList<String>();
-        ArrayList<String> heartrates6 = new ArrayList<String>();
-        ArrayList<String> heartrates7 = new ArrayList<String>();
-        ArrayList<String> heartrates8 = new ArrayList<String>();
-        ArrayList<String> heartrates9 = new ArrayList<String>();
-        ArrayList<String> heartrates10 = new ArrayList<String>();
-        ArrayList<String> heartrates11 = new ArrayList<String>();
-        heartrates2.add("86.7");
-        heartrates3.add("82.3");
-        heartrates4.add("84.1");
-        heartrates5.add("78.3");
-        heartrates6.add("74.2");
-        heartrates7.add("83.5");
-        heartrates8.add("87.1");
-        heartrates9.add("81.4");
-        heartrates10.add("79.8");
-        heartrates11.add("71.2");
-        ArrayList<Responder> respondersTestList1 = new ArrayList<Responder>();
-        respondersTestList1.add(currentUser);
-        respondersTestList1.add(new Responder("2", "Johnson,Johnny", "EMS", heartrates2, "1",
-                null, "37.209601", "-80.429308", "5842", "1", null));
-        respondersTestList1.add(new Responder("3", "Doe,John", "EMS", heartrates3, "1",
-                null, "37.304601", "-80.507308", "5842", "1", null));
-        respondersTestList1.add(new Responder("4", "James,Jim", "EMS", heartrates4, "1",
-                null, "37.247601", "-80.399308", "5842", "1", null));
-        respondersTestList1.add(new Responder("5", "Mathews,Robby", "EMS", heartrates5, "11",
-                null, "37.519601", "-80.529308", "5842", "11", null));
-        respondersTestList1.add(new Responder("6", "Smith,Emma", "EMS", heartrates6, "11",
-                null, "37.489601", "-80.499308", "5842", "11", null));
+        this.getActivity().registerReceiver(receiver, receiverFilter);
 
-        respondersTestList1.add(new Responder("7", "DaDubious,Greg", "EMS", heartrates7, "11",
-                null, "37.389601", "-80.389308", "5842", "11", null));
-        respondersTestList1.add(new Responder("8", "Yasar,Brian", "EMS", heartrates8, "11",
-                null, "37.429601", "-80.549308", "5842", "11", null));
-        respondersTestList1.add(new Responder("9", "McFubious,Dan", "EMS", heartrates9, "11",
-                null, "37.419601", "-80.519308", "5842", "11", null));
-        respondersTestList1.add(new Responder("10", "Watson,Ally", "EMS", heartrates10, "11",
-                null, "37.439601", "-80.509308", "5842", "11", null));
-
-        respondersTestList1.add(new Responder("11", "Dr,T", "EMS", heartrates11, null,
-                null, "37.409601", "-80.529308", "5842", null, null));
-        respondToUpdatedResponderBroadcast(respondersTestList1);
+//        // add dummy items.
+//        ArrayList<String> heartrates2 = new ArrayList<String>();
+//        ArrayList<String> heartrates3 = new ArrayList<String>();
+//        ArrayList<String> heartrates4 = new ArrayList<String>();
+//        ArrayList<String> heartrates5 = new ArrayList<String>();
+//        ArrayList<String> heartrates6 = new ArrayList<String>();
+//        ArrayList<String> heartrates7 = new ArrayList<String>();
+//        ArrayList<String> heartrates8 = new ArrayList<String>();
+//        ArrayList<String> heartrates9 = new ArrayList<String>();
+//        ArrayList<String> heartrates10 = new ArrayList<String>();
+//        ArrayList<String> heartrates11 = new ArrayList<String>();
+//        heartrates2.add("86.7");
+//        heartrates3.add("82.3");
+//        heartrates4.add("84.1");
+//        heartrates5.add("78.3");
+//        heartrates6.add("74.2");
+//        heartrates7.add("83.5");
+//        heartrates8.add("87.1");
+//        heartrates9.add("81.4");
+//        heartrates10.add("79.8");
+//        heartrates11.add("71.2");
+//        ArrayList<Responder> respondersTestList1 = new ArrayList<Responder>();
+//        respondersTestList1.add(currentUser);
+//        respondersTestList1.add(new Responder("2", "Johnson,Johnny", "EMS", heartrates2, "1",
+//                null, "37.209601", "-80.429308", "5842", "1", null));
+//        respondersTestList1.add(new Responder("3", "Doe,John", "EMS", heartrates3, "1",
+//                null, "37.304601", "-80.507308", "5842", "1", null));
+//        respondersTestList1.add(new Responder("4", "James,Jim", "EMS", heartrates4, "1",
+//                null, "37.247601", "-80.399308", "5842", "1", null));
+//        respondersTestList1.add(new Responder("5", "Mathews,Robby", "EMS", heartrates5, "11",
+//                null, "37.519601", "-80.529308", "5842", "11", null));
+//        respondersTestList1.add(new Responder("6", "Smith,Emma", "EMS", heartrates6, "11",
+//                null, "37.489601", "-80.499308", "5842", "11", null));
+//
+//        respondersTestList1.add(new Responder("7", "DaDubious,Greg", "EMS", heartrates7, "11",
+//                null, "37.389601", "-80.389308", "5842", "11", null));
+//        respondersTestList1.add(new Responder("8", "Yasar,Brian", "EMS", heartrates8, "11",
+//                null, "37.429601", "-80.549308", "5842", "11", null));
+//        respondersTestList1.add(new Responder("9", "McFubious,Dan", "EMS", heartrates9, "11",
+//                null, "37.419601", "-80.519308", "5842", "11", null));
+//        respondersTestList1.add(new Responder("10", "Watson,Ally", "EMS", heartrates10, "11",
+//                null, "37.439601", "-80.509308", "5842", "11", null));
+//
+//        respondersTestList1.add(new Responder("11", "Dr,T", "EMS", heartrates11, null,
+//                null, "37.409601", "-80.529308", "5842", null, null));
+//        respondToUpdatedResponderBroadcast(respondersTestList1);
     }
 
     /**
