@@ -205,8 +205,8 @@ public class DatabaseService extends Service {
             Responder r = new Responder(foundUser.getUserId(), foundUser.getName(),  foundUser.getOrganization(),
                     foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
                     foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
-                    foundUser.getCurrentIncidentId(), foundUser.getOrgSuperior(),
-                    foundUser.getOrgSubordinates());
+                    foundUser.getCurrentIncidentId(), foundUser.getIncidentSuperior(),
+                    foundUser.getIncidentSubordinates());
             if (r.getUserID().equals(savedCurrentUserIDToken)) {
                 currentUser = r; // TODO 44444444 look into mutex/locking of some type to prevent race conditions
                 Log.d("currUser setting", "Current Logged-In User Set");
@@ -261,8 +261,8 @@ public class DatabaseService extends Service {
                     Responder subordinate = new Responder(foundUser.getUserId(), foundUser.getName(),  foundUser.getOrganization(),
                             foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
                             foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
-                            foundUser.getCurrentIncidentId(), foundUser.getOrgSuperior(),
-                            foundUser.getOrgSubordinates());
+                            foundUser.getCurrentIncidentId(), foundUser.getIncidentSuperior(),
+                            foundUser.getIncidentSubordinates());
                     orgSubordinates[i] = subordinate;
                 } else {
                     Log.e(TAG, "Failed to find responder " + subordinateId);
@@ -335,8 +335,8 @@ public class DatabaseService extends Service {
                         responder = new Responder(foundUser.getUserId(), foundUser.getName(),  foundUser.getOrganization(),
                                 foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
                                 foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
-                                foundUser.getCurrentIncidentId(), foundUser.getOrgSuperior(),
-                                foundUser.getOrgSubordinates());
+                                foundUser.getCurrentIncidentId(), foundUser.getIncidentSuperior(),
+                                foundUser.getIncidentSubordinates());
                         responders.add(responder);
                     }
                 }
@@ -397,8 +397,8 @@ public class DatabaseService extends Service {
                         responder = new Responder(foundUser.getUserId(), foundUser.getName(),  foundUser.getOrganization(),
                                 foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
                                 foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
-                                foundUser.getCurrentIncidentId(), foundUser.getOrgSuperior(),
-                                foundUser.getOrgSubordinates());
+                                foundUser.getCurrentIncidentId(), foundUser.getIncidentSuperior(),
+                                foundUser.getIncidentSubordinates());
                         responders.add(responder);
                     }
                 }
@@ -448,8 +448,8 @@ public class DatabaseService extends Service {
                         responder = new Responder(foundUser.getUserId(), foundUser.getName(),  foundUser.getOrganization(),
                                 foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
                                 foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
-                                foundUser.getCurrentIncidentId(), foundUser.getOrgSuperior(),
-                                foundUser.getOrgSubordinates());
+                                foundUser.getCurrentIncidentId(), foundUser.getIncidentSuperior(),
+                                foundUser.getIncidentSubordinates());
                         responders.add(responder);
                     }
                 }
