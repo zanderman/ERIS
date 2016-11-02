@@ -223,8 +223,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         if (fragmentManager.getBackStackEntryCount() == 0) {
-            if (fragmentManager.findFragmentByTag(HomeFragment.class.getSimpleName()) == null) {
-                final Class fragmentClass = HomeFragment.class;
+            if (fragmentManager.findFragmentByTag(IncidentListFragment.class.getSimpleName()) == null) {
+                final Class fragmentClass = IncidentListFragment.class;
                 // if we aren't on the home fragment, navigate home.
                 final Fragment fragment = Fragment.instantiate(this, fragmentClass.getName());
 
