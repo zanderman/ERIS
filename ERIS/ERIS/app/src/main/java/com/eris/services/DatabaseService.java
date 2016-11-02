@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -525,110 +526,162 @@ public class DatabaseService extends Service {
      * @param responder The Responder object
      */
     public void pushUpdatedResponderData(Responder responder) {
-        final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-        final UserDataDO userData = new UserDataDO();
+        if (responder == null) {
+            throw new IllegalArgumentException("responder cannot be null");
+        }
+        (new Thread(new PushUpdatedResponderDataThread(responder))).start();
+    }
 
-        if (responder.getUserID() == null) {
-            throw new IllegalArgumentException("userId cannot be null");
+    private class PushUpdatedResponderDataThread implements Runnable{
+        Responder responder;
+
+        public PushUpdatedResponderDataThread(Responder responder) {
+            this.responder = responder;
         }
 
-        userData.setUserId(responder.getUserID());
-        userData.setCurrentIncidentId(responder.getSceneID());
-        userData.setOrganization(responder.getOrganization());
-        userData.setLongitude(responder.getLongitude());
-        userData.setLatitude(responder.getLatitude());
-        userData.setHeartbeatRecord(responder.getHeartrateRecord());
-        userData.setIncidentSubordinates(responder.getIncidentSubordinates());
-        userData.setIncidentSuperior(responder.getIncidentSuperior());
-        userData.setName(responder.getName());
-        userData.setOrgSubordinates(responder.getOrgSubordinates());
-        userData.setOrgSuperior(responder.getOrgSuperior());
+        @Override
+        public void run() {
+            final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
+            final UserDataDO userData = new UserDataDO();
 
-        try {
-            mapper.save(userData, new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES));
-        } catch (final AmazonClientException e) {
-            Log.e(TAG, "Failed saving item " + e.getMessage(), e);
+            if (responder.getUserID() == null) {
+                throw new IllegalArgumentException("userId cannot be null");
+            }
+
+            userData.setUserId(responder.getUserID());
+            userData.setCurrentIncidentId(responder.getSceneID());
+            userData.setOrganization(responder.getOrganization());
+            userData.setLongitude(responder.getLongitude());
+            userData.setLatitude(responder.getLatitude());
+            userData.setHeartbeatRecord(responder.getHeartrateRecord());
+            userData.setIncidentSubordinates(responder.getIncidentSubordinates());
+            userData.setIncidentSuperior(responder.getIncidentSuperior());
+            userData.setName(responder.getName());
+            userData.setOrgSubordinates(responder.getOrgSubordinates());
+            userData.setOrgSuperior(responder.getOrgSuperior());
+
+            try {
+                mapper.save(userData, new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES));
+            } catch (final AmazonClientException e) {
+                Log.e(TAG, "Failed saving item " + e.getMessage(), e);
+            } catch (Exception e) {
+                Log.e(TAG, "Other error: " + e.getMessage() + ", class: " + e.getClass());
+                throw e;
+            }
         }
     }
 
     public void pushNewResponderData(Responder responder) {
-        final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-        final UserDataDO userData = new UserDataDO();
-
-        if (responder.getUserID() == null) {
-            throw new IllegalArgumentException("userId cannot be null");
-        }
-        if (responder.getSceneID() == null) {
-            throw new IllegalArgumentException("sceneId cannot be null");
-        }
-        if (responder.getOrganization() == null) {
-            throw new IllegalArgumentException("organization cannot be null");
-        }
-        if (responder.getLatitude() == null) {
-            throw new IllegalArgumentException("latitude cannot be null");
-        }
-        if (responder.getLongitude() == null) {
-            throw new IllegalArgumentException("longitude cannot be null");
-        }
-        if (responder.getHeartrateRecord() == null) {
-            throw new IllegalArgumentException("heartbeatRecord cannot be null");
-        }
-        if (responder.getIncidentSubordinates() == null) {
-            throw new IllegalArgumentException("incidentSubordinates cannot be null");
-        }
-        if (responder.getIncidentSuperior() == null) {
-            throw new IllegalArgumentException("userId cannot be null");
-        }
-        if (responder.getName() == null) {
-            throw new IllegalArgumentException("name cannot be null");
-        }
-        if (responder.getOrgSubordinates() == null) {
-            throw new IllegalArgumentException("orgSubordinates cannot be null");
-        }
-        if (responder.getOrgSuperior() == null) {
-            throw new IllegalArgumentException("orgSuperior cannot be null");
+            if (responder == null) {
+                throw new IllegalArgumentException("responder cannot be null");
+            }
+            (new Thread(new PushNewResponderDataThread(responder))).start();
         }
 
-        userData.setUserId(responder.getUserID());
-        userData.setCurrentIncidentId(responder.getSceneID());
-        userData.setOrganization(responder.getOrganization());
-        userData.setLongitude(responder.getLongitude());
-        userData.setLatitude(responder.getLatitude());
-        userData.setHeartbeatRecord(responder.getHeartrateRecord());
-        userData.setIncidentSubordinates(responder.getIncidentSubordinates());
-        userData.setIncidentSuperior(responder.getIncidentSuperior());
-        userData.setName(responder.getName());
-        userData.setOrgSubordinates(responder.getOrgSubordinates());
-        userData.setOrgSuperior(responder.getOrgSuperior());
+        private class PushNewResponderDataThread implements Runnable {
+            Responder responder;
 
-        try {
-            mapper.save(userData);
-        } catch (final AmazonClientException e) {
-            Log.e(TAG, "Failed saving item " + e.getMessage(), e);
+            public PushNewResponderDataThread(Responder responder) {
+                this.responder = responder;
+            }
+
+            @Override
+            public void run() {
+                final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
+                final UserDataDO userData = new UserDataDO();
+
+                if (responder.getUserID() == null) {
+                    throw new IllegalArgumentException("userId cannot be null");
+                }
+                if (responder.getSceneID() == null) {
+                    throw new IllegalArgumentException("sceneId cannot be null");
+                }
+                if (responder.getOrganization() == null) {
+                    throw new IllegalArgumentException("organization cannot be null");
+                }
+                if (responder.getLatitude() == null) {
+                    throw new IllegalArgumentException("latitude cannot be null");
+                }
+                if (responder.getLongitude() == null) {
+                    throw new IllegalArgumentException("longitude cannot be null");
+                }
+                if (responder.getHeartrateRecord() == null) {
+                    throw new IllegalArgumentException("heartbeatRecord cannot be null");
+                }
+                if (responder.getIncidentSubordinates() == null) {
+                    throw new IllegalArgumentException("incidentSubordinates cannot be null");
+                }
+                if (responder.getIncidentSuperior() == null) {
+                    throw new IllegalArgumentException("userId cannot be null");
+                }
+                if (responder.getName() == null) {
+                    throw new IllegalArgumentException("name cannot be null");
+                }
+                if (responder.getOrgSubordinates() == null) {
+                    throw new IllegalArgumentException("orgSubordinates cannot be null");
+                }
+                if (responder.getOrgSuperior() == null) {
+                    throw new IllegalArgumentException("orgSuperior cannot be null");
+                }
+
+                userData.setUserId(responder.getUserID());
+                userData.setCurrentIncidentId(responder.getSceneID());
+                userData.setOrganization(responder.getOrganization());
+                userData.setLongitude(responder.getLongitude());
+                userData.setLatitude(responder.getLatitude());
+                userData.setHeartbeatRecord(responder.getHeartrateRecord());
+                userData.setIncidentSubordinates(responder.getIncidentSubordinates());
+                userData.setIncidentSuperior(responder.getIncidentSuperior());
+                userData.setName(responder.getName());
+                userData.setOrgSubordinates(responder.getOrgSubordinates());
+                userData.setOrgSuperior(responder.getOrgSuperior());
+
+                try {
+                    mapper.save(userData);
+                } catch (final AmazonClientException e) {
+                    Log.e(TAG, "Failed saving item " + e.getMessage(), e);
+                }
+            }
         }
-    }
+
 
     public void pushUpdatedIncidentData(Incident incident) {
-        final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-        final ScenesDO incidentData = new ScenesDO();
+        if (incident == null) {
+            throw new IllegalArgumentException("incident cannot be null");
+        }
+        (new Thread(new PushUpdatedIncidentDataThread(incident))).start();
+    }
 
-        if (incident.getSceneId() == null) {
-            throw new IllegalArgumentException("sceneId cannot be null");
+    public class PushUpdatedIncidentDataThread implements Runnable {
+        Incident incident;
+
+        public PushUpdatedIncidentDataThread(Incident incident) {
+            this.incident = incident;
         }
 
-        incidentData.setSceneId(incident.getSceneId());
-        incidentData.setAddress(incident.getAddress());
-        incidentData.setLongitude(incident.getLongitude());
-        incidentData.setLatitude(incident.getLatitude());
-        incidentData.setAssignedOrginizations(incident.getOrganizations());
-        incidentData.setDescription(incident.getDescription());
-        incidentData.setTime(incident.getTime());
-        incidentData.setTitle(incident.getTitle());
+        @Override
+        public void run() {
+            final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
+            final ScenesDO incidentData = new ScenesDO();
 
-        try {
-            mapper.save(incidentData, new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES));
-        } catch (final AmazonClientException e) {
-            Log.e(TAG, "Failed saving item " + e.getMessage(), e);
+            if (incident.getSceneId() == null) {
+                throw new IllegalArgumentException("sceneId cannot be null");
+            }
+
+            incidentData.setSceneId(incident.getSceneId());
+            incidentData.setAddress(incident.getAddress());
+            incidentData.setLongitude(incident.getLongitude());
+            incidentData.setLatitude(incident.getLatitude());
+            incidentData.setAssignedOrginizations(incident.getOrganizations());
+            incidentData.setDescription(incident.getDescription());
+            incidentData.setTime(incident.getTime());
+            incidentData.setTitle(incident.getTitle());
+
+            try {
+                mapper.save(incidentData, new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES));
+            } catch (final AmazonClientException e) {
+                Log.e(TAG, "Failed saving item " + e.getMessage(), e);
+            }
         }
     }
 
@@ -637,47 +690,63 @@ public class DatabaseService extends Service {
      * @param incident The incident to add to the incidents database.
      */
     public void pushNewIncidentData(Incident incident) {
-        final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
-        final ScenesDO incidentData = new ScenesDO();
+        if (incident == null) {
+            throw new IllegalArgumentException("incident cannot be null");
+        }
+        (new Thread(new PushNewIncidentDataThread(incident))).start();
+    }
 
-        if (incident.getSceneId() == null) {
-            throw new IllegalArgumentException("sceneId cannot be null");
-        }
-        if (incident.getAddress() == null) {
-            throw new IllegalArgumentException("address cannot be null");
-        }
-        if (incident.getLatitude() == null) {
-            throw new IllegalArgumentException("latitude cannot be null");
-        }
-        if (incident.getDescription() == null) {
-            throw new IllegalArgumentException("description cannot be null");
-        }
-        if (incident.getLongitude() == null) {
-            throw new IllegalArgumentException("longitude cannot be null");
-        }
-        if (incident.getOrganizations() == null) {
-            throw new IllegalArgumentException("organizations cannot be null");
-        }
-        if (incident.getTime() == null) {
-            throw new IllegalArgumentException("time cannot be null");
-        }
-        if (incident.getTitle() == null) {
-            throw new IllegalArgumentException("title cannot be null");
+    public class PushNewIncidentDataThread implements Runnable {
+        Incident incident;
+
+        public PushNewIncidentDataThread(Incident incident) {
+            this.incident = incident;
         }
 
-        incidentData.setSceneId(incident.getSceneId());
-        incidentData.setAddress(incident.getAddress());
-        incidentData.setLongitude(incident.getLongitude());
-        incidentData.setLatitude(incident.getLatitude());
-        incidentData.setAssignedOrginizations(incident.getOrganizations());
-        incidentData.setDescription(incident.getDescription());
-        incidentData.setTime(incident.getTime());
-        incidentData.setTitle(incident.getTitle());
+        @Override
+        public void run() {
+            final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
+            final ScenesDO incidentData = new ScenesDO();
 
-        try {
-            mapper.save(incidentData);
-        } catch (final AmazonClientException e) {
-            Log.e(TAG, "Failed saving item " + e.getMessage(), e);
+            if (incident.getSceneId() == null) {
+                throw new IllegalArgumentException("sceneId cannot be null");
+            }
+            if (incident.getAddress() == null) {
+                throw new IllegalArgumentException("address cannot be null");
+            }
+            if (incident.getLatitude() == null) {
+                throw new IllegalArgumentException("latitude cannot be null");
+            }
+            if (incident.getDescription() == null) {
+                throw new IllegalArgumentException("description cannot be null");
+            }
+            if (incident.getLongitude() == null) {
+                throw new IllegalArgumentException("longitude cannot be null");
+            }
+            if (incident.getOrganizations() == null) {
+                throw new IllegalArgumentException("organizations cannot be null");
+            }
+            if (incident.getTime() == null) {
+                throw new IllegalArgumentException("time cannot be null");
+            }
+            if (incident.getTitle() == null) {
+                throw new IllegalArgumentException("title cannot be null");
+            }
+
+            incidentData.setSceneId(incident.getSceneId());
+            incidentData.setAddress(incident.getAddress());
+            incidentData.setLongitude(incident.getLongitude());
+            incidentData.setLatitude(incident.getLatitude());
+            incidentData.setAssignedOrginizations(incident.getOrganizations());
+            incidentData.setDescription(incident.getDescription());
+            incidentData.setTime(incident.getTime());
+            incidentData.setTitle(incident.getTitle());
+
+            try {
+                mapper.save(incidentData);
+            } catch (final AmazonClientException e) {
+                Log.e(TAG, "Failed saving item " + e.getMessage(), e);
+            }
         }
     }
 

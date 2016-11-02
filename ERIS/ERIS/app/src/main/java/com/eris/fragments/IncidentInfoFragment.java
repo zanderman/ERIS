@@ -59,6 +59,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
     /*
      * Constants
      */
+    private static final String TAG = IncidentInfoFragment.class.getSimpleName();
     private static final float ZOOM_LEVEL = 16f;//17.5f;
     private final int REQUEST_CODE_ENABLE_MY_LOCATION = 222;
 
