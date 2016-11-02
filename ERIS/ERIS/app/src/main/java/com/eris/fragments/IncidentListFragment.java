@@ -49,6 +49,8 @@ public class IncidentListFragment extends Fragment {
 
         // Obtain reference to the ListView for incidents.
         incidentListView = (ListView) root.findViewById(R.id.incident_list_view);
+        incidentListView.setDivider(null);
+        incidentListView.setDividerHeight(0);
 
         // Inflate the modified layout for this fragment.
         return root;
