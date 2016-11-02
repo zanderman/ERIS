@@ -21,20 +21,20 @@ public class Responder implements Parcelable {
      * Public Members
      */
     //Why are these all public?  seems bad.
-    public String userID;
-    public String sceneID;
-    public float heartRate;
-    public String rank;
-    public LatLng location;
-    public String firstName;
-    public String lastName;
-    public String name;
-    public Marker marker;
+    private String userID;
+    private String sceneID;
+    private float heartRate;
+    private String rank;
+    private LatLng location;
+    private String firstName;
+    private String lastName;
+    private String name;
+    private Marker marker;
 
-    public String organization;
+    private String organization;
     private List<String> heartrateRecord;
     private String orgSuperior;
-    public List<String> orgSubordinates;
+    private List<String> orgSubordinates;
     private String incidentSuperior;
     private List<String> incidentSubordinates;
 
@@ -175,19 +175,43 @@ public class Responder implements Parcelable {
     public String getName() {
         return this.name;
     }
+    public String getFirstName() { return this.firstName; }
+    public String getLastName() { return this.lastName; }
     public String getSceneID() {
         return this.sceneID;
     }
     public String getOrganization() {return  this.organization;}
     public List<String> getHeartrateRecord() {return this.heartrateRecord;}
+    public float getHeartRate() { return  this.heartRate; }
     public String getOrgSuperior() {return  this.orgSuperior;}
     public List<String> getOrgSubordinates() {return this.orgSubordinates;}
     public String getLatitude() {return Double.toString(this.location.latitude);}
     public String getLongitude() {return Double.toString(this.location.longitude);}
+    public LatLng getLocation() {return this.location;}
     public String getIncidentSuperior() {return  this.incidentSuperior;}
     public List<String> getIncidentSubordinates() {return this.incidentSubordinates;}
+    public Marker getMarker() {return this.marker;}
 
-    public void setLocation(LatLng location) {this.location = location;}
-    public void setIncidentSuperior(String superiorID) {this.incidentSuperior = superiorID;}
-    public void setIncidentSubordinates(List<String> subordinateIDs) {this.incidentSubordinates = subordinateIDs;}
+
+    public void setLocation(LatLng location) {
+        if (location == null) {
+            throw new IllegalArgumentException("location cannot be null");
+        }
+        this.location = location;
+    }
+    public void setMarker(Marker marker) {
+        if (marker == null) {
+            throw new IllegalArgumentException("marker cannot be null");
+        }
+        this.marker = marker;}
+    public void setIncidentSuperior(String superiorId) {
+        if (superiorId == null) {
+            throw new IllegalArgumentException("superiorId cannot be null");
+        }
+        this.incidentSuperior = superiorId;}
+    public void setIncidentSubordinates(List<String> subordinateIds) {
+        if (subordinateIds == null) {
+            throw new IllegalArgumentException("subordinateIds cannot be null");
+        }
+        this.incidentSubordinates = subordinateIds;}
 }

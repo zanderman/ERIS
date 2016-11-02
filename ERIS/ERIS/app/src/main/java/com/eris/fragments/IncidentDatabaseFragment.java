@@ -114,13 +114,8 @@ public class IncidentDatabaseFragment extends Fragment {
         buttonGetOrgSubordinates.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Responder superior = new Responder("BK-201", "Tim", "EMS");
-                superior.organization = "EMS";
-                superior.orgSubordinates = new ArrayList<String>();
-                superior.orgSubordinates.add("5555555555");
-                superior.orgSubordinates.add("djin_doe");
-                superior.orgSubordinates.add("not_in_here");
-                ((MainActivity)getActivity()).databaseService.getOrgSubordinates(superior, GET_ORG_SUBORDINATES);
+                TextView tv = (TextView)root.findViewById(R.id.scene_main_text);
+                tv.setText("this button is disabled.");
             }
         });
 

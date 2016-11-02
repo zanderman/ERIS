@@ -166,9 +166,9 @@ public class DemoLocationFragment extends Fragment implements OnMapReadyCallback
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // Show responder location on map.
                 final Responder responder = responderListAdapter.getItem(i);
-                Toast.makeText(getActivity(),"Clicked: " + responder.firstName + " " + responder.lastName,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"Clicked: " + responder.getFirstName() + " " + responder.getLastName(),Toast.LENGTH_SHORT).show();
 
-                centerMapOnLocation(responder.location);
+                centerMapOnLocation(responder.getLocation());
             }
         });
 
@@ -178,7 +178,7 @@ public class DemoLocationFragment extends Fragment implements OnMapReadyCallback
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 // Remove corresponding marker.
-                responderListAdapter.getItem(i).marker.remove();
+                responderListAdapter.getItem(i).getMarker().remove();
 
                 // Remove the responder from the list.
                 responderListAdapter.remove(responderListAdapter.getItem(i));
@@ -191,14 +191,14 @@ public class DemoLocationFragment extends Fragment implements OnMapReadyCallback
             public void onClick(View view) {
                 // Add item to adapter.
                 Responder responder = new Responder("abc123","John","Wayne");
-                responder.location = new LatLng(37.229491,-80.421531);
-                responder.marker = googleMap.addMarker(new MarkerOptions()
-                        .position(responder.location)
-                        .title(responder.firstName + " " + responder.lastName)
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                responder.setLocation(new LatLng(37.229491,-80.421531));
+                responder.setMarker(googleMap.addMarker(new MarkerOptions()
+                        .position(responder.getLocation())
+                        .title(responder.getFirstName() + " " + responder.getLastName())
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))));
 
                 responderListAdapter.add(responder);
-                Toast.makeText(getActivity(),"Added: " + responder.firstName + " " + responder.lastName,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"Added: " + responder.getFirstName() + " " + responder.getLastName(),Toast.LENGTH_SHORT).show();
             }
         });
     }

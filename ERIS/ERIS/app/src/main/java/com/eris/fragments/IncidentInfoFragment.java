@@ -264,7 +264,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                 continue;
             }
 
-            responder.location = new LatLng(Double.parseDouble(responder.getLatitude()), Double.parseDouble(responder.getLongitude()));
+            responder.setLocation(new LatLng(Double.parseDouble(responder.getLatitude()), Double.parseDouble(responder.getLongitude())));
             if (currentUser.getIncidentSuperior().equals(responder.getUserID())) {
                 superiors.add(responder);
             }
@@ -331,7 +331,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                     new MarkerOptions()
                             .position(new LatLng(Double.parseDouble(responder.getLatitude()),
                                     Double.parseDouble(responder.getLongitude())))
-                            .title(responder.name)
+                            .title(responder.getName())
                             .snippet(responder.getOrganization() + "  //  "
                                     + responder.getHeartrateRecord().get(0))
                             .icon(bitmapDescriptor)
@@ -413,21 +413,21 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         responderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                centerMapOnLocation( responderAdapter.getItem(i).location ); // Center map on responder location.
+                centerMapOnLocation( responderAdapter.getItem(i).getLocation() ); // Center map on responder location.
                 markers.get(responderAdapter.getItem(i).getUserID()).showInfoWindow();
             }
         });
         subordinateListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                centerMapOnLocation( subordinateAdapter.getItem(i).location ); // Center map on responder location.
+                centerMapOnLocation( subordinateAdapter.getItem(i).getLocation() ); // Center map on responder location.
                 markers.get(subordinateAdapter.getItem(i).getUserID()).showInfoWindow();
             }
         });
         superiorListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                centerMapOnLocation( superiorAdapter.getItem(i).location ); // Center map on responder location.
+                centerMapOnLocation( superiorAdapter.getItem(i).getLocation() ); // Center map on responder location.
                 markers.get(superiorAdapter.getItem(i).getUserID()).showInfoWindow();
             }
         });
