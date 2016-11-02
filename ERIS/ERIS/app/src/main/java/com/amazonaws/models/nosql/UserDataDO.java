@@ -35,7 +35,7 @@ public class UserDataDO {
     public void setUserId(final String _userId) {
         this._userId = _userId;
     }
-    @DynamoDBAttribute(attributeName = "currentIncidentId")
+    @DynamoDBIndexHashKey(attributeName = "currentIncidentId", globalSecondaryIndexName = "CurrentIncident")
     public String getCurrentIncidentId() {
         return _currentIncidentId;
     }
@@ -67,7 +67,7 @@ public class UserDataDO {
     public void setIncidentSuperior(final String _incidentSuperior) {
         this._incidentSuperior = _incidentSuperior;
     }
-    @DynamoDBAttribute(attributeName = "latitude")
+    @DynamoDBIndexRangeKey(attributeName = "latitude", globalSecondaryIndexNames = {"CurrentIncident","OrginizationIndex",})
     public String getLatitude() {
         return _latitude;
     }
@@ -107,7 +107,7 @@ public class UserDataDO {
     public void setOrgSuperior(final String _orgSuperior) {
         this._orgSuperior = _orgSuperior;
     }
-    @DynamoDBAttribute(attributeName = "organization")
+    @DynamoDBIndexHashKey(attributeName = "organization", globalSecondaryIndexName = "OrginizationIndex")
     public String getOrganization() {
         return _organization;
     }

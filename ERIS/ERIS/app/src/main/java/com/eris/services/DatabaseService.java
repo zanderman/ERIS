@@ -51,6 +51,7 @@ public class DatabaseService extends Service {
     public DatabaseService() {
 
         mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
+        //Get shared preferences and load current user.
 
         Log.d("service", "DatabaseService created");
     }

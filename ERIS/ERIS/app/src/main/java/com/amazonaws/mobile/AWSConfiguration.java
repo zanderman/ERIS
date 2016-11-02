@@ -25,6 +25,9 @@ public class AWSConfiguration {
       Regions.fromName("us-east-1");
     public static final String  AMAZON_COGNITO_IDENTITY_POOL_ID =
         "us-east-1:5ac177bb-2f06-4890-8617-81c8b6e0f89f";
+    // Google Client ID for Web application
+    public static final String GOOGLE_CLIENT_ID =
+        "669425803052-u00tm3b6dh837uguap6875nvt20sf3o8.apps.googleusercontent.com";
     public static final Regions AMAZON_CLOUD_LOGIC_REGION =
        Regions.fromName("us-east-1");
     public static final Regions AMAZON_DYNAMODB_REGION =

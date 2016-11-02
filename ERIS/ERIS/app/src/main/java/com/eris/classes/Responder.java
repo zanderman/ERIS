@@ -13,6 +13,7 @@ import java.util.List;
 
 public class Responder implements Parcelable {
 
+    public static final String TAG = Responder.class.getSimpleName();
     public static final String NO_ERROR = "no_error";
     public static final String QUERY_FAILED = "query_failed";
 
@@ -92,23 +93,30 @@ public class Responder implements Parcelable {
 
         this.userID = userID;
         this.name = name;
-        String[] splitName = name.split(",");
-        if (splitName.length == 2) {
-            this.firstName = splitName[1];
-            this.lastName = splitName[0];
-        } else if (splitName.length == 1) {
-            this.lastName = splitName[0];
-            this.firstName = "NONE";
+        if (name == null) {
+            Log.e(TAG, "Name was null.");
+            this.firstName = "NULLY";
+            this.lastName = "NULLNULL";
         } else {
-            this.firstName = "INVALID";
-            this.lastName = "NAME";
+            String[] splitName = name.split(",");
+            if (splitName.length == 2) {
+                this.firstName = splitName[1];
+                this.lastName = splitName[0];
+            } else if (splitName.length == 1) {
+                this.lastName = splitName[0];
+                this.firstName = "NONE";
+            } else {
+                this.firstName = "INVALID";
+                this.lastName = "NAME";
+            }
         }
         this.organization = organization;
         this.heartrateRecord = heartrateRecord;
-        if (heartrateRecord.size() > 0) {
+        if ((heartrateRecord != null) && (heartrateRecord.size() > 0)) {
             this.heartRate = Float.parseFloat(heartrateRecord.get(0));
         } else {
             this.heartRate = -999;
+            Log.e(TAG, "No heartrate found.  Dead?");
         }
         this.orgSuperior = orgSuperior;
         this.orgSubordinates = orgSubordinates;
