@@ -35,8 +35,6 @@ public class Responder implements Parcelable {
     private List<String> heartrateRecord;
     private String orgSuperior;
     public List<String> orgSubordinates;
-    private String latitude;
-    private String longitude;
     private String incidentSuperior;
     private List<String> incidentSubordinates;
 
@@ -120,8 +118,6 @@ public class Responder implements Parcelable {
         }
         this.orgSuperior = orgSuperior;
         this.orgSubordinates = orgSubordinates;
-        this.latitude = latitude;
-        this.longitude = longitude;
         this.location = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
         this.sceneID = sceneID;
         this.incidentSuperior = incidentSuperior;
@@ -135,8 +131,7 @@ public class Responder implements Parcelable {
         heartrateRecord = in.createStringArrayList();
         orgSuperior = in.readString();
         orgSubordinates = in.createStringArrayList();
-        latitude = in.readString();
-        longitude = in.readString();
+        location = in.readParcelable(LatLng.class.getClassLoader());
         sceneID = in.readString();
         incidentSuperior = in.readString();
         incidentSubordinates = in.createStringArrayList();
@@ -156,8 +151,7 @@ public class Responder implements Parcelable {
         outParcel.writeStringList(heartrateRecord);
         outParcel.writeString(orgSuperior);
         outParcel.writeStringList(orgSubordinates);
-        outParcel.writeString(latitude);
-        outParcel.writeString(longitude);
+        outParcel.writeParcelable(location, 0);
         outParcel.writeString(sceneID);
         outParcel.writeString(incidentSuperior);
         outParcel.writeStringList(incidentSubordinates);
@@ -188,14 +182,12 @@ public class Responder implements Parcelable {
     public List<String> getHeartrateRecord() {return this.heartrateRecord;}
     public String getOrgSuperior() {return  this.orgSuperior;}
     public List<String> getOrgSubordinates() {return this.orgSubordinates;}
-    public String getLatitude() {return this.latitude;}
-    public String getLongitude() {return  this.longitude;}
+    public String getLatitude() {return Double.toString(this.location.latitude);}
+    public String getLongitude() {return Double.toString(this.location.longitude);}
     public String getIncidentSuperior() {return  this.incidentSuperior;}
     public List<String> getIncidentSubordinates() {return this.incidentSubordinates;}
 
     public void setLocation(LatLng location) {this.location = location;}
-    public void setLatitude(String latitude) {this.latitude = latitude;}
-    public void setLongitude(String longitude) {this.longitude = longitude;}
     public void setIncidentSuperior(String superiorID) {this.incidentSuperior = superiorID;}
     public void setIncidentSubordinates(List<String> subordinateIDs) {this.incidentSubordinates = subordinateIDs;}
 }

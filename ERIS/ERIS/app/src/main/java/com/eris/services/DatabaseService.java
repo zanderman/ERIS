@@ -776,8 +776,6 @@ public class DatabaseService extends Service {
         }
 
         currentUser.setLocation(new LatLng(latitude, longitude));
-        currentUser.setLatitude(Double.toString(latitude));
-        currentUser.setLongitude(Double.toString(longitude));
         pushUpdatedResponderData(currentUser);
         return true;
     }
