@@ -1,7 +1,10 @@
 package com.eris.services;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
@@ -21,6 +24,7 @@ import com.amazonaws.models.nosql.UserDataDO;
 
 import com.eris.classes.Incident;
 import com.eris.classes.Responder;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -36,7 +40,8 @@ public class DatabaseService extends Service {
     public static final String ERROR_STATUS = "error_status";
     public static final String DATA = "data";
     public static final String DATABASE_SERVICE_ACTION = "android.intent.action.database.service";
-    //public static final String BROADCAST_ACTION_DATABASE_INCIDENT_RESPONDERS = "broadcast_action_database_incident_responders";
+//    public static final String BROADCAST_ACTION_DATABASE_INCIDENT_RESPONDERS = "broadcast_action_database_incident_responders";
+//    public static final String BROADCAST_ACTION_DATABASE_INCIDENT_LIST = "broadcast_action_database_incident_list";
 
     /*
      * Final Members
@@ -48,6 +53,8 @@ public class DatabaseService extends Service {
     /*
      * Private Members
      */
+    private Responder currentUser;
+    private BroadcastReceiver receiver;
 
     /**
      * Constructor for DatabaseService
@@ -56,6 +63,7 @@ public class DatabaseService extends Service {
 
         mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
         //Get shared preferences and load current user.
+        currentUser = null;
 
         Log.d("service", "DatabaseService created");
     }
@@ -71,6 +79,33 @@ public class DatabaseService extends Service {
         super.onCreate();
         localBroadcastManager = LocalBroadcastManager.getInstance(this);
         //TODO does this work?
+
+        // Create an intent filter
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(LocationService.BROADCAST_ACTION_LOCATION_UPDATE);
+
+        // Create broadcast receiver object.
+        this.receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // Determine which broadcast was sent.
+                switch ( intent.getAction() ) {
+
+                    // Updated Location
+                    case LocationService.BROADCAST_ACTION_LOCATION_UPDATE:
+                        double latitude = intent.getDoubleExtra(LocationService.KEY_LOCATION_LATITUDE, 0.0);
+                        double longitude = intent.getDoubleExtra(LocationService.KEY_LOCATION_LONGITUDE, 0.0);
+                        updateCurrentUserLocation(latitude, longitude);
+                        break;
+
+                    // Unhandled broadcast.
+                    default:
+                        break;
+                }
+            }
+        };
+        this.registerReceiver(receiver, filter);
     }
 
     @Override
@@ -635,4 +670,39 @@ public class DatabaseService extends Service {
             return DatabaseService.this;
         }
     }
+
+    /**
+     * Ask the database service to update the current user object's location
+     * and send a request to also update this data in the database.
+     */
+    private boolean updateCurrentUserLocation(double latitude, double longitude) {
+        // Return false if the currentUser object has not yet been retrieved from the server
+        if (currentUser == null) {
+            return false;
+        }
+
+        currentUser.setLocation(new LatLng(latitude, longitude));
+        pushResponderData(currentUser);
+        return true;
+    }
+
+    /**
+     * Ask the database service to update the current user object's superior and/or subordinates,
+     * and send a request to also update this data in the database.
+     */
+//    private boolean updateCurrentUserSuperiorAndSubordinates(String superiorID, List<String> subordinateIDs) {
+//        // Return false if the currentUser object has not yet been retrieved from the server
+//        if (currentUser == null) {
+//            return false;
+//        }
+//
+//        if (superiorID != null) {
+//            currentUser.setIncidentSuperior(superiorID);
+//        }
+//        if (subordinateIDs != null) {
+//            currentUser.setIncidentSubordinates(subordinateIDs);
+//        }
+//        pushResponderData(currentUser);
+//        return true;
+//    }
 }
