@@ -23,6 +23,7 @@ import com.eris.classes.NavigationDrawerMenuItem;
 //import com.eris.demo.DemoConfiguration;
 //import com.eris.demo.DemoInstructionFragment;
 import com.eris.fragments.HomeFragment;
+import com.eris.fragments.IncidentListFragment;
 
 import static com.eris.R.string.app_name;
 
@@ -81,12 +82,6 @@ public class NavigationDrawer {
                 // Clear back stack when navigating from the Nav Drawer.
                 fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-                if (position == 0) { // Change this later if needed 44444444
-                    // Display the home fragment
-                    showHome();
-                    return;
-                }
-
                 NavigationDrawerMenuItem item = adapter.getItem(position);
                 final Fragment fragment =
                         Fragment.instantiate(parent.getContext(), item.associatedFragmentClassName);
@@ -124,17 +119,17 @@ public class NavigationDrawer {
     }
 
     public void showHome() {
-        final Fragment fragment = new HomeFragment();
+        final Fragment fragment = new IncidentListFragment();
 
         containingActivity.getSupportFragmentManager()
                 .beginTransaction()
-                .replace(fragmentContainerId, fragment, HomeFragment.class.getSimpleName())
+                .replace(fragmentContainerId, fragment, IncidentListFragment.class.getSimpleName())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                 .commit();
 
         // Set the title for the fragment.
         final ActionBar actionBar = containingActivity.getSupportActionBar();
-        actionBar.setTitle(R.string.app_name);
+        actionBar.setTitle("Incident List");
         closeDrawer();
     }
 
