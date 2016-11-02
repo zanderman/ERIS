@@ -95,6 +95,6 @@ public class IncidentListFragment extends Fragment {
         });
 
         // Add some items to the adapter.
-        incidentListAdapter.add(new Incident("1234", "Structure Fire", "Building on fire. Help needed!", "7777 Main Ave.", new ArrayList<String>(Arrays.asList("Police","Fire", "EMS")), "00:00", new LatLng(37.2286649,-80.4190468)));
+        incidentListAdapter.add(new Incident("1234", "Building on fire. Help needed!", "7777 Main Ave.", "37.2286649", "-80.4190468", "00:00", "Structure Fire", new ArrayList<String>(Arrays.asList("Police","Fire", "EMS"))));
     }
 }

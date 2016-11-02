@@ -72,7 +72,7 @@ public class IncidentHistoryFragment extends Fragment {
                 final Incident incident = incidentHistoryAdapter.getItem(i);
 
                 // Toast the ID.
-                Toast.makeText(getActivity(),"showing history for incident " + incident.id, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"showing history for incident " + incident.sceneId, Toast.LENGTH_SHORT).show();
 
 //                // Create new bundle for fragment arguments.
 //                Bundle bundle = new Bundle();
@@ -97,8 +97,8 @@ public class IncidentHistoryFragment extends Fragment {
         });
 
         // Add some items to the adapter.
-        incidentHistoryAdapter.add(new Incident("1234", "Structure Fire", "Fire at the aquarium.\nSave Dori!","42 Wallaby Way, Sydney", new ArrayList<String>(Arrays.asList("Fire","EMS")), "13:00",new LatLng(37.2286649,-80.4190468)));
-        incidentHistoryAdapter.add(new Incident("5678","Flooding", "Flooding on highway by Virginia Tech front gate.","i-460 @ Virginia Tech front gate", new ArrayList<String>(Arrays.asList("Police","Fire")), "06:30", new LatLng(37.2286,-80.4190)));
+        incidentHistoryAdapter.add(new Incident("1234", "Fire at the aquarium.\nSave Dori!", "42 Wallaby Way, Sydney", "37.2286649", "-80.4190468", "13:00", "Structure Fire", new ArrayList<String>(Arrays.asList("Fire","EMS"))));
+        incidentHistoryAdapter.add(new Incident("5678", "Flooding on highway by Virginia Tech front gate.", "i-460 @ Virginia Tech front gate", "37.2286", "-80.4190", "06:30", "Flooding", new ArrayList<String>(Arrays.asList("Police","Fire"))));
     }
 
 }
