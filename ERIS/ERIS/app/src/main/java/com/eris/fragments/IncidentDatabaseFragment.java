@@ -121,7 +121,8 @@ public class IncidentDatabaseFragment extends Fragment {
         buttonGetOrgResponders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity)getActivity()).databaseService.getOrgResponders(Incident.Department.EMT, GET_ORG_SUBORDINATES);
+                //We don't have the hash for this.  TODO get it.
+                //((MainActivity)getActivity()).databaseService.getOrgResponders(Incident.Department.EMT, GET_ORG_SUBORDINATES);
             }
         });
 

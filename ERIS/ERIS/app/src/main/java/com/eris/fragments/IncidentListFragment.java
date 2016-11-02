@@ -70,7 +70,7 @@ public class IncidentListFragment extends Fragment {
                 final Incident incident = incidentListAdapter.getItem(i);
 
                 // Toast the ID.
-                Toast.makeText(getActivity(),"ID: " + incident.id, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"ID: " + incident.getSceneId(), Toast.LENGTH_SHORT).show();
 
                 // Create new bundle for fragment arguments.
                 Bundle bundle = new Bundle();

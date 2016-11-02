@@ -101,7 +101,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
         // Obtain reference to incident object.
         incident = (Incident) args.getSerializable("incident");
-        Log.d(this.getClass().getSimpleName(),"got incident: " + incident.id);
+        Log.d(this.getClass().getSimpleName(),"got incident: " + incident.getSceneId());
     }
 
     @Override

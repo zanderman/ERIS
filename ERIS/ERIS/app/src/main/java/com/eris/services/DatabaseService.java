@@ -285,15 +285,13 @@ public class DatabaseService extends Service {
     }
 
 
-/*
-This doesn't work yet.  TODO debug.
+
     public void getAllResponders(String callingMethodIdentifier) {
         if (callingMethodIdentifier == null) {
             throw new IllegalArgumentException("callingMethodInfo cannot be null");
         }
         (new Thread(new GetAllRespondersDataThread(callingMethodIdentifier))).start();
     }
-*/
 
     private class GetAllRespondersDataThread implements Runnable {
         String callingMethodIdentifier;
