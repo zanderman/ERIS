@@ -679,10 +679,11 @@ public class DatabaseService extends Service {
         // Return false if the currentUser object has not yet been retrieved from the server
         if (currentUser == null) {
             return false;
+            //Should this throw an error?
         }
 
         currentUser.setLocation(new LatLng(latitude, longitude));
-        pushResponderData(currentUser);
+        pushUpdatedResponderData(currentUser);
         return true;
     }
 
