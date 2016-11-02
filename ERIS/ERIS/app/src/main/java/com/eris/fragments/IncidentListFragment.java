@@ -20,6 +20,9 @@ import com.eris.adapters.IncidentListAdapter;
 import com.eris.classes.Incident;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -92,6 +95,6 @@ public class IncidentListFragment extends Fragment {
         });
 
         // Add some items to the adapter.
-        incidentListAdapter.add(new Incident("1234","Requesting:\tEMS, FIRE, POLICE\nTime:\t\ta while","Middle Of Nowhere",new LatLng(37.2286649,-80.4190468)));
+        incidentListAdapter.add(new Incident("1234", "Structure Fire", "Building on fire. Help needed!", "7777 Main Ave.", new ArrayList<String>(Arrays.asList("Police","Fire", "EMS")), "00:00", new LatLng(37.2286649,-80.4190468)));
     }
 }
