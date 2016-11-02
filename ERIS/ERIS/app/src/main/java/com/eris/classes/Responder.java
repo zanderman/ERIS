@@ -93,11 +93,23 @@ public class Responder implements Parcelable {
         this.userID = userID;
         this.name = name;
         String[] splitName = name.split(",");
-        this.firstName = splitName[1];
-        this.lastName = splitName[0];
+        if (splitName.length == 2) {
+            this.firstName = splitName[1];
+            this.lastName = splitName[0];
+        } else if (splitName.length == 1) {
+            this.lastName = splitName[0];
+            this.firstName = "NONE";
+        } else {
+            this.firstName = "INVALID";
+            this.lastName = "NAME";
+        }
         this.organization = organization;
         this.heartrateRecord = heartrateRecord;
-        this.heartRate = Float.parseFloat(heartrateRecord.get(0));
+        if (heartrateRecord.size() > 0) {
+            this.heartRate = Float.parseFloat(heartrateRecord.get(0));
+        } else {
+            this.heartRate = -999;
+        }
         this.orgSuperior = orgSuperior;
         this.orgSubordinates = orgSubordinates;
         this.latitude = latitude;

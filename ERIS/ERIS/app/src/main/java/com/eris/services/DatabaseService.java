@@ -211,7 +211,7 @@ public class DatabaseService extends Service {
                     List<String> emptyList = new ArrayList<String>();
                     Responder subordinate = new Responder(subordinateId, "unknown", superior.getOrganization(),
                             emptyList, "unknown",
-                            emptyList, "unknown", "unknown",
+                            emptyList, "0.0", "0.0 ",
                             "unknown", superior.getUserID(),
                             emptyList);
                     orgSubordinates[i] = subordinate;
