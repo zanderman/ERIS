@@ -222,6 +222,41 @@ public class DatabaseService extends Service {
         }
     }
 
+    /**
+     *
+     * @param sceneId
+     * @param callingMethodIdentifier
+     *
+     * Sends out a broadcast with the following fields:
+     * DATA: an array of responders.  Need to be unparcled first.
+     * ERROR_STATUS: a string with error codes.
+     * CALLING_METHOD_IDENTIFIER: the string you passed in.
+     */
+    public void getRespondersByIncident(String sceneId, String callingMethodIdentifier) {
+        if (sceneId == null) {
+            throw new IllegalArgumentException("sceneId cannot be null");
+        } else if (callingMethodIdentifier == null) {
+            throw new IllegalArgumentException("callingMethodInfo cannot be null");
+        }
+        //(new Thread(new GetOrgRespondersDataThread(dept.getName(), callingMethodIdentifier))).start();
+    }
+
+    private class GetRespondersByIncidentDataThread implements Runnable {
+        String callingMethodIdentifier;
+        String sceneId;
+
+        public GetRespondersByIncidentDataThread(String sceneId, String callingMethodIdentifier) {
+            this.callingMethodIdentifier = callingMethodIdentifier;
+            this.sceneId = sceneId;
+        }
+
+        @Override
+        public void run() {
+            //Return an array in DATA.
+        }
+    }
+
+
     /*
     We don't hash for this key.  We need to do that before this method works.
     public void getOrgResponders(Incident.Department dept, String callingMethodIdentifier) {
@@ -332,13 +367,26 @@ public class DatabaseService extends Service {
         }
     }
 
-    public Incident[] getAllIncidents() {
-        return null;
+    /**
+     *
+     * @param callingMethodIdentifier
+     *
+     * Sends out a broadcast with the following fields:
+     * DATA: an array of incidents.  Need to be unparcled first.
+     * ERROR_STATUS: a string with error codes.
+     * CALLING_METHOD_IDENTIFIER: the string you passed in.
+     */
+    public void getAllIncidents(String callingMethodIdentifier) {
+
     }
 
-    public Incident[] getDepartmentIncidents(Incident.Department dept) {
-        return null;
+    public void pushResponderData(Responder responder) {
+
     }
+
+    //public void pushIncidentData(Incident incident) {}
+
+    //public void getDepartmentIncidents(Incident.Department dept) {}
 
     public class DatabaseServiceBinder extends Binder {
         public DatabaseService getService() {
