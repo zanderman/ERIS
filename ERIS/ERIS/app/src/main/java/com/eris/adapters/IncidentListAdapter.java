@@ -66,14 +66,14 @@ public class IncidentListAdapter extends ArrayAdapter<Incident> {
         organizations.add((ImageView) root.findViewById(R.id.incident_request_image_3));
 
         // Alter content of view elements.
-        titleTextView.setText(incident.title);// TODO: add title field to incident
-        addressTextView.setText(incident.address);
-        descriptionTextView.setText(incident.description);
-        timeTextView.setText(incident.time);
+        titleTextView.setText(incident.getTitle());// TODO: add title field to incident
+        addressTextView.setText(incident.getAddress());
+        descriptionTextView.setText(incident.getDescription());
+        timeTextView.setText(incident.getTime());
 
         // Add requested organization.
         int imageIndex = 0;
-        for (String org : incident.organizations) {
+        for (String org : incident.getOrganizations()) {
             switch (org.toLowerCase()) {
                 case "fire":
                     organizations.get(imageIndex).setImageResource(R.drawable.ic_fire); // Set image icon.

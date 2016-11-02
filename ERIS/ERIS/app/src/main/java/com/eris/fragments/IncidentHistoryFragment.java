@@ -74,7 +74,7 @@ public class IncidentHistoryFragment extends Fragment {
                 final Incident incident = incidentHistoryAdapter.getItem(i);
 
                 // Toast the ID.
-                Toast.makeText(getActivity(),"showing history for incident " + incident.sceneId, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"showing history for incident " + incident.getSceneId(), Toast.LENGTH_SHORT).show();
 
 //                // Create new bundle for fragment arguments.
 //                Bundle bundle = new Bundle();

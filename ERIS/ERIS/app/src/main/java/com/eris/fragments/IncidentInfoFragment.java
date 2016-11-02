@@ -393,8 +393,8 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         /*
          * Display incident information.
          */
-        addressTextView.setText(this.incident.address);
-        descriptionTextView.setText(this.incident.description);
+        addressTextView.setText(this.incident.getAddress());
+        descriptionTextView.setText(this.incident.getDescription());
         runtimeTextView.setText("00:00");
 
         /*
@@ -445,7 +445,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         incidentFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                centerMapOnLocation(incident.location); // Center the map on the incident location.
+                centerMapOnLocation(incident.getLocation()); // Center the map on the incident location.
             }
         });
 
@@ -666,9 +666,9 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         // Drop marker on incident location.
         this.googleMap.addMarker(
                 new MarkerOptions()
-                        .position(incident.location)
-                        .title(incident.address)
-                        .snippet(incident.description)
+                        .position(incident.getLocation())
+                        .title(incident.getAddress())
+                        .snippet(incident.getDescription())
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
         );
 
@@ -680,7 +680,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
             // Draw proximity circle around incident.
             this.googleMap.addCircle(
                     new CircleOptions()
-                            .center(incident.location)
+                            .center(incident.getLocation())
                             .radius(radius) /* meters */
                             .strokeColor(0x20000000) /* 20F44336, opaque red (500)*/
                             .fillColor(0x05000000) /* 0x55E57373, opaque red */
@@ -689,7 +689,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         }
 
         // Center map on incident location.
-        centerMapOnLocation(incident.location);
+        centerMapOnLocation(incident.getLocation());
 
         this.getActivity().registerReceiver(receiver, receiverFilter);
 

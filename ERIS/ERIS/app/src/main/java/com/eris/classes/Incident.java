@@ -36,13 +36,13 @@ public class Incident implements Parcelable, Serializable{
         }
     }
     //TODO really, these should be private.
-    public String time;
-    public String title;
-    public String description;
-    public String address;
-    public LatLng location;
-    public String sceneId;
-    public List<String> organizations;
+    private String time;
+    private String title;
+    private String description;
+    private String address;
+    private LatLng location;
+    private String sceneId;
+    private List<String> organizations;
 
 
     public Incident(String sceneId, String description, String address, String latitude, String longitude, String time, String title, List<String> organizations) {
@@ -119,4 +119,5 @@ public class Incident implements Parcelable, Serializable{
     public String getLongitude() {
         return Double.toString(location.longitude);
     }
+    public LatLng getLocation() { return location; }
 }
