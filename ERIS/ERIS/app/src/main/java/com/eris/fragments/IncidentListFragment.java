@@ -20,6 +20,9 @@ import com.eris.adapters.IncidentListAdapter;
 import com.eris.classes.Incident;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -46,6 +49,8 @@ public class IncidentListFragment extends Fragment {
 
         // Obtain reference to the ListView for incidents.
         incidentListView = (ListView) root.findViewById(R.id.incident_list_view);
+        incidentListView.setDivider(null);
+        incidentListView.setDividerHeight(0);
 
         // Inflate the modified layout for this fragment.
         return root;
@@ -68,9 +73,6 @@ public class IncidentListFragment extends Fragment {
 
                 // Get the incident that was clicked.
                 final Incident incident = incidentListAdapter.getItem(i);
-
-                // Toast the ID.
-                Toast.makeText(getActivity(),"ID: " + incident.getSceneId(), Toast.LENGTH_SHORT).show();
 
                 // Create new bundle for fragment arguments.
                 Bundle bundle = new Bundle();
@@ -95,6 +97,6 @@ public class IncidentListFragment extends Fragment {
         });
 
         // Add some items to the adapter.
-        incidentListAdapter.add(new Incident("1234","Requesting:\tEMS, FIRE, POLICE\nTime:\t\ta while","Middle Of Nowhere",new LatLng(37.2286649,-80.4190468)));
+        incidentListAdapter.add(new Incident("1234", "Building on fire. Help needed!", "7777 Main Ave.", "37.2286649", "-80.4190468", "00:00", "Structure Fire", new ArrayList<String>(Arrays.asList("Police","Fire", "EMS"))));
     }
 }

@@ -32,7 +32,6 @@
                 android:weightSum="1">
 
                 <TextView
-                    android:text="Structure Fire"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -51,22 +50,19 @@
                         android:layout_width="70px"
                         android:layout_height="70px"
                         android:layout_gravity="center"
-                        app:srcCompat="@drawable/ic_fire"
-                        android:id="@+id/incident_request_image_fire" />
-
-                    <ImageView
-                        android:layout_width="60px"
-                        android:layout_height="60px"
-                        android:layout_gravity="center"
-                        app:srcCompat="@drawable/ic_police"
-                        android:id="@+id/incident_request_image_police"/>
+                        android:id="@+id/incident_request_image_3" />
 
                     <ImageView
                         android:layout_width="70px"
                         android:layout_height="70px"
                         android:layout_gravity="center"
-                        app:srcCompat="@drawable/ic_ems"
-                        android:id="@+id/incident_request_image_ems" />
+                        android:id="@+id/incident_request_image_2"/>
+
+                    <ImageView
+                        android:layout_width="70px"
+                        android:layout_height="70px"
+                        android:layout_gravity="center"
+                        android:id="@+id/incident_request_image_1" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -83,7 +79,6 @@
                     app:srcCompat="@drawable/ic_location_on_black_24dp"/>
 
                 <TextView
-                    android:text="42 Wallaby Way, Sydney"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="6pt"
@@ -93,7 +88,6 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:text="00:00"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="right"
@@ -103,7 +97,6 @@
             </LinearLayout>
 
             <TextView
-                android:text="Structure fire at the aquarium.\nSave Dori, Marlin and Nemo!"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:ellipsize="none"
