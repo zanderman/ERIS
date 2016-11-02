@@ -3,6 +3,8 @@ package com.eris.classes;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Intent;
 import android.location.Location;
@@ -42,19 +44,21 @@ public class Incident implements Parcelable, Serializable{
     public String address;
     public LatLng location;
     public String sceneId;
+    public List<String> organizations;
 
 
-    public Incident(String sceneId, String description, String address, String latitude, String longitude, String time, String title) {
-        this(sceneId, description, address, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)), time, title);
+    public Incident(String sceneId, String description, String address, String latitude, String longitude, String time, String title, List<String> organizations) {
+        this(sceneId, description, address, new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude)), time, title, organizations);
     }
 
-    public Incident(String sceneId, String description, String address, LatLng location, String time, String title) {
+    public Incident(String sceneId, String description, String address, LatLng location, String time, String title, List<String> organizations) {
         this.sceneId = sceneId;
         this.description = description;
         this.address = address;
         this.location = location;
         this.time = time;
         this.title = title;
+        this.organizations = organizations;
     }
 
     private Incident(Parcel in) {
@@ -64,6 +68,7 @@ public class Incident implements Parcelable, Serializable{
         location = in.readParcelable(LatLng.class.getClassLoader());
         time = in.readString();
         title = in.readString();
+        organizations = in.createStringArrayList();
     }
 
     @Override
@@ -74,6 +79,7 @@ public class Incident implements Parcelable, Serializable{
         outParcel.writeParcelable(location, 0);
         outParcel.writeString(time);
         outParcel.writeString(title);
+        outParcel.writeStringList(organizations);
     }
 
     public static final Parcelable.Creator<Incident> CREATOR = new Parcelable.Creator<Incident>() {
@@ -94,6 +100,9 @@ public class Incident implements Parcelable, Serializable{
     }
 
 
+    public List<String> getOrganizations() {
+        return this.organizations;
+    }
     public String getTitle() {
         return this.title;
     }
