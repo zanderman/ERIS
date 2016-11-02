@@ -259,8 +259,11 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
         for (Parcelable parcelableResponder : updatedResponders) {
             Responder responder = (Responder) parcelableResponder;
-            Log.d("wat", "subordinate list of current: " + currentUser.getIncidentSubordinates().toString());
-            Log.d("wat", "examining responder: " + responder.getUserID());
+
+            if (currentUser.getUserID().equals(responder.getUserID())) {
+                continue;
+            }
+
             responder.location = new LatLng(Double.parseDouble(responder.getLatitude()), Double.parseDouble(responder.getLongitude()));
             if (currentUser.getIncidentSuperior().equals(responder.getUserID())) {
                 superiors.add(responder);
@@ -268,9 +271,10 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
             else if (currentUser.getIncidentSubordinates().contains(responder.getUserID())) {
                 subordinates.add(responder);
             }
-            else if (!currentUser.getUserID().equals(responder.getUserID())) {
+            else {
                 responders.add(responder);
             }
+
             BitmapDescriptor bitmapDescriptor;
 
             float[] hsv = new float[3];
