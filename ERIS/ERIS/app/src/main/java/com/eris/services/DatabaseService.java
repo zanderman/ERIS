@@ -120,7 +120,6 @@ public class DatabaseService extends Service {
                 getResources().getString(R.string.sharedpreferences_entry_userID), "");
 
         this.getResponderData(savedCurrentUserIDToken, "");
-        Log.d("currUser setting", "Current saved id: " + savedCurrentUserIDToken);
     }
 
     @Override

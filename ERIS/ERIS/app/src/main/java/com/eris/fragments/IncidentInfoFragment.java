@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -213,9 +214,17 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                 databaseService.getRespondersByIncident("5842", callingMethodIdentifier);
             }
 
+            SharedPreferences preferences = getActivity().getSharedPreferences(
+                    getResources().getString(R.string.sharedpreferences_user_settings),
+                    0
+            );
+            int waitTimeSeconds = preferences.getInt(
+                    getResources().getString(R.string.preferences_broadcast), 30);
+            long waitTimeMilliseconds = 1000 * ((long) waitTimeSeconds);
+
             while (responderListUpdateFlag) {
                 try {
-                    Thread.sleep(30000);
+                    Thread.sleep(waitTimeMilliseconds);
                 } catch (Exception e) {
                     // oops
                 } finally {
