@@ -128,17 +128,18 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         markers = new HashMap<String, Marker>();
 
         // Get the reference to the Responder object for the current user
-        // TODO 44444444 update this to use actual user pulled from database on login
-        ArrayList<String> heartrates = new ArrayList<String>();
-        heartrates.add("72.4");
-        heartrates.add("75.1");
-        heartrates.add("80.2");
-        ArrayList<String> currSubordinates = new ArrayList<String>();
-        currSubordinates.add("2");
-        currSubordinates.add("3");
-        currSubordinates.add("4");
-        currentUser = new Responder("1", "Albertson,Al", "EMS", heartrates, "11",
-                currSubordinates, "37.229601", "-80.417308", "5842", "11", currSubordinates);
+//        // TODO 44444444 update this to use actual user pulled from database on login
+//        ArrayList<String> heartrates = new ArrayList<String>();
+//        heartrates.add("72.4");
+//        heartrates.add("75.1");
+//        heartrates.add("80.2");
+//        ArrayList<String> currSubordinates = new ArrayList<String>();
+//        currSubordinates.add("2");
+//        currSubordinates.add("3");
+//        currSubordinates.add("4");
+//        currentUser = new Responder("1", "Albertson,Al", "EMS", heartrates, "11",
+//                currSubordinates, "37.229601", "-80.417308", "5842", "11", currSubordinates);
+        currentUser = ((MainActivity) getActivity()).databaseService.getCurrentUser();
 
         // Create an intent filter
         receiverFilter = new IntentFilter();
@@ -242,8 +243,14 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         subordinateAdapter.clear();
         superiorAdapter.clear();
 
+        if (currentUser == null) {
+            return;
+        }
+
         for (Parcelable parcelableResponder : updatedResponders) {
             Responder responder = (Responder) parcelableResponder;
+            Log.d("wat", "subordinate list of current: " + currentUser.getIncidentSubordinates().toString());
+            Log.d("wat", "examining responder: " + responder.getUserID());
             responder.location = new LatLng(Double.parseDouble(responder.getLatitude()), Double.parseDouble(responder.getLongitude()));
             if (currentUser.getIncidentSuperior().equals(responder.getUserID())) {
                 superiors.add(responder);

@@ -39,6 +39,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.server_client_id))
+                .requestEmail()
                 .build();
 
         // Build a GoogleApiClient with access to the Google Sign-In API and the
@@ -123,11 +124,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             // Obtain access to the user's account.
             GoogleSignInAccount acct = result.getSignInAccount();
-            Toast.makeText(this, "Welcome " + acct.getDisplayName() + " (ID token: " + acct.getIdToken() + ")", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Welcome " + acct.getDisplayName(), Toast.LENGTH_SHORT).show();
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(getResources()
-                    .getString(R.string.sharedpreferences_entry_userID), acct.getIdToken());
+                    .getString(R.string.sharedpreferences_entry_userID), acct.getEmail());
             editor.commit();
 
             // Go to the Main activity.

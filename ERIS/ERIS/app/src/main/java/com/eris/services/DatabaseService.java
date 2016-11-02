@@ -5,10 +5,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.mobile.AWSMobileClient;
@@ -22,6 +24,7 @@ import com.amazonaws.mobileconnectors.dynamodbv2.dynamodbmapper.PaginatedScanLis
 import com.amazonaws.models.nosql.ScenesDO;
 import com.amazonaws.models.nosql.UserDataDO;
 
+import com.eris.R;
 import com.eris.classes.Incident;
 import com.eris.classes.Responder;
 import com.google.android.gms.maps.model.LatLng;
@@ -54,6 +57,7 @@ public class DatabaseService extends Service {
      * Private Members
      */
     private Responder currentUser;
+    private String savedCurrentUserIDToken;
     private BroadcastReceiver receiver;
 
     /**
@@ -106,6 +110,16 @@ public class DatabaseService extends Service {
             }
         };
         this.registerReceiver(receiver, filter);
+
+        SharedPreferences preferences = getSharedPreferences(
+                getResources().getString(R.string.sharedpreferences_curr_user_account_info),
+                Context.MODE_PRIVATE
+        );
+        savedCurrentUserIDToken = preferences.getString(
+                getResources().getString(R.string.sharedpreferences_entry_userID), "");
+
+        this.getResponderData(savedCurrentUserIDToken, "");
+        Log.d("currUser setting", "Current saved id: " + savedCurrentUserIDToken);
     }
 
     @Override
@@ -193,6 +207,10 @@ public class DatabaseService extends Service {
                     foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
                     foundUser.getCurrentIncidentId(), foundUser.getOrgSuperior(),
                     foundUser.getOrgSubordinates());
+            if (r.getUserID().equals(savedCurrentUserIDToken)) {
+                currentUser = r; // TODO 44444444 look into mutex/locking of some type to prevent race conditions
+                Log.d("currUser setting", "Current Logged-In User Set");
+            }
             intent.putExtra(DATA, r);
             sendBroadcast(intent);
             Log.d(TAG, "Sent broadcast for responder found.");
@@ -669,6 +687,13 @@ public class DatabaseService extends Service {
         public DatabaseService getService() {
             return DatabaseService.this;
         }
+    }
+
+    /**
+     * Get a reference to the Responder object representing the current logged in user.
+     */
+    public Responder getCurrentUser() {
+        return currentUser;
     }
 
     /**
