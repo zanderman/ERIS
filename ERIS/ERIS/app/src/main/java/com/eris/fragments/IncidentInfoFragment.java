@@ -272,15 +272,53 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                 responders.add(responder);
             }
             BitmapDescriptor bitmapDescriptor;
+
+            float[] hsv = new float[3];
             switch (responder.getOrganization()) {
                 case "EMS":
-                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+                    // Subordinate color.
+                    if (currentUser.getIncidentSubordinates().contains(responder.getUserID())) {
+                        Color.colorToHSV(Color.parseColor("#9acd32"), hsv); // EMS green
+                    }
+                    // Superior color.
+                    else if (currentUser.getIncidentSuperior().equals(responder.getUserID())) {
+                        Color.colorToHSV(Color.parseColor("#00c78c"), hsv); // EMS green
+                    }
+                    // default color.
+                    else {
+                        Color.colorToHSV(getResources().getColor(R.color.md_green_600), hsv); // EMS green
+                    }
+                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(hsv[0]);
                     break;
                 case "POLICE":
-                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE);
+                    // Subordinate color.
+                    if (currentUser.getIncidentSubordinates().contains(responder.getUserID())) {
+                        Color.colorToHSV(getResources().getColor(R.color.md_blue_400), hsv); // Police blue
+                    }
+                    // Superior color.
+                    else if (currentUser.getIncidentSuperior().equals(responder.getUserID())) {
+                        Color.colorToHSV(getResources().getColor(R.color.md_blue_900), hsv); // Police blue
+                    }
+                    // default color.
+                    else {
+                        Color.colorToHSV(getResources().getColor(R.color.md_blue_700), hsv); // Police blue
+                    }
+                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(hsv[0]);
                     break;
                 case "FIRE":
-                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED);
+                    // Subordinate color.
+                    if (currentUser.getIncidentSubordinates().contains(responder.getUserID())) {
+                        Color.colorToHSV(Color.parseColor("#ff83fa"), hsv); // Fire red
+                    }
+                    // Superior color.
+                    else if (currentUser.getIncidentSuperior().equals(responder.getUserID())) {
+                        Color.colorToHSV(Color.parseColor("#8B1C62"), hsv); // Fire red
+                    }
+                    // default color.
+                    else {
+                        Color.colorToHSV(getResources().getColor(R.color.md_red_500), hsv); // Fire red
+                    }
+                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(hsv[0]);
                     break;
                 default:
                     bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
