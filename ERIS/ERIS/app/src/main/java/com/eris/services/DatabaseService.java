@@ -32,6 +32,7 @@ public class DatabaseService extends Service {
     public static final String ERROR_STATUS = "error_status";
     public static final String DATA = "data";
     public static final String DATABASE_SERVICE_ACTION = "android.intent.action.database.service";
+    public static final String BROADCAST_ACTION_DATABASE_INCIDENT_RESPONDERS = "broadcast_action_database_incident_responders";
 
     /*
      * Final Members

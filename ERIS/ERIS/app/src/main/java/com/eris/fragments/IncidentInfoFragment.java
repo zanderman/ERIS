@@ -154,10 +154,9 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                         Log.d("location", "UPDATE: " + location);
                         break;
 
-                    // Database query result.
-                    // TODO 44444444 implement this using database service broadcast
-//                    case DatabaseService.BROADCAST_ACTION_QUERY_RESULT:
-//                        ArrayList<Responder> updatedResponders = intent.getParcelableArrayListExtra("currentResponders");
+//                    // Database query result.
+//                    case DatabaseService.BROADCAST_ACTION_DATABASE_INCIDENT_RESPONDERS:
+//                        ArrayList<Responder> updatedResponders = intent.getParcelableArrayListExtra(DatabaseService.DATA);
 //                        respondToUpdatedResponderBroadcast(updatedResponders);
 //                        break;
 

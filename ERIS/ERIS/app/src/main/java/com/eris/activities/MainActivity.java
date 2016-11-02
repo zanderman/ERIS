@@ -37,6 +37,7 @@ import com.eris.classes.NavigationDrawerMenuItem;
 import com.eris.fragments.DemoResponderDatabaseFragment;
 import com.eris.fragments.HomeFragment;
 import com.eris.fragments.IncidentListFragment;
+import com.eris.fragments.IncidentDatabaseFragment;
 import com.eris.fragments.SettingsFragment;
 import com.eris.navigation.NavigationDrawer;
 import com.eris.services.LocationService;
@@ -127,6 +128,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 "Command Structure", R.mipmap.ic_line_style_black_24dp,
                 DemoResponderDatabaseFragment.class.getName(), DemoResponderDatabaseFragment.class.getSimpleName()
         );
+        NavigationDrawerMenuItem databaseServiceTestItem = new NavigationDrawerMenuItem(
+                "Database Test", R.mipmap.ic_donut_large_black_24dp,
+                IncidentDatabaseFragment.class.getName(), IncidentDatabaseFragment.class.getSimpleName()
+        );
         NavigationDrawerMenuItem settingsItem = new NavigationDrawerMenuItem(
                 "Settings", R.mipmap.ic_settings_black_24dp,
                 SettingsFragment.class.getName(), SettingsFragment.class.getSimpleName()
@@ -134,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         navigationDrawer.addItemToMenu(incidentListItem);
         navigationDrawer.addItemToMenu(commandStructureItem);
+        navigationDrawer.addItemToMenu(databaseServiceTestItem);
         navigationDrawer.addItemToMenu(settingsItem);
 
         if (savedInstanceState == null) {
