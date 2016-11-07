@@ -1,12 +1,18 @@
 package com.eris.fragments;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +24,8 @@ import com.eris.R;
 import com.eris.activities.MainActivity;
 import com.eris.adapters.IncidentListAdapter;
 import com.eris.classes.Incident;
+import com.eris.services.DatabaseService;
+import com.eris.services.LocationService;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
@@ -34,11 +42,39 @@ public class IncidentListFragment extends Fragment {
     private ListView incidentListView;
     private IncidentListAdapter incidentListAdapter;
 
+    private BroadcastReceiver receiver;
+    private IntentFilter receiverFilter;
+    private String incidentsRequestMethodIdentifier;
+
 
     public IncidentListFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Create an intent filter
+        receiverFilter = new IntentFilter();
+        receiverFilter.addAction(DatabaseService.DATABASE_SERVICE_ACTION);
+
+        // Create broadcast receiver object.
+        this.receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // Determine which broadcast was sent.
+                String callingMethodIdentifier = intent.getStringExtra(DatabaseService.CALLING_METHOD_IDENTIFIER);
+                if (callingMethodIdentifier != null) {
+                    if (callingMethodIdentifier.equals(incidentsRequestMethodIdentifier)) {
+                        Parcelable incidents[] = intent.getParcelableArrayExtra(DatabaseService.DATA);
+                        respondToIncidentListFromDatabaseService(incidents);
+                    }
+                }
+            }
+        };
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,6 +87,10 @@ public class IncidentListFragment extends Fragment {
         incidentListView = (ListView) root.findViewById(R.id.incident_list_view);
         incidentListView.setDivider(null);
         incidentListView.setDividerHeight(0);
+
+        // Send the request to the database service to retrieve the list of incidents
+        DatabaseService databaseService = ((MainActivity) getActivity()).databaseService;
+        databaseService.getAllIncidents();
 
         // Inflate the modified layout for this fragment.
         return root;
@@ -98,5 +138,15 @@ public class IncidentListFragment extends Fragment {
 
         // Add some items to the adapter.
         incidentListAdapter.add(new Incident("1234", "Building on fire. Help needed!", "7777 Main Ave.", "37.2286649", "-80.4190468", "00:00", "Structure Fire", new ArrayList<String>(Arrays.asList("Police","Fire", "EMS"))));
+    }
+
+    /**
+     * Helper method used to populate the list of incidents, based on the array of incidents
+     * received from the DatabaseService.
+     *
+     * @param incidents
+     */
+    private void respondToIncidentListFromDatabaseService(Parcelable[] incidents) {
+        // TODO populate list
     }
 }

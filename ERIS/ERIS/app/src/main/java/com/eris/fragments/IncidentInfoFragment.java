@@ -214,12 +214,8 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                 databaseService.getRespondersByIncident("5842", callingMethodIdentifier);
             }
 
-            SharedPreferences preferences = getActivity().getSharedPreferences(
-                    getResources().getString(R.string.sharedpreferences_user_settings),
-                    0
-            );
-            int waitTimeSeconds = preferences.getInt(
-                    getResources().getString(R.string.preferences_broadcast), 30);
+            SharedPreferences preferences = getActivity().getSharedPreferences(getResources().getString(R.string.sharedpreferences_user_settings), 0);
+            int waitTimeSeconds = preferences.getInt(getResources().getString(R.string.preferences_broadcast), 30);
             long waitTimeMilliseconds = 1000 * ((long) waitTimeSeconds);
 
             while (responderListUpdateFlag) {
