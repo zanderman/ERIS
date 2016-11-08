@@ -27,67 +27,93 @@
 
             <LinearLayout
                 android:id="@+id/incident_info_container"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.80"
-                android:background="@drawable/card_bg_shadow">
+                android:layout_weight="0.90"
+                android:background="@drawable/card_bg_shadow"
+                android:weightSum="1">
 
                 <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:weightSum="1">
-
-                    <ImageView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/ic_location_on_black_24dp"
-                        android:id="@+id/imageView"
-                        android:layout_weight="0.1" />
-
-                    <TextView
-                        android:text="address"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:textStyle="italic"
-                        android:gravity="left|center"
-                        android:id="@+id/info_address"
-                        android:layout_weight="0.55" />
+                    android:layout_weight="1">
 
                     <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="0dp"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="0.35">
+                        android:weightSum="1">
+
+                        <ImageView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/ic_location_on_black_24dp"
+                            android:id="@+id/imageView"
+                            android:layout_weight="0.1" />
 
                         <TextView
-                            android:text="status"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/info_status"
-                            android:layout_weight="1" />
+                            android:text="address"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:textStyle="italic"
+                            android:gravity="left|center"
+                            android:id="@+id/info_address"
+                            android:layout_weight="0.55" />
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.35">
+
+                            <TextView
+                                android:text="status"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/info_status"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:text="runtime"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/info_runtime"
+                                android:layout_weight="1" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
                         <TextView
-                            android:text="runtime"
-                            android:layout_width="match_parent"
+                            android:text="description"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/info_runtime"
+                            android:id="@+id/info_description"
                             android:layout_weight="1" />
                     </LinearLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:id="@+id/card_visibility_layout"
+                    android:orientation="vertical"
+                    android:layout_width="40px"
+                    android:layout_height="match_parent"
+                    android:gravity="center|end"
+                    android:background="@drawable/rounded_rectangle"
+                    android:clickable="true">
 
-                    <TextView
-                        android:text="description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/info_description"
-                        android:layout_weight="1" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="30px"
+                        app:srcCompat="@drawable/ic_fast_rewind_black_24dp"
+                        android:id="@+id/card_visibility_image"
+                        android:layout_gravity="center"/>
                 </LinearLayout>
 
             </LinearLayout>
