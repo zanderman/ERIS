@@ -22,9 +22,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -74,7 +76,8 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
     /*
      * Private Members
      */
-    private LinearLayout infoContainer, hierarchyContainer;
+    private LinearLayout infoContainer, hierarchyContainer, visibilityContainer;
+    private ImageView visibilityImage;
     private RelativeLayout mapContainer;
     private FloatingActionButton hierarchyFloatingActionButton,
             incidentFloatingActionButton,
@@ -356,6 +359,10 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         infoContainer = (LinearLayout) root.findViewById(R.id.incident_info_container);
         hierarchyContainer = (LinearLayout) root.findViewById(R.id.incident_hierarchy_layout);
         mapContainer = (RelativeLayout) root.findViewById(R.id.incident_map_layout);
+        visibilityContainer = (LinearLayout) root.findViewById(R.id.card_visibility_layout);
+
+        // Set reference to image views.
+        visibilityImage = (ImageView) root.findViewById(R.id.card_visibility_image);
 
         // Set references to FloatingActionButtons.
         hierarchyFloatingActionButton = (FloatingActionButton) root.findViewById(R.id.hierarchy_floatingActionButton);
@@ -480,6 +487,14 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                 displayInformation();
             }
         });
+
+        // Set click action for info card.
+        visibilityContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayInformation();
+            }
+        });
     }
 
     @Override
@@ -574,11 +589,52 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
         // Change parameters based on flipflop.
         if (information_flipflop) {
-            infoContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.fade_out));
-            infoContainer.setVisibility(View.INVISIBLE);
+//            infoContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.fade_out));
+//            infoContainer.setVisibility(View.INVISIBLE);
+            Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.move_out_card);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) infoContainer.getLayoutParams();
+                    int offset = (int)(infoContainer.getWidth() * 0.85);
+                    params.setMargins(-1*(offset), 0, (offset), 0);
+                    infoContainer.setLayoutParams(params);
+                    visibilityImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_fast_forward_black_24dp));
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            infoContainer.startAnimation(animation);
         } else {
-            infoContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.fade_in));
-            infoContainer.setVisibility(View.VISIBLE);
+//            infoContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.fade_in));
+//            infoContainer.setVisibility(View.VISIBLE);
+            Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.move_in_card);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) infoContainer.getLayoutParams();// new LinearLayout.LayoutParams(infoContainer.getWidth(), infoContainer.getHeight());
+                    params.setMargins(0, 0, 0, 0);
+                    infoContainer.setLayoutParams(params);
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    visibilityImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_fast_rewind_black_24dp));
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            infoContainer.startAnimation(animation);
         }
 
         // Change the flipflop value.
