@@ -125,7 +125,7 @@
             android:id="@+id/incident_hierarchy_layout"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="250dp"
             android:layout_alignParentBottom="true"
             android:weightSum="1">
 
@@ -146,6 +146,62 @@
                     android:layout_gravity="center"
                     android:layout_weight="1" />
             </LinearLayout>
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/incident_sliding_tabs"
+                android:background="@color/md_white_1000"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></android.support.design.widget.TabLayout>
+            <android.support.v4.view.ViewPager
+                android:id="@+id/incident_viewpager"
+                android:background="@color/md_white_1000"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></android.support.v4.view.ViewPager>
+
+            <!--NOTE: Everything below this point will be deleted eventually-->
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="1">
+
+                <TextView
+                    android:text="Team"
+                    android:textSize="8pt"
+                    android:textStyle="normal"
+                    android:textColor="@color/md_white_1000"
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/button2"
+                    android:background="@color/md_green_500"
+                    android:layout_weight="0.5" />
+
+                <!-- Black Divider -->
+                <View
+                    android:layout_width="1dip"
+                    android:layout_height="match_parent"
+                    android:background="@color/black_overlay"></View>
+
+                <TextView
+                    android:text="Everyone"
+                    android:textSize="8pt"
+                    android:textStyle="normal"
+                    android:textColor="@color/md_white_1000"
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@color/md_grey_500"
+                    android:id="@+id/button"
+                    android:layout_weight="0.5" />
+            </LinearLayout>
+
+            <!-- Black Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:background="@color/black_overlay"></View>
 
             <LinearLayout
                 android:orientation="horizontal"

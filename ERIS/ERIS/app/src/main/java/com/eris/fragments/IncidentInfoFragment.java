@@ -13,10 +13,12 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.test.suitebuilder.TestMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -35,6 +37,7 @@ import android.widget.Toast;
 
 import com.eris.R;
 import com.eris.activities.MainActivity;
+import com.eris.adapters.HierarchyPagerAdapter;
 import com.eris.adapters.ResponderListAdapter;
 import com.eris.classes.Incident;
 import com.eris.classes.Responder;
@@ -76,6 +79,8 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
     /*
      * Private Members
      */
+    private ViewPager incidentViewPager;
+    private TabLayout incidentTabLayout;
     private LinearLayout infoContainer, hierarchyContainer, cardVisibilityContainer, listVisibilityContainer;
     private ImageView cardVisibilityImage, listVisibilityImage;
     private RelativeLayout mapContainer;
@@ -354,6 +359,10 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         // Obtain access to the root layout.
         View root = inflater.inflate(R.layout.fragment_incident_info, container, false);
 
+        // Grab tabbed view items.
+        incidentViewPager = (ViewPager) root.findViewById(R.id.incident_viewpager);
+        incidentTabLayout = (TabLayout) root.findViewById(R.id.incident_sliding_tabs);
+
         // Set references to FrameLayouts.
         infoContainer = (LinearLayout) root.findViewById(R.id.incident_info_container);
         hierarchyContainer = (LinearLayout) root.findViewById(R.id.incident_hierarchy_layout);
@@ -413,6 +422,12 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         subordinateListView.setAdapter(subordinateAdapter);
         superiorAdapter = new ResponderListAdapter(getActivity());
         superiorListView.setAdapter(superiorAdapter);
+
+        /*
+         * Set tabbed view adapters
+         */
+        incidentViewPager.setAdapter(new HierarchyPagerAdapter(getActivity().getSupportFragmentManager(), getActivity()));
+        incidentTabLayout.setupWithViewPager(incidentViewPager);
 
         /*
          * Set ListView item actions.
