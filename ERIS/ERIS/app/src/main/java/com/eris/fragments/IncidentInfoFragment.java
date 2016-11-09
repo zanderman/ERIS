@@ -69,7 +69,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
     /*
      * Flags
      */
-    private boolean resize_flipflop;
+    private boolean hierarchy_flipflop;
     private boolean checkin_flipflop;
     private boolean information_flipflop;
 
@@ -119,7 +119,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
 
         // Initialize the flipflops.
-        resize_flipflop = true;
+        hierarchy_flipflop = true;
         checkin_flipflop = false;
         information_flipflop = true;
 
@@ -478,14 +478,14 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
             public void onClick(View view) {
 
                 // Ensure the information windows are in the same visibility state.
-                if (information_flipflop != resize_flipflop) {
-                    if (information_flipflop) displayInformation();
-                    if (resize_flipflop) resizeMap();
+                if (information_flipflop != hierarchy_flipflop) {
+                    if (information_flipflop) resizeInformation();
+                    if (hierarchy_flipflop) resizeHierarchy();
                 }
                 else {
                     // show/hide information.
-                    displayInformation();
-                    resizeMap(); // Resize the Google Map.
+                    resizeInformation();
+                    resizeHierarchy(); // Resize the Google Map.
                 }
             }
         });
@@ -494,7 +494,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         cardVisibilityContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                displayInformation();
+                resizeInformation();
             }
         });
 
@@ -502,7 +502,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         listVisibilityContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                resizeMap();
+                resizeHierarchy();
             }
         });
     }
@@ -561,12 +561,12 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
 
     /**
-     * Helper method to resize the Google Map.
+     * Helper method to reposition the hierarchy window over top of the map.
      */
-    private void resizeMap() {
+    private void resizeHierarchy() {
 
         // Change parameters based on flipflop.
-        if (resize_flipflop) {
+        if (hierarchy_flipflop) {
             Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.move_down_list);
             animation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
@@ -612,13 +612,13 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         }
 
         // Change the flipflop value.
-        resize_flipflop = !resize_flipflop;
+        hierarchy_flipflop = !hierarchy_flipflop;
     }
 
     /**
      * Helper method to show/hide information card over top of map.
      */
-    private void displayInformation() {
+    private void resizeInformation() {
 
         // Change parameters based on flipflop.
         if (information_flipflop) {
@@ -632,7 +632,6 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                 @Override
                 public void onAnimationEnd(Animation animation) {
                     LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) infoContainer.getLayoutParams();
-//                    int offset = (int)(infoContainer.getWidth() * 0.85);
                     int offset = (int)((infoContainer.getWidth() - cardVisibilityContainer.getWidth())*0.90);
                     params.setMargins(-1*(offset), 0, (offset), 0);
                     infoContainer.setLayoutParams(params);
