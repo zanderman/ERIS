@@ -63,7 +63,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
      * Constants
      */
     private static final String TAG = IncidentInfoFragment.class.getSimpleName();
-    private static final float ZOOM_LEVEL = 16f;//17.5f;
+    private static final float ZOOM_LEVEL = 17f;
     private final int REQUEST_CODE_ENABLE_MY_LOCATION = 222;
 
     /*
@@ -76,11 +76,10 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
     /*
      * Private Members
      */
-    private LinearLayout infoContainer, hierarchyContainer, visibilityContainer;
-    private ImageView visibilityImage;
+    private LinearLayout infoContainer, hierarchyContainer, cardVisibilityContainer, listVisibilityContainer;
+    private ImageView cardVisibilityImage, listVisibilityImage;
     private RelativeLayout mapContainer;
-    private FloatingActionButton hierarchyFloatingActionButton,
-            incidentFloatingActionButton,
+    private FloatingActionButton incidentFloatingActionButton,
             checkinFloatingActionButton,
             informationFloatingActionButton;
     private GoogleMap googleMap;
@@ -359,13 +358,14 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         infoContainer = (LinearLayout) root.findViewById(R.id.incident_info_container);
         hierarchyContainer = (LinearLayout) root.findViewById(R.id.incident_hierarchy_layout);
         mapContainer = (RelativeLayout) root.findViewById(R.id.incident_map_layout);
-        visibilityContainer = (LinearLayout) root.findViewById(R.id.card_visibility_layout);
+        cardVisibilityContainer = (LinearLayout) root.findViewById(R.id.card_visibility_layout);
+        listVisibilityContainer = (LinearLayout) root.findViewById(R.id.list_visibility_layout);
 
         // Set reference to image views.
-        visibilityImage = (ImageView) root.findViewById(R.id.card_visibility_image);
+        cardVisibilityImage = (ImageView) root.findViewById(R.id.card_visibility_image);
+        listVisibilityImage = (ImageView) root.findViewById(R.id.list_visibility_image);
 
         // Set references to FloatingActionButtons.
-        hierarchyFloatingActionButton = (FloatingActionButton) root.findViewById(R.id.hierarchy_floatingActionButton);
         incidentFloatingActionButton = (FloatingActionButton) root.findViewById(R.id.incident_floatingActionButton);
         checkinFloatingActionButton = (FloatingActionButton) root.findViewById(R.id.checkin_floatingActionButton);
         informationFloatingActionButton = (FloatingActionButton) root.findViewById(R.id.information_floatingActionButton);
@@ -442,13 +442,6 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         /*
          * Set FloatingActionButton actions.
          */
-        hierarchyFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                resizeMap(); // Resize the Google Map.
-            }
-        });
-
         incidentFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -483,16 +476,33 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         informationFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // show/hide information card.
-                displayInformation();
+
+                // Ensure the information windows are in the same visibility state.
+                if (information_flipflop != resize_flipflop) {
+                    if (information_flipflop) displayInformation();
+                    if (resize_flipflop) resizeMap();
+                }
+                else {
+                    // show/hide information.
+                    displayInformation();
+                    resizeMap(); // Resize the Google Map.
+                }
             }
         });
 
         // Set click action for info card.
-        visibilityContainer.setOnClickListener(new View.OnClickListener() {
+        cardVisibilityContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 displayInformation();
+            }
+        });
+
+        // Set click action for responder list.
+        listVisibilityContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resizeMap();
             }
         });
     }
@@ -557,25 +567,48 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
         // Change parameters based on flipflop.
         if (resize_flipflop) {
-//            infoContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.fade_out));
-            hierarchyContainer.setVisibility(View.GONE);
-            mapContainer.setLayoutParams(
-                    new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.MATCH_PARENT
-                    )
-            );
+            Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.move_down_list);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    listVisibilityImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_up_white_24dp));
+                }
 
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) hierarchyContainer.getLayoutParams();
+                    int offset = hierarchyContainer.getHeight() - listVisibilityContainer.getHeight();
+                    params.setMargins(0,offset,0,-1*(offset));
+                    hierarchyContainer.setLayoutParams(params);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            hierarchyContainer.startAnimation(animation);
         } else {
-//            infoContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.fade_in));
-            mapContainer.setLayoutParams(
-                    new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            0,
-                            (float) 0.7
-                    )
-            );
-            hierarchyContainer.setVisibility(View.VISIBLE);
+            Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.move_up_list);
+            animation.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    listVisibilityImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_down_white_24dp));
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) hierarchyContainer.getLayoutParams();
+                    params.setMargins(0, 0, 0, 0);
+                    hierarchyContainer.setLayoutParams(params);
+                }
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+
+                }
+            });
+            hierarchyContainer.startAnimation(animation);
         }
 
         // Change the flipflop value.
@@ -589,21 +622,20 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
         // Change parameters based on flipflop.
         if (information_flipflop) {
-//            infoContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.fade_out));
-//            infoContainer.setVisibility(View.INVISIBLE);
             Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.move_out_card);
             animation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
+                    cardVisibilityImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_fast_forward_white_24dp));
                 }
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
                     LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) infoContainer.getLayoutParams();
-                    int offset = (int)(infoContainer.getWidth() * 0.85);
+//                    int offset = (int)(infoContainer.getWidth() * 0.85);
+                    int offset = (int)((infoContainer.getWidth() - cardVisibilityContainer.getWidth())*0.90);
                     params.setMargins(-1*(offset), 0, (offset), 0);
                     infoContainer.setLayoutParams(params);
-                    visibilityImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_fast_forward_black_24dp));
                 }
 
                 @Override
@@ -613,20 +645,18 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
             });
             infoContainer.startAnimation(animation);
         } else {
-//            infoContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.fade_in));
-//            infoContainer.setVisibility(View.VISIBLE);
             Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.move_in_card);
             animation.setAnimationListener(new Animation.AnimationListener() {
                 @Override
                 public void onAnimationStart(Animation animation) {
-                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) infoContainer.getLayoutParams();// new LinearLayout.LayoutParams(infoContainer.getWidth(), infoContainer.getHeight());
+                    cardVisibilityImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_fast_rewind_white_24dp));
+                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) infoContainer.getLayoutParams();
                     params.setMargins(0, 0, 0, 0);
                     infoContainer.setLayoutParams(params);
                 }
 
                 @Override
                 public void onAnimationEnd(Animation animation) {
-                    visibilityImage.setImageDrawable(getResources().getDrawable(R.drawable.ic_fast_rewind_black_24dp));
                 }
 
                 @Override
