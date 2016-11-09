@@ -130,17 +130,6 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         markers = new HashMap<String, Marker>();
 
         // Get the reference to the Responder object for the current user
-//        // TODO 44444444 update this to use actual user pulled from database on login
-//        ArrayList<String> heartrates = new ArrayList<String>();
-//        heartrates.add("72.4");
-//        heartrates.add("75.1");
-//        heartrates.add("80.2");
-//        ArrayList<String> currSubordinates = new ArrayList<String>();
-//        currSubordinates.add("2");
-//        currSubordinates.add("3");
-//        currSubordinates.add("4");
-//        currentUser = new Responder("1", "Albertson,Al", "EMS", heartrates, "11",
-//                currSubordinates, "37.229601", "-80.417308", "5842", "11", currSubordinates);
         currentUser = ((MainActivity) getActivity()).databaseService.getCurrentUser();
 
         // Create an intent filter
@@ -456,14 +445,23 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
             @Override
             public boolean onLongClick(View view) {
 
+                // Get a reference to the database service to check the responder in
+                DatabaseService databaseService = ((MainActivity) getActivity()).databaseService;
+
                 /*
                  * User is not currently checked-in.
                  * So check them in.
                  */
                 if (!checkin_flipflop) {
+                    currentUser.setSceneID(incident.getSceneId());
+                    databaseService.pushUpdatedResponderData(currentUser);
+                    // TODO 44444444 do we need to wait on success from database service to report checkin?
                     Toast.makeText(getActivity(), "checked-in", Toast.LENGTH_SHORT).show();
                     checkinFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_cancel_white_24dp));
                 } else {
+                    currentUser.setSceneID(null);
+                    databaseService.pushUpdatedResponderData(currentUser);
+                    // TODO 44444444 do we need to wait on success from database service to report checkout?
                     Toast.makeText(getActivity(), "checked-out", Toast.LENGTH_SHORT).show();
                     checkinFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_white_24dp));
                 }
@@ -595,65 +593,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
     @Override
     public void onMapLongClick(LatLng latLng) {
-//        // TODO 44444444 remove dummy values & update response call, only here to simulate update from database
-//        ArrayList<String> heartrates2 = new ArrayList<String>();
-//        ArrayList<String> heartrates3 = new ArrayList<String>();
-//        ArrayList<String> heartrates4 = new ArrayList<String>();
-//        ArrayList<String> heartrates5 = new ArrayList<String>();
-//        ArrayList<String> heartrates6 = new ArrayList<String>();
-//        ArrayList<String> heartrates7 = new ArrayList<String>();
-//        ArrayList<String> heartrates8 = new ArrayList<String>();
-//        ArrayList<String> heartrates9 = new ArrayList<String>();
-//        ArrayList<String> heartrates10 = new ArrayList<String>();
-//        ArrayList<String> heartrates11 = new ArrayList<String>();
-//        heartrates2.add("86.7");
-//        heartrates3.add("82.3");
-//        heartrates4.add("84.1");
-//        heartrates5.add("78.3");
-//        heartrates6.add("74.2");
-//        heartrates7.add("83.5");
-//        heartrates8.add("87.1");
-//        heartrates9.add("81.4");
-//        heartrates10.add("79.8");
-//        heartrates11.add("71.2");
-//        ArrayList<Responder> respondersTestList2 = new ArrayList<Responder>();
-//
-//        ArrayList<String> heartrates = new ArrayList<String>();
-//        heartrates.add("72.4");
-//        heartrates.add("75.1");
-//        heartrates.add("80.2");
-//        ArrayList<String> currSubordinates = new ArrayList<String>();
-//        currSubordinates.add("2");
-//        currSubordinates.add("3");
-//        currSubordinates.add("4");
-//        currSubordinates.add("5");
-//        currentUser = new Responder("1", "Albertson,Al", "EMS", heartrates, "11",
-//                currSubordinates, "37.229601", "-80.417308", "5842", "11", currSubordinates);
-//
-//        respondersTestList2.add(currentUser);
-//        respondersTestList2.add(new Responder("2", "Johnson,Johnny", "EMS", heartrates2, "1",
-//                null, "37.209601", "-80.429308", "5842", "1", null));
-//        respondersTestList2.add(new Responder("3", "Doe,John", "EMS", heartrates3, "1",
-//                null, "37.304601", "-80.507308", "5842", "1", null));
-//        respondersTestList2.add(new Responder("4", "James,Jim", "EMS", heartrates4, "1",
-//                null, "37.247601", "-80.399308", "5842", "1", null));
-//        respondersTestList2.add(new Responder("5", "Mathews,Robby", "EMS", heartrates5, "1",
-//                null, "37.419601", "-80.319308", "5842", "1", null));
-//        respondersTestList2.add(new Responder("6", "Smith,Emma", "EMS", heartrates6, "11",
-//                null, "37.519601", "-80.479308", "5842", "11", null));
-//
-//        respondersTestList2.add(new Responder("7", "DaDubious,Greg", "EMS", heartrates7, "11",
-//                null, "37.389601", "-80.389308", "5842", "11", null));
-//        respondersTestList2.add(new Responder("8", "Yasar,Brian", "EMS", heartrates8, "11",
-//                null, "37.429601", "-80.549308", "5842", "11", null));
-//        respondersTestList2.add(new Responder("9", "McFubious,Dan", "EMS", heartrates9, "11",
-//                null, "37.419601", "-80.519308", "5842", "11", null));
-//        respondersTestList2.add(new Responder("10", "Watson,Ally", "EMS", heartrates10, "11",
-//                null, "37.439601", "-80.509308", "5842", "11", null));
-//
-//        respondersTestList2.add(new Responder("11", "Dr,T", "EMS", heartrates11, null,
-//                null, "37.409601", "-80.529308", "5842", null, null));
-//        respondToUpdatedResponderBroadcast(respondersTestList2);
+        // currently, do nothing
     }
 
     @Override
@@ -696,52 +636,6 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
         this.getActivity().registerReceiver(receiver, receiverFilter);
 
-//        // add dummy items.
-//        ArrayList<String> heartrates2 = new ArrayList<String>();
-//        ArrayList<String> heartrates3 = new ArrayList<String>();
-//        ArrayList<String> heartrates4 = new ArrayList<String>();
-//        ArrayList<String> heartrates5 = new ArrayList<String>();
-//        ArrayList<String> heartrates6 = new ArrayList<String>();
-//        ArrayList<String> heartrates7 = new ArrayList<String>();
-//        ArrayList<String> heartrates8 = new ArrayList<String>();
-//        ArrayList<String> heartrates9 = new ArrayList<String>();
-//        ArrayList<String> heartrates10 = new ArrayList<String>();
-//        ArrayList<String> heartrates11 = new ArrayList<String>();
-//        heartrates2.add("86.7");
-//        heartrates3.add("82.3");
-//        heartrates4.add("84.1");
-//        heartrates5.add("78.3");
-//        heartrates6.add("74.2");
-//        heartrates7.add("83.5");
-//        heartrates8.add("87.1");
-//        heartrates9.add("81.4");
-//        heartrates10.add("79.8");
-//        heartrates11.add("71.2");
-//        ArrayList<Responder> respondersTestList1 = new ArrayList<Responder>();
-//        respondersTestList1.add(currentUser);
-//        respondersTestList1.add(new Responder("2", "Johnson,Johnny", "EMS", heartrates2, "1",
-//                null, "37.209601", "-80.429308", "5842", "1", null));
-//        respondersTestList1.add(new Responder("3", "Doe,John", "EMS", heartrates3, "1",
-//                null, "37.304601", "-80.507308", "5842", "1", null));
-//        respondersTestList1.add(new Responder("4", "James,Jim", "EMS", heartrates4, "1",
-//                null, "37.247601", "-80.399308", "5842", "1", null));
-//        respondersTestList1.add(new Responder("5", "Mathews,Robby", "EMS", heartrates5, "11",
-//                null, "37.519601", "-80.529308", "5842", "11", null));
-//        respondersTestList1.add(new Responder("6", "Smith,Emma", "EMS", heartrates6, "11",
-//                null, "37.489601", "-80.499308", "5842", "11", null));
-//
-//        respondersTestList1.add(new Responder("7", "DaDubious,Greg", "EMS", heartrates7, "11",
-//                null, "37.389601", "-80.389308", "5842", "11", null));
-//        respondersTestList1.add(new Responder("8", "Yasar,Brian", "EMS", heartrates8, "11",
-//                null, "37.429601", "-80.549308", "5842", "11", null));
-//        respondersTestList1.add(new Responder("9", "McFubious,Dan", "EMS", heartrates9, "11",
-//                null, "37.419601", "-80.519308", "5842", "11", null));
-//        respondersTestList1.add(new Responder("10", "Watson,Ally", "EMS", heartrates10, "11",
-//                null, "37.439601", "-80.509308", "5842", "11", null));
-//
-//        respondersTestList1.add(new Responder("11", "Dr,T", "EMS", heartrates11, null,
-//                null, "37.409601", "-80.529308", "5842", null, null));
-//        respondToUpdatedResponderBroadcast(respondersTestList1);
     }
 
     /**
