@@ -220,7 +220,10 @@ public class Responder implements Parcelable {
      *
      * @param id  The Incident ID to be set
      */
-    public void setSceneID(String id) {
-        this.sceneID = id;
+    public void setSceneID(String sceneID) {
+        if (sceneID == null) {
+            throw new IllegalArgumentException("sceneID cannot be null, use empty string");
+        }
+        this.sceneID = sceneID;
     }
 }
