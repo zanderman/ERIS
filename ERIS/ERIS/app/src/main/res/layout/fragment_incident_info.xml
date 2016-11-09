@@ -11,7 +11,9 @@
         android:id="@+id/incident_map_layout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.7">
+        android:layout_weight="1">
+
+
 
         <FrameLayout
             android:id="@+id/incident_map_fragment_container"
@@ -28,9 +30,8 @@
             <LinearLayout
                 android:id="@+id/incident_info_container"
                 android:orientation="horizontal"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.90"
+                android:layout_width="300dp"
+                android:layout_height="100dp"
                 android:background="@drawable/card_bg_shadow"
                 android:weightSum="1">
 
@@ -102,16 +103,17 @@
                 <LinearLayout
                     android:id="@+id/card_visibility_layout"
                     android:orientation="vertical"
-                    android:layout_width="40px"
+                    android:layout_width="30dp"
                     android:layout_height="match_parent"
+                    android:layout_gravity="right"
                     android:gravity="center|end"
                     android:background="@drawable/rounded_rectangle"
                     android:clickable="true">
 
                     <ImageView
                         android:layout_width="match_parent"
-                        android:layout_height="30px"
-                        app:srcCompat="@drawable/ic_fast_rewind_black_24dp"
+                        android:layout_height="50px"
+                        app:srcCompat="@drawable/ic_fast_rewind_white_24dp"
                         android:id="@+id/card_visibility_image"
                         android:layout_gravity="center"/>
                 </LinearLayout>
@@ -119,9 +121,86 @@
             </LinearLayout>
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/incident_hierarchy_layout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_alignParentBottom="true"
+            android:weightSum="1">
+
+            <LinearLayout
+                android:id="@+id/list_visibility_layout"
+                android:orientation="horizontal"
+                android:layout_width="50dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:background="@drawable/rounded_rectangle"
+                android:clickable="true">
+
+                <ImageView
+                    android:id="@+id/list_visibility_image"
+                    android:layout_width="60px"
+                    android:layout_height="60px"
+                    app:srcCompat="@drawable/ic_down_white_24dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/md_white_1000"
+                android:weightSum="1">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:weightSum="1">
+
+                    <ListView
+                        android:id="@+id/incident_superior_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="100px">
+                    </ListView>
+
+                    <!-- Black Divider -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dip"
+                        android:background="@color/black_overlay"></View>
+
+                    <ListView
+                        android:id="@+id/incident_subordinate_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"/>
+                </LinearLayout>
+
+                <!-- Black Divider -->
+                <View
+                    android:layout_width="1dip"
+                    android:layout_height="match_parent"
+                    android:background="@color/black_overlay"></View>
+
+                <ListView
+                    android:id="@+id/incident_responder_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
         <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -160,76 +239,11 @@
                     app:elevation="0dp"
                     android:clickable="true"
                     app:fabSize="mini"
-                    android:src="@drawable/ic_zoom_out_map_white_24dp"
-                    app:backgroundTint="@color/md_orange_500"
-                    android:id="@+id/hierarchy_floatingActionButton"/>
-
-                <android.support.design.widget.FloatingActionButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    app:elevation="0dp"
-                    android:clickable="true"
-                    app:fabSize="mini"
                     android:src="@drawable/ic_done_white_24dp"
                     app:backgroundTint="@color/md_red_500"
                     android:id="@+id/checkin_floatingActionButton"/>
             </LinearLayout>
         </android.support.design.widget.CoordinatorLayout>
-
     </RelativeLayout>
-
-    <!-- Black Divider -->
-    <LinearLayout
-        android:id="@+id/incident_hierarchy_layout"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.3"
-        android:weightSum="1">
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:weightSum="1">
-
-            <ListView
-                android:id="@+id/incident_superior_list"
-                android:layout_width="match_parent"
-                android:layout_height="100px">
-            </ListView>
-
-            <!-- Black Divider -->
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dip"
-                android:background="@color/black_overlay"></View>
-
-            <ListView
-                android:id="@+id/incident_subordinate_list"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-        </LinearLayout>
-
-        <!-- Black Divider -->
-        <View
-            android:layout_width="1dip"
-            android:layout_height="match_parent"
-            android:background="@color/black_overlay"></View>
-
-        <ListView
-            android:id="@+id/incident_responder_list"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"/>
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dip"
-        android:background="@color/black_overlay"></View>
 
 </LinearLayout>
