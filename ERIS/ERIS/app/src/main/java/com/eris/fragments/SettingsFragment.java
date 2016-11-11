@@ -12,11 +12,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.eris.R;
+import com.eris.activities.MainActivity;
 import com.eris.classes.NotificationDispatcher;
+import com.eris.classes.Responder;
+import com.eris.services.DatabaseService;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +35,11 @@ public class SettingsFragment extends Fragment {
     private CheckBox phoneCheck;
     private CheckBox watchCheck;
     private CheckBox glassesCheck;
+    private EditText userFirstNameEditText;
+    private EditText userLastNameEditText;
+    private EditText userSuperiorIdEditText;
+    private EditText userOrganizationEditText;
+    private Button updateUserInfoButton;
 
     private SharedPreferences settings;
 
@@ -71,6 +81,11 @@ public class SettingsFragment extends Fragment {
         phoneCheck = (CheckBox) view.findViewById(R.id.phoneCheck);
         watchCheck = (CheckBox) view.findViewById(R.id.watchCheck);
         glassesCheck = (CheckBox) view.findViewById(R.id.glassesCheck);
+        userFirstNameEditText = (EditText) view.findViewById(R.id.userFirstNameEditText);
+        userLastNameEditText = (EditText) view.findViewById(R.id.userLastNameEditText);
+        userSuperiorIdEditText = (EditText) view.findViewById(R.id.userSuperiorIdEditText);
+        userOrganizationEditText = (EditText) view.findViewById(R.id.userOrganizationEditText);
+        updateUserInfoButton = (Button) view.findViewById(R.id.updateUserInfoButton);
 
         // Load current settings from memory
         broadcastBar.setProgress(
@@ -107,6 +122,30 @@ public class SettingsFragment extends Fragment {
                 NotificationDispatcher.send("ERIS Alert", "Test Notification", getContext());
             }
         });
+
+        final DatabaseService databaseService = ((MainActivity) getActivity()).databaseService;
+        final Responder currUser = databaseService.getCurrentUser();
+        if (currUser == null) {
+            Toast.makeText(getActivity(), "User info not yet found.", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            userFirstNameEditText.setText(currUser.getFirstName());
+            userLastNameEditText.setText(currUser.getLastName());
+            userSuperiorIdEditText.setText(currUser.getOrgSuperior());
+            userOrganizationEditText.setText(currUser.getOrganization());
+        }
+
+        updateUserInfoButton.setOnClickListener(new Button.OnClickListener() {
+            public void onClick(View v) {
+                // Set values for the current user and ask the database service to push this update
+                currUser.setFirstName(userFirstNameEditText.getText().toString());
+                currUser.setLastName(userLastNameEditText.getText().toString());
+                currUser.setOrgSuperior(userSuperiorIdEditText.getText().toString());
+                currUser.setOrganization(userOrganizationEditText.getText().toString());
+                databaseService.pushUpdatedResponderData(currUser);
+            }
+        });
+
         return view;
     }
 
