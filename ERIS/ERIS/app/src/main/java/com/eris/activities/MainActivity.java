@@ -25,6 +25,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -45,9 +46,11 @@ import com.eris.navigation.NavigationDrawer;
 import com.eris.services.LocationService;
 import com.eris.services.DatabaseService;
 
+import java.util.concurrent.CountDownLatch;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     /** Class name for log messages. */
-    private final static String LOG_TAG = MainActivity.class.getSimpleName();
+    private final static String TAG = MainActivity.class.getSimpleName();
 
     /** Bundle key for saving/restoring the toolbar title. */
     private final static String BUNDLE_KEY_TOOLBAR_TITLE = "title";
@@ -66,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public LocationService locationService;
     public DatabaseService databaseService;
+    public CountDownLatch databaseServiceLatch;
 
     /*
      * Constants
@@ -77,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             if (iBinder instanceof DatabaseService.DatabaseServiceBinder) {
                 databaseService = ((DatabaseService.DatabaseServiceBinder)iBinder).getService();
+                databaseServiceLatch.countDown();
             }
         }
 
@@ -159,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        databaseServiceLatch = new CountDownLatch(1);
         // Obtain a reference to the mobile client. It is created in the Application class,
         // but in case a custom Application class is not used, we initialize it here if necessary.
         AWSMobileClient.initializeMobileClientIfNecessary(this);
@@ -182,8 +188,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-
-
         final AWSMobileClient awsMobileClient = AWSMobileClient.defaultMobileClient();
     }
 

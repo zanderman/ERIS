@@ -33,6 +33,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 
 //Uses the local service model.
@@ -61,6 +62,8 @@ public class DatabaseService extends Service {
     private String savedCurrentUserIDToken;
     private BroadcastReceiver receiver;
 
+    public CountDownLatch currentUserLatch;
+
     /**
      * Constructor for DatabaseService
      */
@@ -83,7 +86,7 @@ public class DatabaseService extends Service {
     public void onCreate() {
         super.onCreate();
         localBroadcastManager = LocalBroadcastManager.getInstance(this);
-        //TODO does this work?
+        currentUserLatch = new CountDownLatch(1);
 
         // Create an intent filter
         IntentFilter filter = new IntentFilter();
@@ -208,7 +211,8 @@ public class DatabaseService extends Service {
                     foundUser.getCurrentIncidentId(), foundUser.getIncidentSuperior(),
                     foundUser.getIncidentSubordinates());
             if (r.getUserID().equals(savedCurrentUserIDToken)) {
-                currentUser = r; // TODO 44444444 look into mutex/locking of some type to prevent race conditions
+                currentUser = r;
+                currentUserLatch.countDown();
                 Log.d("currUser setting", "Current Logged-In User Set");
             }
             intent.putExtra(DATA, r);
@@ -475,6 +479,7 @@ public class DatabaseService extends Service {
         if (callingMethodIdentifier == null) {
             throw new IllegalArgumentException("callingMethodInfo cannot be null");
         }
+        Log.d(TAG, "Started getting all incidents.");
         (new Thread(new GetAllIncidentsDataThread(callingMethodIdentifier))).start();
     }
 
@@ -505,7 +510,9 @@ public class DatabaseService extends Service {
                         //TODO add a thing to the scene.
                         incident = new Incident(foundIncident.getSceneId(), foundIncident.getDescription(),  foundIncident.getAddress(),
                                 foundIncident.getLatitude(), foundIncident.getLongitude(),
-                                foundIncident.getTime(), foundIncident.getTitle(), foundIncident.getAssignedOrginizations());
+                                foundIncident.getTime(), foundIncident.getTitle(), foundIncident.getAssignedOrganizations());
+                        Log.d(TAG, "Assigned Orginizations: " + foundIncident.getAssignedOrganizations());
+                        Log.d(TAG, foundIncident.toString());
                         incidents.add(incident);
                     }
                 }
@@ -671,7 +678,7 @@ public class DatabaseService extends Service {
             incidentData.setAddress(incident.getAddress());
             incidentData.setLongitude(incident.getLongitude());
             incidentData.setLatitude(incident.getLatitude());
-            incidentData.setAssignedOrginizations(incident.getOrganizations());
+            incidentData.setAssignedOrganizations(incident.getOrganizations());
             incidentData.setDescription(incident.getDescription());
             incidentData.setTime(incident.getTime());
             incidentData.setTitle(incident.getTitle());
@@ -736,7 +743,7 @@ public class DatabaseService extends Service {
             incidentData.setAddress(incident.getAddress());
             incidentData.setLongitude(incident.getLongitude());
             incidentData.setLatitude(incident.getLatitude());
-            incidentData.setAssignedOrginizations(incident.getOrganizations());
+            incidentData.setAssignedOrganizations(incident.getOrganizations());
             incidentData.setDescription(incident.getDescription());
             incidentData.setTime(incident.getTime());
             incidentData.setTitle(incident.getTitle());
@@ -759,6 +766,8 @@ public class DatabaseService extends Service {
 
     /**
      * Get a reference to the Responder object representing the current logged in user.
+     * You should expect this could be null if you call it too soon.
+     * Really you should call it from a thread and wait for the countdownlatch to open.
      */
     public Responder getCurrentUser() {
         return currentUser;

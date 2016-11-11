@@ -99,6 +99,7 @@ public class IncidentHistoryFragment extends Fragment {
         });
 
         // Add some items to the adapter.
+        //TODO Ok we need to change this but I need more info on whats going on.
         incidentHistoryAdapter.add(new Incident("1234", "Fire at the aquarium.\nSave Dori!", "42 Wallaby Way, Sydney", "37.2286649", "-80.4190468", "13:00", "Structure Fire", new ArrayList<String>(Arrays.asList("Fire","EMS"))));
         incidentHistoryAdapter.add(new Incident("5678", "Flooding on highway by Virginia Tech front gate.", "i-460 @ Virginia Tech front gate", "37.2286", "-80.4190", "06:30", "Flooding", new ArrayList<String>(Arrays.asList("Police","Fire"))));
     }

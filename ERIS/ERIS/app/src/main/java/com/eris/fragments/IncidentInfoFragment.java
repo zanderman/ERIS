@@ -228,6 +228,9 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                 } catch (Exception e) {
                     // oops
                 } finally {
+                    //TODO we need to store the current incident in shared prefs, don't we.
+                    //Do we need a current signed in incident and current looking at incident?
+                    //That will get confusing.
                     databaseService.getRespondersByIncident("5842", callingMethodIdentifier);
                 }
             }

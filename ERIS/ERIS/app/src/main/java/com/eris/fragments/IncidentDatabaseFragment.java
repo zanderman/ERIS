@@ -136,7 +136,7 @@ public class IncidentDatabaseFragment extends Fragment {
         buttonGetRespondersByIncident.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity)getActivity()).databaseService.getRespondersByIncident("5842", GET_INCIDENT_RESPONDERS);
+               ((MainActivity)getActivity()).databaseService.getRespondersByIncident("5842", GET_INCIDENT_RESPONDERS);
             }
         });
 
@@ -197,8 +197,8 @@ public class IncidentDatabaseFragment extends Fragment {
             if (callingMethodIdentifier.equals(GET_SINGLE_RESPONDER)) {
                 if (intent.getStringExtra(DatabaseService.ERROR_STATUS).equals(Responder.NO_ERROR)) {
                     Responder r = intent.getParcelableExtra(DatabaseService.DATA);
-                    tv.setText(r.getName());
-                    Log.d(TAG, "Info: " + r.getName() + r.getHeartrateRecord().toString());
+                    tv.setText(r.getName()+ r.getHeartrateRecord() + r.getOrgSubordinates());
+                    Log.d(TAG, "Info: " + r.getName() + r.getHeartrateRecord() + r.getOrgSubordinates());
                 } else if (intent.getStringExtra(DatabaseService.ERROR_STATUS).equals(Responder.QUERY_FAILED)) {
                     tv.setText("Failed to get responder [insert name here]");
                     Log.d(TAG, "Failed to get data.");
@@ -257,7 +257,7 @@ public class IncidentDatabaseFragment extends Fragment {
                 }
                 StringBuilder builder = new StringBuilder();
                 for (int i = 0; i < incidents.length; i++) {
-                    builder.append(incidents[i].getSceneId());
+                    builder.append(incidents[i].getOrganizations());
                 }
                 tv.setText(builder.toString());
 

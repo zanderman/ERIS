@@ -16,7 +16,7 @@ import java.util.Set;
 public class ScenesDO {
     private String _sceneId;
     private String _address;
-    private List<String> _assignedOrginizations;
+    private List<String> _assignedOrganizations;
     private String _description;
     private String _latitude;
     private String _longitude;
@@ -40,13 +40,13 @@ public class ScenesDO {
     public void setAddress(final String _address) {
         this._address = _address;
     }
-    @DynamoDBAttribute(attributeName = "assigned_orginizations")
-    public List<String> getAssignedOrginizations() {
-        return _assignedOrginizations;
+    @DynamoDBAttribute(attributeName = "assigned_organizations")
+    public List<String> getAssignedOrganizations() {
+        return _assignedOrganizations;
     }
 
-    public void setAssignedOrginizations(final List<String> _assignedOrginizations) {
-        this._assignedOrginizations = _assignedOrginizations;
+    public void setAssignedOrganizations(final List<String> _assignedOrganizations) {
+        this._assignedOrganizations = _assignedOrganizations;
     }
     @DynamoDBAttribute(attributeName = "description")
     public String getDescription() {
