@@ -20,7 +20,6 @@ public class Responder implements Parcelable {
     /*
      * Public Members
      */
-    //Why are these all public?  seems bad.
     private String userID;
     private String sceneID;
     private float heartRate;
@@ -53,6 +52,7 @@ public class Responder implements Parcelable {
         this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.name = lastName + "," + firstName;
 
         /*
          * Initialize unknown values.
@@ -77,6 +77,7 @@ public class Responder implements Parcelable {
         this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.name = lastName + "," + firstName;
         this.sceneID = sceneID;
         this.heartRate = heartRate;
         this.location = location;
@@ -114,7 +115,7 @@ public class Responder implements Parcelable {
             this.heartRate = Float.parseFloat(heartrateRecord.get(0));
         } else {
             this.heartRate = -999;
-            Log.e(TAG, "No heartrate found.  Dead?");
+            Log.e(TAG, "No valid heartrate found.");
         }
         this.orgSuperior = orgSuperior;
         this.orgSubordinates = orgSubordinates;
@@ -192,6 +193,15 @@ public class Responder implements Parcelable {
     public List<String> getIncidentSubordinates() {return this.incidentSubordinates;}
     public Marker getMarker() {return this.marker;}
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+        this.name = this.lastName + "," + this.firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+        this.name = this.lastName + "," + this.firstName;
+    }
 
     public void setLocation(LatLng location) {
         if (location == null) {
@@ -199,21 +209,45 @@ public class Responder implements Parcelable {
         }
         this.location = location;
     }
+
     public void setMarker(Marker marker) {
         if (marker == null) {
             throw new IllegalArgumentException("marker cannot be null");
         }
-        this.marker = marker;}
+        this.marker = marker;
+    }
+
+    public void setOrganization(String organization) {
+        this.organization = organization;
+    }
+
+    public void setOrgSuperior(String superiorId) {
+        if (superiorId == null) {
+            throw new IllegalArgumentException("superiorId cannot be null");
+        }
+        this.orgSuperior = superiorId;
+    }
+
+    public void setOrgSubordinates(List<String> subordinateIds) {
+        if (subordinateIds == null) {
+            throw new IllegalArgumentException("subordinateIds cannot be null");
+        }
+        this.orgSubordinates = subordinateIds;
+    }
+
     public void setIncidentSuperior(String superiorId) {
         if (superiorId == null) {
             throw new IllegalArgumentException("superiorId cannot be null");
         }
-        this.incidentSuperior = superiorId;}
+        this.incidentSuperior = superiorId;
+    }
+
     public void setIncidentSubordinates(List<String> subordinateIds) {
         if (subordinateIds == null) {
             throw new IllegalArgumentException("subordinateIds cannot be null");
         }
-        this.incidentSubordinates = subordinateIds;}
+        this.incidentSubordinates = subordinateIds;
+    }
 
     /**
      * Set the incident/scene ID for this responder.
