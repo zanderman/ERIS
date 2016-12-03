@@ -568,6 +568,9 @@ public class DatabaseService extends Service {
 
             try {
                 mapper.save(userData, new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES));
+                if (responder.getUserID().equals(currentUser.getUserID())) {
+                    currentUser = responder;
+                }
             } catch (final AmazonClientException e) {
                 Log.e(TAG, "Failed saving item " + e.getMessage(), e);
             } catch (Exception e) {
