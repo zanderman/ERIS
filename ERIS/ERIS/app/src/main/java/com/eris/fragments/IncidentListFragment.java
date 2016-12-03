@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.SystemClock;
@@ -12,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +34,7 @@ import java.util.Arrays;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class IncidentListFragment extends Fragment {
+public class IncidentListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     /*
      * Private Members
@@ -46,6 +48,8 @@ public class IncidentListFragment extends Fragment {
     private IncidentListAdapter incidentListAdapter;
     private Responder currentUser;
     private BroadcastReceiver receiver;
+    private IntentFilter filter;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
 
 
@@ -56,10 +60,16 @@ public class IncidentListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        IntentFilter filter = new IntentFilter();
+        filter = new IntentFilter();
         filter.addAction(DatabaseService.DATABASE_SERVICE_ACTION);
         this.receiver = new IncidentListFragmentReceiver();
         this.getActivity().registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onRefresh() {
+        //This actually needs to be a handler or whatever TODO TODO.
+        ((MainActivity) getActivity()).databaseService.getAllIncidents(GET_ALL_INCIDENTS);
     }
 
 
@@ -75,6 +85,13 @@ public class IncidentListFragment extends Fragment {
         incidentListView.setDivider(null);
         incidentListView.setDividerHeight(0);
 
+        swipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.incident_list_swipe_refresh);
+        Log.d(TAG, "layout: " + swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setColorSchemeResources(
+                R.color.md_red_600,
+                R.color.md_indigo_A400,
+                R.color.md_green_500);
         // Inflate the modified layout for this fragment.
         return root;
     }
@@ -141,35 +158,33 @@ public class IncidentListFragment extends Fragment {
                 Log.e(TAG, e.getLocalizedMessage());
             }
             currentUser = ((MainActivity) getActivity()).databaseService.getCurrentUser();
-            (new Thread(new TimedDatabaseUpdateThread())).start();
+            (new Thread(new RefreshIncidentsThread())).start();
         }
     }
 
-    class TimedDatabaseUpdateThread implements Runnable {
-        public TimedDatabaseUpdateThread() {
-
+    class RefreshIncidentsThread implements Runnable {
+        public RefreshIncidentsThread() {
+            //Required constructor
         }
 
         @Override
         public void run() {
-            //Every minute, get incidents.  Might want a force refresh feature in the future.
-            //while(true) { TODO make this thread quit when the fragment exits.
-            //OK, I don't know why this constantly crashes the app. It should only happen once.
-            //It seems to have stopped.  I do need to fix this though.
-            //It should also probably save these so we do less accesses.
-                ((MainActivity) getActivity()).databaseService.getAllIncidents(GET_ALL_INCIDENTS);
-                SystemClock.sleep(60 * 1000);
-            //}
+            try {
+                ((MainActivity)getActivity()).databaseServiceLatch.await();
+            } catch (InterruptedException e) {
+                Log.e(TAG, e.getLocalizedMessage());
+            }
+            ((MainActivity) getActivity()).databaseService.getAllIncidents(GET_ALL_INCIDENTS);
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         // Unregister location updates broadcast receiver.
-        this.getActivity().unregisterReceiver(receiver);
+        //this.getActivity().unregisterReceiver(receiver); TODO reenable this.
     }
+
 
     public class IncidentListFragmentReceiver extends BroadcastReceiver {
 
@@ -189,12 +204,15 @@ public class IncidentListFragment extends Fragment {
                     incidents[i] = (Incident) parcelables[i];
                 }
 
+                //TODO sort incidents by time
+
                 incidentListAdapter.clear();
                 for (int i = 0; i < incidents.length; i++) {
                     if (incidents[i].getOrganizations().contains(currentUser.getOrganization())) {
                         incidentListAdapter.add(incidents[i]);
                     }
                 }
+                swipeRefreshLayout.setRefreshing(false);
 
             } else {
                 //Do nothing
