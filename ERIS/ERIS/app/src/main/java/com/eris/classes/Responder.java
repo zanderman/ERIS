@@ -214,4 +214,16 @@ public class Responder implements Parcelable {
             throw new IllegalArgumentException("subordinateIds cannot be null");
         }
         this.incidentSubordinates = subordinateIds;}
+
+    /**
+     * Set the incident/scene ID for this responder.
+     *
+     * @param id  The Incident ID to be set
+     */
+    public void setSceneID(String sceneID) {
+        if (sceneID == null) {
+            throw new IllegalArgumentException("sceneID cannot be null, use empty string");
+        }
+        this.sceneID = sceneID;
+    }
 }
