@@ -531,22 +531,32 @@ public class DatabaseService extends Service {
      * This method will ignore the null fields, if any.
      * @param responder The Responder object
      */
-    public void pushUpdatedResponderData(Responder responder) {
+    public void pushUpdatedResponderData(Responder responder, String callingMethodIdentifier) {
         if (responder == null) {
             throw new IllegalArgumentException("responder cannot be null");
         }
-        (new Thread(new PushUpdatedResponderDataThread(responder))).start();
+        (new Thread(new PushUpdatedResponderDataThread(responder, callingMethodIdentifier))).start();
     }
 
     private class PushUpdatedResponderDataThread implements Runnable{
         Responder responder;
+        String callingMethodIdentifier;
+        Intent intent;
 
-        public PushUpdatedResponderDataThread(Responder responder) {
+        public PushUpdatedResponderDataThread(Responder responder, String callingMethodIdentifier) {
             this.responder = responder;
+            this.callingMethodIdentifier = callingMethodIdentifier;
+            if (callingMethodIdentifier != null) {
+                this.intent = new Intent();
+            }
         }
 
         @Override
         public void run() {
+            if (callingMethodIdentifier != null) {
+                intent.setAction(DATABASE_SERVICE_ACTION);
+                intent.putExtra(CALLING_METHOD_IDENTIFIER, callingMethodIdentifier);
+            }
             final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
             final UserDataDO userData = new UserDataDO();
 
@@ -570,6 +580,9 @@ public class DatabaseService extends Service {
                 mapper.save(userData, new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES));
                 if (responder.getUserID().equals(currentUser.getUserID())) {
                     currentUser = responder;
+                }
+                if (callingMethodIdentifier != null) {
+                    sendBroadcast(intent);
                 }
             } catch (final AmazonClientException e) {
                 Log.e(TAG, "Failed saving item " + e.getMessage(), e);
@@ -788,7 +801,7 @@ public class DatabaseService extends Service {
         }
 
         currentUser.setLocation(new LatLng(latitude, longitude));
-        pushUpdatedResponderData(currentUser);
+        pushUpdatedResponderData(currentUser, null);
         return true;
     }
 

@@ -1,11 +1,15 @@
 package com.eris.fragments;
 
 import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +45,10 @@ public class SettingsFragment extends Fragment {
     private EditText userOrganizationEditText;
     private Button updateUserInfoButton;
 
+    private BroadcastReceiver receiver;
+    private IntentFilter receiverFilter;
+    private String userUpdateInfoRequestMethodIdentifier;
+
     private SharedPreferences settings;
 
     public String broadcastPref;
@@ -67,6 +75,26 @@ public class SettingsFragment extends Fragment {
         phonePref = getResources().getString(R.string.preferences_phone_alerts);
         watchPref = getResources().getString(R.string.preferences_watch_alerts);
         glassPref = getResources().getString(R.string.preferences_glass_alerts);
+
+        // Create an intent filter
+        receiverFilter = new IntentFilter();
+        receiverFilter.addAction(DatabaseService.DATABASE_SERVICE_ACTION);
+
+        // Create broadcast receiver object.
+        this.receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // Determine which broadcast was sent.
+                String callingMethodIdentifier = intent.getStringExtra(DatabaseService.CALLING_METHOD_IDENTIFIER);
+                if (callingMethodIdentifier != null) {
+                    if (callingMethodIdentifier.equals(userUpdateInfoRequestMethodIdentifier)) {
+                        Toast.makeText(getActivity(), "Settings Updated", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        };
+        this.getActivity().registerReceiver(receiver, receiverFilter);
     }
 
     @Override
@@ -142,7 +170,11 @@ public class SettingsFragment extends Fragment {
                 currUser.setLastName(userLastNameEditText.getText().toString());
                 currUser.setOrgSuperior(userSuperiorIdEditText.getText().toString());
                 currUser.setOrganization(userOrganizationEditText.getText().toString());
-                databaseService.pushUpdatedResponderData(currUser);
+
+                userUpdateInfoRequestMethodIdentifier = this.getClass().getSimpleName()
+                        + "broadcast_action_database_update_user_settings"
+                        + currUser.getUserID();
+                databaseService.pushUpdatedResponderData(currUser, userUpdateInfoRequestMethodIdentifier);
             }
         });
 

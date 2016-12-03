@@ -86,6 +86,8 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
     private Thread incidentResponderUpdateThread;
     private boolean responderListUpdateFlag;
     private String respondersByIncidentRequestMethodIdentifier;
+    private String responderCheckInRequestMethodIdentifier;
+    private String responderCheckOutRequestMethodIdentifier;
     private Incident incident;
     private Responder currentUser;
     private ListView responderListView, subordinateListView, superiorListView;
@@ -150,6 +152,18 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                         Log.d("receiving responders", "got response :" + updatedResponders);
                         respondToUpdatedResponderBroadcast(updatedResponders);
                     }
+                    else if (callingMethodIdentifier.equals(responderCheckInRequestMethodIdentifier)) {
+                        Toast.makeText(getActivity(), "Checked In", Toast.LENGTH_SHORT).show();
+                        // Alternate the checkin flipflop flag.
+                        checkin_flipflop = !checkin_flipflop;
+                        checkinFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_cancel_white_24dp));
+                    }
+                    else if (callingMethodIdentifier.equals(responderCheckOutRequestMethodIdentifier)) {
+                        Toast.makeText(getActivity(), "Checked Out", Toast.LENGTH_SHORT).show();
+                        // Alternate the checkin flipflop flag.
+                        checkin_flipflop = !checkin_flipflop;
+                        checkinFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_white_24dp));
+                    }
                 } else {
                     switch ( intent.getAction() ) {
 
@@ -169,7 +183,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
             }
         };
-        //this.getActivity().registerReceiver(receiver, receiverFilter);
+        this.getActivity().registerReceiver(receiver, receiverFilter);
 
         // Create a thread to request updates from the database periodically
         this.responderListUpdateFlag = true;
@@ -255,10 +269,10 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
             }
 
             responder.setLocation(new LatLng(Double.parseDouble(responder.getLatitude()), Double.parseDouble(responder.getLongitude())));
-            if (currentUser.getIncidentSuperior().equals(responder.getUserID())) {
+            if (responder.getUserID().equals(currentUser.getOrgSuperior())) {
                 superiors.add(responder);
             }
-            else if (currentUser.getIncidentSubordinates().contains(responder.getUserID())) {
+            else if (responder.getOrgSuperior().equals(currentUser.getUserID())) {
                 subordinates.add(responder);
             }
             else {
@@ -268,6 +282,8 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
             BitmapDescriptor bitmapDescriptor;
 
             float[] hsv = new float[3];
+            // TODO the incident subordinates lists are not currently updated, so we need to fix that, if needed
+            // TODO however, it may not be needed, since we are likely changing marker colors overall, anyway?
             switch (responder.getOrganization()) {
                 case "EMS":
                     // Subordinate color.
@@ -447,25 +463,21 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                 DatabaseService databaseService = ((MainActivity) getActivity()).databaseService;
 
                 /*
-                 * User is not currently checked-in.
-                 * So check them in.
+                 * Set up database communication for check-in button
                  */
                 if (!checkin_flipflop) {
                     currentUser.setSceneID(incident.getSceneId());
-                    databaseService.pushUpdatedResponderData(currentUser);
-                    // TODO 44444444 do we need to wait on success from database service to report checkin?
-                    Toast.makeText(getActivity(), "checked-in", Toast.LENGTH_SHORT).show();
-                    checkinFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_cancel_white_24dp));
+                    responderCheckInRequestMethodIdentifier = this.getClass().getSimpleName()
+                            + "broadcast_action_database_checkin"
+                            + incident.getSceneId();
+                    databaseService.pushUpdatedResponderData(currentUser, responderCheckInRequestMethodIdentifier);
                 } else {
                     currentUser.setSceneID("0");
-                    databaseService.pushUpdatedResponderData(currentUser);
-                    // TODO 44444444 do we need to wait on success from database service to report checkout?
-                    Toast.makeText(getActivity(), "checked-out", Toast.LENGTH_SHORT).show();
-                    checkinFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_white_24dp));
+                    responderCheckOutRequestMethodIdentifier = this.getClass().getSimpleName()
+                            + "broadcast_action_database_checkout"
+                            + incident.getSceneId();
+                    databaseService.pushUpdatedResponderData(currentUser, responderCheckOutRequestMethodIdentifier);
                 }
-
-                // Alternate the flipflop value.
-                checkin_flipflop = !checkin_flipflop;
 
                 // The callback has consumed the long click.
                 return true;
