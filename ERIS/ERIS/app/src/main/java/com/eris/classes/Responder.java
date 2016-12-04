@@ -7,8 +7,15 @@ import android.util.Log;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
-import java.util.Arrays;
+
+import org.joda.time.DateTimeZone;
+import org.joda.time.Instant;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 public class Responder implements Parcelable {
@@ -16,6 +23,7 @@ public class Responder implements Parcelable {
     public static final String TAG = Responder.class.getSimpleName();
     public static final String NO_ERROR = "no_error";
     public static final String QUERY_FAILED = "query_failed";
+    public static final String NO_INCIDENT = "INCIDENT_NONE";
 
     /*
      * Public Members
@@ -31,12 +39,19 @@ public class Responder implements Parcelable {
     private String name;
     private Marker marker;
 
+    private List<String> incidentHistory;//TODO now just how to encode/decode this.
+    //private Set<String> incidentHistory;
+
+
     private String organization;
     private List<String> heartrateRecord;
     private String orgSuperior;
     private List<String> orgSubordinates;
     private String incidentSuperior;
     private List<String> incidentSubordinates;
+
+    //private DateTimeZone EASTERN_TIME = DateTimeZone.forOffsetHours(-5);
+    private DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("MM dd YYYY HH mm ss SSS");
 
     /**
      * Constructs new responder objects.
@@ -61,6 +76,9 @@ public class Responder implements Parcelable {
         this.heartRate = 0;
         this.rank = null;
         this.location = null;
+
+
+        incidentHistory = new ArrayList<>();
     }
 
     /**
@@ -81,6 +99,9 @@ public class Responder implements Parcelable {
         this.heartRate = heartRate;
         this.location = location;
         this.rank = rank;
+
+
+        incidentHistory = new ArrayList<>();//TODO replace all these with constructor things.
     }
 
     public Responder(String userID, String name,  String organization, List<String> heartrateRecord,
@@ -122,6 +143,9 @@ public class Responder implements Parcelable {
         this.sceneID = sceneID;
         this.incidentSuperior = incidentSuperior;
         this.incidentSubordinates = incidentSubordinates;
+
+
+        incidentHistory = new ArrayList<>();
     }
 
     private Responder(Parcel in) {
@@ -135,6 +159,9 @@ public class Responder implements Parcelable {
         sceneID = in.readString();
         incidentSuperior = in.readString();
         incidentSubordinates = in.createStringArrayList();
+
+
+        incidentHistory = new ArrayList<>();
     }
 
     //Override function, has no other use.
@@ -166,7 +193,6 @@ public class Responder implements Parcelable {
             return new Responder[size];
         }
     };
-
 
 
     public String getUserID() {
@@ -218,12 +244,19 @@ public class Responder implements Parcelable {
     /**
      * Set the incident/scene ID for this responder.
      *
-     * @param id  The Incident ID to be set
+     * @param sceneId  The Incident ID to be set
      */
-    public void setSceneID(String sceneID) {
-        if (sceneID == null) {
-            throw new IllegalArgumentException("sceneID cannot be null, use empty string");
+
+    public void setSceneId(String sceneId) {
+        if (sceneId == null) {
+            throw new IllegalArgumentException("sceneId cannot be null, use empty string");
+        } else if (sceneId == NO_INCIDENT) {//Check out of scene.
+            this.sceneID = sceneId;
+        } else {//Check in to scene
+            this.sceneID = sceneId;
+            //Log the check in in the history.  sceneId + currentInstant
+            incidentHistory.add(sceneId + ":" + dateTimeFormatter.print(new Instant().getMillis()));
         }
-        this.sceneID = sceneID;
+        Log.e(TAG, "Incident history: " + incidentHistory.toString());
     }
 }

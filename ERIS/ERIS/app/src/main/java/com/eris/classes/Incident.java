@@ -10,6 +10,8 @@ import android.os.Parcelable;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.joda.time.Instant;
+
 /**
  * Incident
  *
@@ -36,6 +38,8 @@ public class Incident implements Parcelable, Serializable{
         }
     }
     //TODO really, these should be private.
+    private Instant startTime;
+    private Instant endTime;
     private String time;
     private String title;
     private String description;

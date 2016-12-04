@@ -439,6 +439,11 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
             }
         });
 
+        //Check if already logged in.
+        if (currentUser.getSceneID().equals(incident.getSceneId())) {
+            checkinFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_cancel_white_24dp));
+            checkin_flipflop = !checkin_flipflop;
+        }
         checkinFloatingActionButton.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -451,13 +456,14 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                  * So check them in.
                  */
                 if (!checkin_flipflop) {
-                    currentUser.setSceneID(incident.getSceneId());
+                    //Ok, this needs updating.
+                    currentUser.setSceneId(incident.getSceneId());
                     databaseService.pushUpdatedResponderData(currentUser);
                     // TODO 44444444 do we need to wait on success from database service to report checkin?
                     Toast.makeText(getActivity(), "checked-in", Toast.LENGTH_SHORT).show();
                     checkinFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_cancel_white_24dp));
-                } else {
-                    currentUser.setSceneID("0");
+                } else {//Check the user out of the scene.  TODO add history logging here.
+                    currentUser.setSceneId(Responder.NO_INCIDENT);
                     databaseService.pushUpdatedResponderData(currentUser);
                     // TODO 44444444 do we need to wait on success from database service to report checkout?
                     Toast.makeText(getActivity(), "checked-out", Toast.LENGTH_SHORT).show();
