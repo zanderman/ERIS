@@ -49,7 +49,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -90,6 +93,8 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
     private String responderCheckOutRequestMethodIdentifier;
     private Incident incident;
     private Responder currentUser;
+    private SharedPreferences userPreferences;
+    private int timeDurationForRecent;
     private ListView responderListView, subordinateListView, superiorListView;
     private ResponderListAdapter responderAdapter, subordinateAdapter, superiorAdapter;
     private ArrayList<Responder> subordinates, responders, superiors;
@@ -133,6 +138,14 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
         // Get the reference to the Responder object for the current user
         currentUser = ((MainActivity) getActivity()).databaseService.getCurrentUser();
+
+        // Get the user's settings to determine the time duration to qualify data as "recent"
+        userPreferences = getActivity().getSharedPreferences(
+                getResources().getString(R.string.sharedpreferences_user_settings),
+                0
+        );
+        timeDurationForRecent = userPreferences.getInt(
+                getResources().getString(R.string.preferences_time_duration_for_recent), 45);
 
         // Create an intent filter
         receiverFilter = new IntentFilter();
@@ -217,11 +230,7 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                 databaseService.getRespondersByIncident(incidentId, callingMethodIdentifier);
             }
 
-            SharedPreferences preferences = getActivity().getSharedPreferences(
-                    getResources().getString(R.string.sharedpreferences_user_settings),
-                    0
-            );
-            int waitTimeSeconds = preferences.getInt(
+            int waitTimeSeconds = userPreferences.getInt(
                     getResources().getString(R.string.preferences_broadcast), 30);
             long waitTimeMilliseconds = 1000 * ((long) waitTimeSeconds);
 
@@ -268,75 +277,90 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                 continue;
             }
 
+            BitmapDescriptor bitmapDescriptor;
+
             responder.setLocation(new LatLng(Double.parseDouble(responder.getLatitude()), Double.parseDouble(responder.getLongitude())));
             if (responder.getUserID().equals(currentUser.getOrgSuperior())) {
                 superiors.add(responder);
+                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
             }
             else if (responder.getOrgSuperior().equals(currentUser.getUserID())) {
                 subordinates.add(responder);
+                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
             }
             else {
                 responders.add(responder);
+                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
             }
 
-            BitmapDescriptor bitmapDescriptor;
+            // Use a grey marker if the location data for a responder is not recent
+            float[] markerHSV = new float[3];
+            Color.colorToHSV(Color.GRAY, markerHSV); // grey
+            // If no locationDate is found, assume the data is not recent
+            if (responder.getLocationDate() == null) {
+                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(markerHSV[0]);
+            }
+            // If the current time is more than timeDurationForRecent seconds after the
+            // responder's location date, then the location data is not recent
+            else if (new Date().getTime() - Long.parseLong(responder.getLocationDate()) > timeDurationForRecent * 1000) {
+                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(markerHSV[0]);
+            }
 
-            float[] hsv = new float[3];
             // TODO the incident subordinates lists are not currently updated, so we need to fix that, if needed
             // TODO however, it may not be needed, since we are likely changing marker colors overall, anyway?
-            switch (responder.getOrganization()) {
-                case "EMS":
-                    // Subordinate color.
-                    if (currentUser.getIncidentSubordinates().contains(responder.getUserID())) {
-                        Color.colorToHSV(Color.parseColor("#9acd32"), hsv); // EMS green
-                    }
-                    // Superior color.
-                    else if (currentUser.getIncidentSuperior().equals(responder.getUserID())) {
-                        Color.colorToHSV(Color.parseColor("#00c78c"), hsv); // EMS green
-                    }
-                    // default color.
-                    else {
-                        Color.colorToHSV(getResources().getColor(R.color.md_green_600), hsv); // EMS green
-                    }
-                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(hsv[0]);
-                    break;
-                case "POLICE":
-                    // Subordinate color.
-                    if (currentUser.getIncidentSubordinates().contains(responder.getUserID())) {
-                        Color.colorToHSV(getResources().getColor(R.color.md_blue_400), hsv); // Police blue
-                    }
-                    // Superior color.
-                    else if (currentUser.getIncidentSuperior().equals(responder.getUserID())) {
-                        Color.colorToHSV(getResources().getColor(R.color.md_blue_900), hsv); // Police blue
-                    }
-                    // default color.
-                    else {
-                        Color.colorToHSV(getResources().getColor(R.color.md_blue_700), hsv); // Police blue
-                    }
-                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(hsv[0]);
-                    break;
-                case "FIRE":
-                    // Subordinate color.
-                    if (currentUser.getIncidentSubordinates().contains(responder.getUserID())) {
-                        Color.colorToHSV(Color.parseColor("#ff83fa"), hsv); // Fire red
-                    }
-                    // Superior color.
-                    else if (currentUser.getIncidentSuperior().equals(responder.getUserID())) {
-                        Color.colorToHSV(Color.parseColor("#8B1C62"), hsv); // Fire red
-                    }
-                    // default color.
-                    else {
-                        Color.colorToHSV(getResources().getColor(R.color.md_red_500), hsv); // Fire red
-                    }
-                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(hsv[0]);
-                    break;
-                default:
-                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
-            }
+//            float[] hsv = new float[3];
+//            switch (responder.getOrganization()) {
+//                case "EMS":
+//                    // Subordinate color.
+//                    if (currentUser.getIncidentSubordinates().contains(responder.getUserID())) {
+//                        Color.colorToHSV(Color.parseColor("#9acd32"), hsv); // EMS green
+//                    }
+//                    // Superior color.
+//                    else if (currentUser.getIncidentSuperior().equals(responder.getUserID())) {
+//                        Color.colorToHSV(Color.parseColor("#00c78c"), hsv); // EMS green
+//                    }
+//                    // default color.
+//                    else {
+//                        Color.colorToHSV(getResources().getColor(R.color.md_green_600), hsv); // EMS green
+//                    }
+//                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(hsv[0]);
+//                    break;
+//                case "POLICE":
+//                    // Subordinate color.
+//                    if (currentUser.getIncidentSubordinates().contains(responder.getUserID())) {
+//                        Color.colorToHSV(getResources().getColor(R.color.md_blue_400), hsv); // Police blue
+//                    }
+//                    // Superior color.
+//                    else if (currentUser.getIncidentSuperior().equals(responder.getUserID())) {
+//                        Color.colorToHSV(getResources().getColor(R.color.md_blue_900), hsv); // Police blue
+//                    }
+//                    // default color.
+//                    else {
+//                        Color.colorToHSV(getResources().getColor(R.color.md_blue_700), hsv); // Police blue
+//                    }
+//                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(hsv[0]);
+//                    break;
+//                case "FIRE":
+//                    // Subordinate color.
+//                    if (currentUser.getIncidentSubordinates().contains(responder.getUserID())) {
+//                        Color.colorToHSV(Color.parseColor("#ff83fa"), hsv); // Fire red
+//                    }
+//                    // Superior color.
+//                    else if (currentUser.getIncidentSuperior().equals(responder.getUserID())) {
+//                        Color.colorToHSV(Color.parseColor("#8B1C62"), hsv); // Fire red
+//                    }
+//                    // default color.
+//                    else {
+//                        Color.colorToHSV(getResources().getColor(R.color.md_red_500), hsv); // Fire red
+//                    }
+//                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(hsv[0]);
+//                    break;
+//                default:
+//                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+//            }
             Marker marker = googleMap.addMarker(
                     new MarkerOptions()
-                            .position(new LatLng(Double.parseDouble(responder.getLatitude()),
-                                    Double.parseDouble(responder.getLongitude())))
+                            .position(responder.getLocation())
                             .title(responder.getName())
                             .snippet(responder.getOrganization() + "  //  "
                                     + responder.getHeartrateRecord().get(0))

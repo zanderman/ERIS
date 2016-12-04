@@ -8,6 +8,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 
@@ -25,6 +26,7 @@ public class Responder implements Parcelable {
     private float heartRate;
     private String rank;
     private LatLng location;
+    private String locationDate;
     private String firstName;
     private String lastName;
     private String name;
@@ -86,7 +88,7 @@ public class Responder implements Parcelable {
 
     public Responder(String userID, String name,  String organization, List<String> heartrateRecord,
                      String orgSuperior,  List<String> orgSubordinates, String latitude,
-                     String longitude, String sceneID, String incidentSuperior,
+                     String longitude, String locationDate, String sceneID, String incidentSuperior,
                      List<String> incidentSubordinates) {
         //Should do null checks.
 
@@ -120,6 +122,7 @@ public class Responder implements Parcelable {
         this.orgSuperior = orgSuperior;
         this.orgSubordinates = orgSubordinates;
         this.location = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
+        this.locationDate = locationDate;
         this.sceneID = sceneID;
         this.incidentSuperior = incidentSuperior;
         this.incidentSubordinates = incidentSubordinates;
@@ -133,6 +136,7 @@ public class Responder implements Parcelable {
         orgSuperior = in.readString();
         orgSubordinates = in.createStringArrayList();
         location = in.readParcelable(LatLng.class.getClassLoader());
+        locationDate = in.readString();
         sceneID = in.readString();
         incidentSuperior = in.readString();
         incidentSubordinates = in.createStringArrayList();
@@ -153,6 +157,7 @@ public class Responder implements Parcelable {
         outParcel.writeString(orgSuperior);
         outParcel.writeStringList(orgSubordinates);
         outParcel.writeParcelable(location, 0);
+        outParcel.writeString(locationDate);
         outParcel.writeString(sceneID);
         outParcel.writeString(incidentSuperior);
         outParcel.writeStringList(incidentSubordinates);
@@ -169,7 +174,7 @@ public class Responder implements Parcelable {
     };
 
 
-
+    // Getter methods
     public String getUserID() {
         return this.userID;
     }
@@ -189,6 +194,7 @@ public class Responder implements Parcelable {
     public String getLatitude() {return Double.toString(this.location.latitude);}
     public String getLongitude() {return Double.toString(this.location.longitude);}
     public LatLng getLocation() {return this.location;}
+    public String getLocationDate() {return this.locationDate;}
     public String getIncidentSuperior() {return  this.incidentSuperior;}
     public List<String> getIncidentSubordinates() {return this.incidentSubordinates;}
     public Marker getMarker() {return this.marker;}
@@ -208,6 +214,13 @@ public class Responder implements Parcelable {
             throw new IllegalArgumentException("location cannot be null");
         }
         this.location = location;
+    }
+
+    public void setLocationDate(String locationDate) {
+        if (locationDate == null) {
+            throw new IllegalArgumentException("locationDate cannot be null");
+        }
+        this.locationDate = locationDate;
     }
 
     public void setMarker(Marker marker) {
@@ -252,7 +265,7 @@ public class Responder implements Parcelable {
     /**
      * Set the incident/scene ID for this responder.
      *
-     * @param id  The Incident ID to be set
+     * @param sceneID  The Incident ID to be set
      */
     public void setSceneID(String sceneID) {
         if (sceneID == null) {

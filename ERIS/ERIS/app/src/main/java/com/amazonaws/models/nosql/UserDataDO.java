@@ -21,6 +21,7 @@ public class UserDataDO {
     private String _incidentSuperior;
     private String _latitude;
     private String _longitude;
+    private String _locationDate;
     private String _name;
     private List<String> _orgSubordinates;
     private String _orgSuperior;
@@ -82,6 +83,14 @@ public class UserDataDO {
 
     public void setLongitude(final String _longitude) {
         this._longitude = _longitude;
+    }
+    @DynamoDBAttribute(attributeName = "locationDate")
+    public String getLocationDate() {
+        return _locationDate;
+    }
+
+    public void setLocationDate(final String _locationDate) {
+        this._locationDate = _locationDate;
     }
     @DynamoDBAttribute(attributeName = "name")
     public String getName() {
