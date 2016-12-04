@@ -145,7 +145,7 @@ public class DemoResponderDatabaseFragment extends Fragment{
                 data.add(new Responder(user.getUserId(), user.getName(), user.getOrganization(),
                         user.getHeartbeatRecord(), user.getOrgSuperior(), user.getOrgSubordinates(),
                         user.getLatitude(), user.getLongitude(), user.getLocationDate(), user.getCurrentIncidentId(),
-                        user.getIncidentSuperior(), user.getIncidentSubordinates()));
+                        user.getIncidentSuperior(), user.getIncidentSubordinates(),null));//TODO UPD8 THIS
             }
 
             return null;

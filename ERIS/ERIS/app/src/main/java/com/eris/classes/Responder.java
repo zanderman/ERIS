@@ -53,7 +53,7 @@ public class Responder implements Parcelable {
     private List<String> incidentSubordinates;
 
     //private DateTimeZone EASTERN_TIME = DateTimeZone.forOffsetHours(-5);
-    private DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("MM dd YYYY HH mm ss SSS");
+    public DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("MM dd YYYY HH mm ss SSS");
 
     /**
      * Constructs new responder objects.
@@ -111,7 +111,7 @@ public class Responder implements Parcelable {
     public Responder(String userID, String name,  String organization, List<String> heartrateRecord,
                      String orgSuperior,  List<String> orgSubordinates, String latitude,
                      String longitude, String locationDate, String sceneID, String incidentSuperior,
-                     List<String> incidentSubordinates) {
+                     List<String> incidentSubordinates, List<String> incidentHistory) {
         //Should do null checks.
 
         this.userID = userID;
@@ -149,8 +149,11 @@ public class Responder implements Parcelable {
         this.incidentSuperior = incidentSuperior;
         this.incidentSubordinates = incidentSubordinates;
 
-
-        incidentHistory = new ArrayList<>();
+        if (incidentHistory == null) {
+            this.incidentHistory = new ArrayList<>();
+        } else {
+            this.incidentHistory = incidentHistory;
+        }
     }
 
     private Responder(Parcel in) {
@@ -165,9 +168,7 @@ public class Responder implements Parcelable {
         sceneID = in.readString();
         incidentSuperior = in.readString();
         incidentSubordinates = in.createStringArrayList();
-
-
-        incidentHistory = new ArrayList<>();
+        incidentHistory = in.createStringArrayList();
     }
 
     //Override function, has no other use.
@@ -189,6 +190,7 @@ public class Responder implements Parcelable {
         outParcel.writeString(sceneID);
         outParcel.writeString(incidentSuperior);
         outParcel.writeStringList(incidentSubordinates);
+        outParcel.writeStringList(incidentHistory);
     }
 
     public static final Parcelable.Creator<Responder> CREATOR = new Parcelable.Creator<Responder>() {
@@ -225,6 +227,7 @@ public class Responder implements Parcelable {
     public String getIncidentSuperior() {return  this.incidentSuperior;}
     public List<String> getIncidentSubordinates() {return this.incidentSubordinates;}
     public Marker getMarker() {return this.marker;}
+    public List<String> getIncidentHistory() {return this.incidentHistory;}
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;

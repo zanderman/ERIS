@@ -17,11 +17,12 @@ public class UserDataDO {
     private String _userId;
     private String _currentIncidentId;
     private List<String> _heartbeatRecord;
+    private List<String> _incidentHistory;
     private List<String> _incidentSubordinates;
     private String _incidentSuperior;
     private String _latitude;
-    private String _longitude;
     private String _locationDate;
+    private String _longitude;
     private String _name;
     private List<String> _orgSubordinates;
     private String _orgSuperior;
@@ -52,6 +53,14 @@ public class UserDataDO {
     public void setHeartbeatRecord(final List<String> _heartbeatRecord) {
         this._heartbeatRecord = _heartbeatRecord;
     }
+    @DynamoDBAttribute(attributeName = "incidentHistory")
+    public List<String> getIncidentHistory() {
+        return _incidentHistory;
+    }
+
+    public void setIncidentHistory(final List<String> _incidentHistory) {
+        this._incidentHistory = _incidentHistory;
+    }
     @DynamoDBAttribute(attributeName = "incidentSubordinates")
     public List<String> getIncidentSubordinates() {
         return _incidentSubordinates;
@@ -76,14 +85,6 @@ public class UserDataDO {
     public void setLatitude(final String _latitude) {
         this._latitude = _latitude;
     }
-    @DynamoDBAttribute(attributeName = "longitude")
-    public String getLongitude() {
-        return _longitude;
-    }
-
-    public void setLongitude(final String _longitude) {
-        this._longitude = _longitude;
-    }
     @DynamoDBAttribute(attributeName = "locationDate")
     public String getLocationDate() {
         return _locationDate;
@@ -91,6 +92,14 @@ public class UserDataDO {
 
     public void setLocationDate(final String _locationDate) {
         this._locationDate = _locationDate;
+    }
+    @DynamoDBAttribute(attributeName = "longitude")
+    public String getLongitude() {
+        return _longitude;
+    }
+
+    public void setLongitude(final String _longitude) {
+        this._longitude = _longitude;
     }
     @DynamoDBAttribute(attributeName = "name")
     public String getName() {

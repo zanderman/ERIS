@@ -230,18 +230,20 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                 databaseService.getRespondersByIncident(incidentId, callingMethodIdentifier);
             }
 
-            int waitTimeSeconds = userPreferences.getInt(
-                    getResources().getString(R.string.preferences_broadcast), 30);
-            long waitTimeMilliseconds = 1000 * ((long) waitTimeSeconds);
+            if(isAdded()) {//Prevents crashes.
+                int waitTimeSeconds = userPreferences.getInt(
+                        getResources().getString(R.string.preferences_broadcast), 30);
+                long waitTimeMilliseconds = 1000 * ((long) waitTimeSeconds);
 
-            while (responderListUpdateFlag) {
-                try {
-                    Thread.sleep(waitTimeMilliseconds);
-                } catch (Exception e) {
-                    // oops
-                } finally {
-                    //TODO we need to store the current incident in shared prefs, don't we.
-                    databaseService.getRespondersByIncident(incidentId, callingMethodIdentifier);
+                while (responderListUpdateFlag) {
+                    try {
+                        Thread.sleep(waitTimeMilliseconds);
+                    } catch (Exception e) {
+                        // oops
+                    } finally {
+                        //TODO we need to store the current incident in shared prefs, don't we.
+                        databaseService.getRespondersByIncident(incidentId, callingMethodIdentifier);
+                    }
                 }
             }
         }

@@ -210,7 +210,7 @@ public class DatabaseService extends Service {
                     foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
                     foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
                     foundUser.getLocationDate(), foundUser.getCurrentIncidentId(),
-                    foundUser.getIncidentSuperior(), foundUser.getIncidentSubordinates());
+                    foundUser.getIncidentSuperior(), foundUser.getIncidentSubordinates(), foundUser.getIncidentHistory());
             if (r.getUserID().equals(savedCurrentUserIDToken)) {
                 currentUser = r;
                 currentUserLatch.countDown();
@@ -222,7 +222,6 @@ public class DatabaseService extends Service {
         }
     }
 
-    //TODO if people want to call this by ID, might put that in here also.
     public void getOrgSubordinates(Responder superior, String callingMethodIdentifier) {
         if (superior == null) {
             throw new IllegalArgumentException("superior cannot be null");
@@ -267,7 +266,7 @@ public class DatabaseService extends Service {
                             foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
                             foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
                             foundUser.getLocationDate(), foundUser.getCurrentIncidentId(),
-                            foundUser.getIncidentSuperior(), foundUser.getIncidentSubordinates());
+                            foundUser.getIncidentSuperior(), foundUser.getIncidentSubordinates(), foundUser.getIncidentHistory());
                     orgSubordinates[i] = subordinate;
                 } else {
                     Log.e(TAG, "Failed to find responder " + subordinateId);
@@ -276,7 +275,7 @@ public class DatabaseService extends Service {
                             emptyList, "unknown",
                             emptyList, "0.0", "0.0", "January 1, 1970, 00:00:00 GMT",
                             "unknown", superior.getUserID(),
-                            emptyList);
+                            emptyList, emptyList);
                     orgSubordinates[i] = subordinate;
                 }
                 i++;
@@ -341,7 +340,8 @@ public class DatabaseService extends Service {
                                 foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
                                 foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
                                 foundUser.getLocationDate(), foundUser.getCurrentIncidentId(),
-                                foundUser.getIncidentSuperior(), foundUser.getIncidentSubordinates());
+                                foundUser.getIncidentSuperior(), foundUser.getIncidentSubordinates(),
+                                foundUser.getIncidentHistory());
                         responders.add(responder);
                     }
                 }
@@ -403,7 +403,8 @@ public class DatabaseService extends Service {
                                 foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
                                 foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
                                 foundUser.getLocationDate(), foundUser.getCurrentIncidentId(),
-                                foundUser.getIncidentSuperior(), foundUser.getIncidentSubordinates());
+                                foundUser.getIncidentSuperior(), foundUser.getIncidentSubordinates(),
+                                foundUser.getIncidentHistory());
                         responders.add(responder);
                     }
                 }
@@ -454,7 +455,8 @@ public class DatabaseService extends Service {
                                 foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
                                 foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
                                 foundUser.getLocationDate(), foundUser.getCurrentIncidentId(),
-                                foundUser.getIncidentSuperior(), foundUser.getIncidentSubordinates());
+                                foundUser.getIncidentSuperior(), foundUser.getIncidentSubordinates(),
+                                foundUser.getIncidentHistory());
                         responders.add(responder);
                     }
                 }
@@ -466,6 +468,75 @@ public class DatabaseService extends Service {
             sendBroadcast(intent);
         }
     }
+
+
+    /**
+     * Find in the system database the responder with the given userId.
+     *
+     * @param sceneId The ID string for the user whose data should be retrieved
+     * @param callingMethodIdentifier A unique request ID to identify this call
+     * @return A Responder object with the requested user's data as found
+     * in the system database; null if no results were found for the given userId
+     * You must wait for a broadcast to come back with the unique callingMethodIdentifier
+     * that you provided.  If the data in this is null, this method failed.
+     *
+     * The extras returned are in the form:
+     * Incident DATA,
+     * String ERROR_STATUS
+     * String CALLING_METHOD_IDENTIFIER;
+     */
+    public void getIncidentData(final String sceneId, final String callingMethodIdentifier) {
+        if (sceneId == null) {
+            throw new IllegalArgumentException("sceneId cannot be null");
+        } else if (callingMethodIdentifier == null) {
+            throw new IllegalArgumentException("callingMethodInfo cannot be null");
+        }
+        (new Thread(new GetIncidentDataThread(sceneId, callingMethodIdentifier))).start();
+    }
+
+    private class GetIncidentDataThread implements Runnable {
+        String callingMethodIdentifier;
+        String sceneId;
+
+        public GetIncidentDataThread(String sceneId, String callingMethodIdentifier) {
+            this.callingMethodIdentifier = callingMethodIdentifier;
+            this.sceneId = sceneId;
+        }
+
+        public void run() {
+            Intent intent = new Intent();
+            intent.setAction(DATABASE_SERVICE_ACTION);
+            intent.putExtra(CALLING_METHOD_IDENTIFIER, callingMethodIdentifier);
+
+            final ScenesDO targetIncident = new ScenesDO();
+            targetIncident.setSceneId(sceneId);
+
+            final DynamoDBQueryExpression<ScenesDO> queryExpr = new DynamoDBQueryExpression<ScenesDO>()
+                    .withHashKeyValues(targetIncident)
+                    .withConsistentRead(false)
+                    .withLimit(1);
+
+            final PaginatedQueryList<ScenesDO> resultList = mapper.query(ScenesDO.class, queryExpr);
+
+            if (resultList.size() < 1) {
+                intent.putExtra(ERROR_STATUS, Responder.QUERY_FAILED);
+                sendBroadcast(intent);
+                Log.d(TAG, "Sent broadcast for incident not found.");
+                return;
+            }
+
+            ScenesDO foundScene = resultList.get(0);
+            //No just broadcast this with the rID.
+            intent.putExtra(ERROR_STATUS, Responder.NO_ERROR);
+            Incident i = new Incident(foundScene.getSceneId(), foundScene.getDescription(),
+                    foundScene.getAddress(), foundScene.getLatitude(), foundScene.getLongitude(),
+                    foundScene.getTime(), foundScene.getTitle(), foundScene.getAssignedOrganizations());
+            intent.putExtra(DATA, (Parcelable) i);
+            sendBroadcast(intent);
+            Log.d(TAG, "Sent broadcast for incident found.");
+        }
+    }
+
 
     /**
      *
@@ -577,6 +648,7 @@ public class DatabaseService extends Service {
             userData.setName(responder.getName());
             userData.setOrgSubordinates(responder.getOrgSubordinates());
             userData.setOrgSuperior(responder.getOrgSuperior());
+            userData.setIncidentHistory(responder.getIncidentHistory());
 
             try {
                 mapper.save(userData, new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES));

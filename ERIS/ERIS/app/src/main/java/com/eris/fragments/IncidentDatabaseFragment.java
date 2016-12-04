@@ -107,7 +107,7 @@ public class IncidentDatabaseFragment extends Fragment {
         buttonGetResponder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((MainActivity)getActivity()).databaseService.getResponderData("5555555555", GET_SINGLE_RESPONDER);
+                ((MainActivity)getActivity()).databaseService.getIncidentData("5842", GET_SINGLE_RESPONDER);
             }
         });
 
@@ -196,6 +196,10 @@ public class IncidentDatabaseFragment extends Fragment {
             String callingMethodIdentifier = intent.getStringExtra(DatabaseService.CALLING_METHOD_IDENTIFIER);
             if (callingMethodIdentifier.equals(GET_SINGLE_RESPONDER)) {
                 if (intent.getStringExtra(DatabaseService.ERROR_STATUS).equals(Responder.NO_ERROR)) {
+                    Incident i = intent.getParcelableExtra(DatabaseService.DATA);
+                    tv.setText(i.getDescription() + i.getSceneId());
+                }
+                    /*
                     Responder r = intent.getParcelableExtra(DatabaseService.DATA);
                     tv.setText(r.getName()+ r.getHeartrateRecord() + r.getOrgSubordinates());
                     Log.d(TAG, "Info: " + r.getName() + r.getHeartrateRecord() + r.getOrgSubordinates());
@@ -205,7 +209,7 @@ public class IncidentDatabaseFragment extends Fragment {
                 } else {
                     Log.e(TAG, "Unexpected status " + intent.getStringExtra(DatabaseService.ERROR_STATUS));
                 }
-                Log.d(TAG, "Textview text: " + tv.getText().toString());
+                Log.d(TAG, "Textview text: " + tv.getText().toString());*/
             } else if (callingMethodIdentifier.equals(GET_ORG_SUBORDINATES)) {
                 Parcelable parcelables[] = intent.getParcelableArrayExtra(DatabaseService.DATA);
                 Responder subordinates[] = new Responder[parcelables.length];
