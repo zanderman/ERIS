@@ -72,6 +72,82 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/testAlert" />
 
+            <!-- Black Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dip"
+                android:background="@color/black_overlay"></View>
+
+            <TextView
+                android:text="User Info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/userInfoLabel"
+                android:textSize="20sp"
+                android:paddingLeft="5sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/userFirstNameLabel"
+                android:text="First Name"
+                android:textSize="15sp"
+                android:paddingLeft="5sp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/userFirstNameEditText"
+                android:layout_weight="0.02" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/userLastNameLabel"
+                android:text="Last Name"
+                android:textSize="15sp"
+                android:paddingLeft="5sp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/userLastNameEditText"
+                android:layout_weight="0.02" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/userSuperiorIdLabel"
+                android:text="Superior ID (email)"
+                android:textSize="15sp"
+                android:paddingLeft="5sp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/userSuperiorIdEditText"
+                android:layout_weight="0.02" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/userOrganizationLabel"
+                android:text="Organization (e.g. EMS, FIRE, POLICE)"
+                android:textSize="15sp"
+                android:paddingLeft="5sp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/userOrganizationEditText"
+                android:layout_weight="0.02" />
+
+            <Button
+                android:text="Update User Info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/updateUserInfoButton" />
+
         </LinearLayout>
     </ScrollView>
 

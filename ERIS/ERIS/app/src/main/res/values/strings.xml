@@ -31,6 +31,7 @@
 
     <!-- Preference names in settings table -->
     <string name="preferences_broadcast">BroadcastPref"</string>
+    <string name="preferences_time_duration_for_recent">"TimeDurationForRecent"</string>
     <string name="preferences_phone_alerts">PhonePref</string>
     <string name="preferences_watch_alerts">WatchPref</string>
     <string name="preferences_glass_alerts">GlassPref</string>

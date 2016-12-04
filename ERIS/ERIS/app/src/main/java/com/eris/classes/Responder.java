@@ -14,6 +14,8 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -28,12 +30,12 @@ public class Responder implements Parcelable {
     /*
      * Public Members
      */
-    //Why are these all public?  seems bad.
     private String userID;
     private String sceneID;
     private float heartRate;
     private String rank;
     private LatLng location;
+    private String locationDate;
     private String firstName;
     private String lastName;
     private String name;
@@ -68,6 +70,7 @@ public class Responder implements Parcelable {
         this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.name = lastName + "," + firstName;
 
         /*
          * Initialize unknown values.
@@ -95,6 +98,7 @@ public class Responder implements Parcelable {
         this.userID = userID;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.name = lastName + "," + firstName;
         this.sceneID = sceneID;
         this.heartRate = heartRate;
         this.location = location;
@@ -106,7 +110,7 @@ public class Responder implements Parcelable {
 
     public Responder(String userID, String name,  String organization, List<String> heartrateRecord,
                      String orgSuperior,  List<String> orgSubordinates, String latitude,
-                     String longitude, String sceneID, String incidentSuperior,
+                     String longitude, String locationDate, String sceneID, String incidentSuperior,
                      List<String> incidentSubordinates) {
         //Should do null checks.
 
@@ -135,11 +139,12 @@ public class Responder implements Parcelable {
             this.heartRate = Float.parseFloat(heartrateRecord.get(0));
         } else {
             this.heartRate = -999;
-            Log.e(TAG, "No heartrate found.  Dead?");
+            Log.e(TAG, "No valid heartrate found.");
         }
         this.orgSuperior = orgSuperior;
         this.orgSubordinates = orgSubordinates;
         this.location = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
+        this.locationDate = locationDate;
         this.sceneID = sceneID;
         this.incidentSuperior = incidentSuperior;
         this.incidentSubordinates = incidentSubordinates;
@@ -156,6 +161,7 @@ public class Responder implements Parcelable {
         orgSuperior = in.readString();
         orgSubordinates = in.createStringArrayList();
         location = in.readParcelable(LatLng.class.getClassLoader());
+        locationDate = in.readString();
         sceneID = in.readString();
         incidentSuperior = in.readString();
         incidentSubordinates = in.createStringArrayList();
@@ -179,6 +185,7 @@ public class Responder implements Parcelable {
         outParcel.writeString(orgSuperior);
         outParcel.writeStringList(orgSubordinates);
         outParcel.writeParcelable(location, 0);
+        outParcel.writeString(locationDate);
         outParcel.writeString(sceneID);
         outParcel.writeString(incidentSuperior);
         outParcel.writeStringList(incidentSubordinates);
@@ -214,10 +221,20 @@ public class Responder implements Parcelable {
     public String getLatitude() {return Double.toString(this.location.latitude);}
     public String getLongitude() {return Double.toString(this.location.longitude);}
     public LatLng getLocation() {return this.location;}
+    public String getLocationDate() {return this.locationDate;}
     public String getIncidentSuperior() {return  this.incidentSuperior;}
     public List<String> getIncidentSubordinates() {return this.incidentSubordinates;}
     public Marker getMarker() {return this.marker;}
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+        this.name = this.lastName + "," + this.firstName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+        this.name = this.lastName + "," + this.firstName;
+    }
 
     public void setLocation(LatLng location) {
         if (location == null) {
@@ -225,21 +242,52 @@ public class Responder implements Parcelable {
         }
         this.location = location;
     }
+
+    public void setLocationDate(String locationDate) {
+        if (locationDate == null) {
+            throw new IllegalArgumentException("locationDate cannot be null");
+        }
+        this.locationDate = locationDate;
+    }
+
     public void setMarker(Marker marker) {
         if (marker == null) {
             throw new IllegalArgumentException("marker cannot be null");
         }
-        this.marker = marker;}
+        this.marker = marker;
+    }
+
+    public void setOrganization(String organization) {
+        this.organization = organization;
+    }
+
+    public void setOrgSuperior(String superiorId) {
+        if (superiorId == null) {
+            throw new IllegalArgumentException("superiorId cannot be null");
+        }
+        this.orgSuperior = superiorId;
+    }
+
+    public void setOrgSubordinates(List<String> subordinateIds) {
+        if (subordinateIds == null) {
+            throw new IllegalArgumentException("subordinateIds cannot be null");
+        }
+        this.orgSubordinates = subordinateIds;
+    }
+
     public void setIncidentSuperior(String superiorId) {
         if (superiorId == null) {
             throw new IllegalArgumentException("superiorId cannot be null");
         }
-        this.incidentSuperior = superiorId;}
+        this.incidentSuperior = superiorId;
+    }
+
     public void setIncidentSubordinates(List<String> subordinateIds) {
         if (subordinateIds == null) {
             throw new IllegalArgumentException("subordinateIds cannot be null");
         }
-        this.incidentSubordinates = subordinateIds;}
+        this.incidentSubordinates = subordinateIds;
+    }
 
     /**
      * Set the incident/scene ID for this responder.

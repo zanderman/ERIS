@@ -31,6 +31,7 @@ import com.eris.classes.Responder;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
@@ -205,11 +206,11 @@ public class DatabaseService extends Service {
             UserDataDO foundUser = resultList.get(0);
             //No just broadcast this with the rID.
             intent.putExtra(ERROR_STATUS, Responder.NO_ERROR);
-            Responder r = new Responder(foundUser.getUserId(), foundUser.getName(),  foundUser.getOrganization(),
+            Responder r = new Responder(foundUser.getUserId(), foundUser.getName(), foundUser.getOrganization(),
                     foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
                     foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
-                    foundUser.getCurrentIncidentId(), foundUser.getIncidentSuperior(),
-                    foundUser.getIncidentSubordinates());
+                    foundUser.getLocationDate(), foundUser.getCurrentIncidentId(),
+                    foundUser.getIncidentSuperior(), foundUser.getIncidentSubordinates());
             if (r.getUserID().equals(savedCurrentUserIDToken)) {
                 currentUser = r;
                 currentUserLatch.countDown();
@@ -262,18 +263,18 @@ public class DatabaseService extends Service {
 
                 if (resultList.size() > 0) {
                     UserDataDO foundUser = resultList.get(0);
-                    Responder subordinate = new Responder(foundUser.getUserId(), foundUser.getName(),  foundUser.getOrganization(),
+                    Responder subordinate = new Responder(foundUser.getUserId(), foundUser.getName(), foundUser.getOrganization(),
                             foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
                             foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
-                            foundUser.getCurrentIncidentId(), foundUser.getIncidentSuperior(),
-                            foundUser.getIncidentSubordinates());
+                            foundUser.getLocationDate(), foundUser.getCurrentIncidentId(),
+                            foundUser.getIncidentSuperior(), foundUser.getIncidentSubordinates());
                     orgSubordinates[i] = subordinate;
                 } else {
                     Log.e(TAG, "Failed to find responder " + subordinateId);
                     List<String> emptyList = new ArrayList<String>();
                     Responder subordinate = new Responder(subordinateId, "unknown", superior.getOrganization(),
                             emptyList, "unknown",
-                            emptyList, "0.0", "0.0 ",
+                            emptyList, "0.0", "0.0", "January 1, 1970, 00:00:00 GMT",
                             "unknown", superior.getUserID(),
                             emptyList);
                     orgSubordinates[i] = subordinate;
@@ -339,8 +340,8 @@ public class DatabaseService extends Service {
                         responder = new Responder(foundUser.getUserId(), foundUser.getName(),  foundUser.getOrganization(),
                                 foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
                                 foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
-                                foundUser.getCurrentIncidentId(), foundUser.getIncidentSuperior(),
-                                foundUser.getIncidentSubordinates());
+                                foundUser.getLocationDate(), foundUser.getCurrentIncidentId(),
+                                foundUser.getIncidentSuperior(), foundUser.getIncidentSubordinates());
                         responders.add(responder);
                     }
                 }
@@ -401,8 +402,8 @@ public class DatabaseService extends Service {
                         responder = new Responder(foundUser.getUserId(), foundUser.getName(),  foundUser.getOrganization(),
                                 foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
                                 foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
-                                foundUser.getCurrentIncidentId(), foundUser.getIncidentSuperior(),
-                                foundUser.getIncidentSubordinates());
+                                foundUser.getLocationDate(), foundUser.getCurrentIncidentId(),
+                                foundUser.getIncidentSuperior(), foundUser.getIncidentSubordinates());
                         responders.add(responder);
                     }
                 }
@@ -452,8 +453,8 @@ public class DatabaseService extends Service {
                         responder = new Responder(foundUser.getUserId(), foundUser.getName(),  foundUser.getOrganization(),
                                 foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
                                 foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
-                                foundUser.getCurrentIncidentId(), foundUser.getIncidentSuperior(),
-                                foundUser.getIncidentSubordinates());
+                                foundUser.getLocationDate(), foundUser.getCurrentIncidentId(),
+                                foundUser.getIncidentSuperior(), foundUser.getIncidentSubordinates());
                         responders.add(responder);
                     }
                 }
@@ -531,22 +532,32 @@ public class DatabaseService extends Service {
      * This method will ignore the null fields, if any.
      * @param responder The Responder object
      */
-    public void pushUpdatedResponderData(Responder responder) {
+    public void pushUpdatedResponderData(Responder responder, String callingMethodIdentifier) {
         if (responder == null) {
             throw new IllegalArgumentException("responder cannot be null");
         }
-        (new Thread(new PushUpdatedResponderDataThread(responder))).start();
+        (new Thread(new PushUpdatedResponderDataThread(responder, callingMethodIdentifier))).start();
     }
 
     private class PushUpdatedResponderDataThread implements Runnable{
         Responder responder;
+        String callingMethodIdentifier;
+        Intent intent;
 
-        public PushUpdatedResponderDataThread(Responder responder) {
+        public PushUpdatedResponderDataThread(Responder responder, String callingMethodIdentifier) {
             this.responder = responder;
+            this.callingMethodIdentifier = callingMethodIdentifier;
+            if (callingMethodIdentifier != null) {
+                this.intent = new Intent();
+            }
         }
 
         @Override
         public void run() {
+            if (callingMethodIdentifier != null) {
+                intent.setAction(DATABASE_SERVICE_ACTION);
+                intent.putExtra(CALLING_METHOD_IDENTIFIER, callingMethodIdentifier);
+            }
             final DynamoDBMapper mapper = AWSMobileClient.defaultMobileClient().getDynamoDBMapper();
             final UserDataDO userData = new UserDataDO();
 
@@ -559,6 +570,7 @@ public class DatabaseService extends Service {
             userData.setOrganization(responder.getOrganization());
             userData.setLongitude(responder.getLongitude());
             userData.setLatitude(responder.getLatitude());
+            userData.setLocationDate(responder.getLocationDate());
             userData.setHeartbeatRecord(responder.getHeartrateRecord());
             userData.setIncidentSubordinates(responder.getIncidentSubordinates());
             userData.setIncidentSuperior(responder.getIncidentSuperior());
@@ -570,6 +582,9 @@ public class DatabaseService extends Service {
                 mapper.save(userData, new DynamoDBMapperConfig(DynamoDBMapperConfig.SaveBehavior.UPDATE_SKIP_NULL_ATTRIBUTES));
                 if (responder.getUserID().equals(currentUser.getUserID())) {
                     currentUser = responder;
+                }
+                if (callingMethodIdentifier != null) {
+                    sendBroadcast(intent);
                 }
             } catch (final AmazonClientException e) {
                 Log.e(TAG, "Failed saving item " + e.getMessage(), e);
@@ -614,6 +629,9 @@ public class DatabaseService extends Service {
                 if (responder.getLongitude() == null) {
                     throw new IllegalArgumentException("longitude cannot be null");
                 }
+                if (responder.getLocationDate() == null) {
+                    throw new IllegalArgumentException("locationDate cannot be null");
+                }
                 if (responder.getHeartrateRecord() == null) {
                     throw new IllegalArgumentException("heartbeatRecord cannot be null");
                 }
@@ -638,6 +656,7 @@ public class DatabaseService extends Service {
                 userData.setOrganization(responder.getOrganization());
                 userData.setLongitude(responder.getLongitude());
                 userData.setLatitude(responder.getLatitude());
+                userData.setLocationDate(responder.getLocationDate());
                 userData.setHeartbeatRecord(responder.getHeartrateRecord());
                 userData.setIncidentSubordinates(responder.getIncidentSubordinates());
                 userData.setIncidentSuperior(responder.getIncidentSuperior());
@@ -788,27 +807,8 @@ public class DatabaseService extends Service {
         }
 
         currentUser.setLocation(new LatLng(latitude, longitude));
-        pushUpdatedResponderData(currentUser);
+        currentUser.setLocationDate(Long.toString(new Date().getTime()));
+        pushUpdatedResponderData(currentUser, null);
         return true;
     }
-
-    /**
-     * Ask the database service to update the current user object's superior and/or subordinates,
-     * and send a request to also update this data in the database.
-     */
-//    private boolean updateCurrentUserSuperiorAndSubordinates(String superiorID, List<String> subordinateIDs) {
-//        // Return false if the currentUser object has not yet been retrieved from the server
-//        if (currentUser == null) {
-//            return false;
-//        }
-//
-//        if (superiorID != null) {
-//            currentUser.setIncidentSuperior(superiorID);
-//        }
-//        if (subordinateIDs != null) {
-//            currentUser.setIncidentSubordinates(subordinateIDs);
-//        }
-//        pushResponderData(currentUser);
-//        return true;
-//    }
 }
