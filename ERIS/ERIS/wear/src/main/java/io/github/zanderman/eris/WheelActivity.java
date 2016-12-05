@@ -314,6 +314,8 @@ public class WheelActivity extends Activity
                 Log.d("heartrate", "------------");
                 for (float value : event.values) {
                     Log.d("heartrate", value + "");
+                    SendDataTask task = new SendDataTask();
+                    task.doInBackground(value);
                 }
                 Log.d("heartrate", "------------");
                 break;
