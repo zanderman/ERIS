@@ -70,16 +70,21 @@ public class WearService extends Service
 
         // Connect to wearable if possible.
         if (!connected) {
+            Log.d("service", "WearService - connecting to google APIs");
 
             // Setup Google API Client.
             buildGoogleApiClient();
             connectGoogleApiClient();
         }
 
+        Log.d("service", "WearService STARTED!");
+
         // If the OS runs out of memory, START_STICKY tells the OS to start this service back up
         // again once enough memory has been freed.
         return START_STICKY;
     }
+
+
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -102,12 +107,14 @@ public class WearService extends Service
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        Log.d("service", "connected to watch!");
+        this.connected = true;
         Wearable.DataApi.addListener(googleApiClient, this); // this is how we'll communicate with the watch.
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        this.connected = false;
     }
 
     @Override
