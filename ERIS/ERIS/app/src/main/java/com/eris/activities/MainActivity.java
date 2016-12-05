@@ -291,6 +291,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     public void runWearService() {
         startService( new Intent(this, WearService.class) );
+        return;
     }
 
 
