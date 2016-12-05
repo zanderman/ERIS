@@ -3,6 +3,7 @@ package com.eris.services;
 import android.app.Service;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -34,6 +35,11 @@ public class WearService extends Service
         implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         DataApi.DataListener {
+
+    /*
+     * Constants
+     */
+    private final IBinder wearServiceBinder = new WearServiceBinder();
 
     /*
      * Broadcast keys
@@ -75,10 +81,9 @@ public class WearService extends Service
         return START_STICKY;
     }
 
-    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+        return wearServiceBinder;
     }
 
     private void buildGoogleApiClient() {
@@ -171,4 +176,8 @@ public class WearService extends Service
             Log.d("service", "Handling message from watch on UI thread. Got heartrate of: " + hr + " bpm");
         }
     };
+
+    public class WearServiceBinder extends Binder {
+        public WearService getService() { return WearService.this; }
+    }
 }
