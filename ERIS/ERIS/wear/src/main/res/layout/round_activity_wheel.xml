@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" tools:context="io.github.zanderman.eris.WheelActivity"
+    tools:deviceIds="wear_round">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/infoLayout">
+
+        <FrameLayout
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:id="@+id/mapFrame">
+
+        </FrameLayout>
+
+        <com.lukedeighton.wheelview.WheelView
+            android:id="@+id/wheelview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/peep"
+            app:rotatableWheelDrawable="false"
+            app:selectionAngle="90.0"
+            app:wheelOffsetY="0dp"
+            app:wheelOffsetX="0dp"
+            app:repeatItems="true"
+            app:wheelRadius="match_parent"
+            app:wheelItemCount="7"
+            app:wheelPadding="22dp"
+            app:selectionColor="@color/orange"
+            app:wheelItemRadius="20dp"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/waitLayout"
+        android:gravity="center">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/waitProgress" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="connecting..."
+            android:id="@+id/waitMessage" />
+    </LinearLayout>
+
+    <android.support.wearable.view.DismissOverlayView
+        android:id="@+id/dismiss_overlay"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"/>
+
+
+
+    <!--<com.google.android.gms.maps.MapView-->
+        <!--android:layout_width="120dp"-->
+        <!--android:layout_height="120dp"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:background="@drawable/circle"-->
+        <!--android:id="@+id/mapView" />-->
+
+</RelativeLayout>
