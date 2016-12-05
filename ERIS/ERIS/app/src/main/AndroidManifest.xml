@@ -63,6 +63,10 @@
             android:name=".services.DatabaseService"
             android:enabled="true"
             android:exported="true" />
+        <service
+            android:name=".services.WearService"
+            android:enabled="true"
+            android:exported="true" />
 
         <activity
             android:name=".activities.LoginActivity"
