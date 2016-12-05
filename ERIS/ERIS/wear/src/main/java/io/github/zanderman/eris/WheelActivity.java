@@ -311,13 +311,13 @@ public class WheelActivity extends Activity
 
                 // TODO: send HeartRate data to phone.
 
-                Log.d("heartrate", "------------");
                 for (float value : event.values) {
                     Log.d("heartrate", value + "");
                     SendDataTask task = new SendDataTask();
-                    task.doInBackground(value);
+                    task.execute(value);
+                    break;
                 }
-                Log.d("heartrate", "------------");
+
                 break;
         }
 
