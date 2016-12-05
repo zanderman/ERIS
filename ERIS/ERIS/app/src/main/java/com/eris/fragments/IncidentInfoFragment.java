@@ -499,13 +499,13 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                 if (!checkin_flipflop) {
 
                     //Ok, this needs updating.
-                    currentUser.setSceneId(incident.getSceneId());
+//                    currentUser.setSceneId(incident.getSceneId());
                     responderCheckInRequestMethodIdentifier = this.getClass().getSimpleName()
                             + "broadcast_action_database_checkin"
                             + incident.getSceneId();
                     databaseService.pushUpdatedResponderData(currentUser, responderCheckInRequestMethodIdentifier);
                 } else {//Check the user out of the scene.  TODO add history logging here.
-                    currentUser.setSceneId(Responder.NO_INCIDENT);
+//                    currentUser.setSceneId(Responder.NO_INCIDENT);
                     responderCheckOutRequestMethodIdentifier = this.getClass().getSimpleName()
                             + "broadcast_action_database_checkout"
                             + incident.getSceneId();
