@@ -46,6 +46,8 @@ import com.eris.navigation.NavigationDrawer;
 import com.eris.services.LocationService;
 import com.eris.services.DatabaseService;
 
+import com.thalmic.myo.Hub;
+
 import java.util.concurrent.CountDownLatch;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -178,6 +180,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setupToolbar(savedInstanceState);
 
         setupNavigationMenu(savedInstanceState);
+
+        // Initialize the Hub for Myo
+        Hub myoHub = Hub.getInstance();
+        if (!myoHub.init(this)) {
+            Log.e(TAG, "Could not initialize the Hub for Myo.");
+            finish();
+            return;
+        }
 
         // Run the location and database services.
         runLocationService();

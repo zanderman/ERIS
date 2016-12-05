@@ -14,7 +14,7 @@ android {
     buildToolsVersion "23.0.1"
     defaultConfig {
         applicationId "com.eris"
-        minSdkVersion 15
+        minSdkVersion 18
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
@@ -44,6 +44,7 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile fileTree(include: ['*.jar'], dir: 'app/libs')
+    compile fileTree(include: ['*.jar'], dir: '../Myo/myo-android-sdk-0.10.0')
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.google.android.gms:play-services:9.0.0'
@@ -55,4 +56,12 @@ dependencies {
     compile 'com.amazonaws:aws-android-sdk-lambda:2.2.18'
     compile 'com.android.support:design:23.4.0'
     compile 'joda-time:joda-time:2.9.6'
+
+    repositories {
+        maven {
+            url '../Myo/myo-android-sdk-0.10.0/myorepository'
+        }
+    }
+
+    compile('com.thalmic:myosdk:0.10.+@aar')
 }
