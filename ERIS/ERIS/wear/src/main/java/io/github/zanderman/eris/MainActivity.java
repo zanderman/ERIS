@@ -1,12 +1,16 @@
 package io.github.zanderman.eris;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.wearable.view.DismissOverlayView;
 import android.support.wearable.view.WatchViewStub;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,22 +21,26 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.Wearable;
 
-public class MainActivity extends Activity
-        implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        DataApi.DataListener {
+import java.util.List;
 
-    private TextView mTextView;
+import io.github.zanderman.eris.services.CommunicationService;
+
+public class MainActivity extends Activity {
+
     private Button showTeamButton;
     private LinearLayout connectingLayout;
-    private GoogleApiClient googleApiClient;
-    private boolean connected = false;
     private DismissOverlayView mDismissOverlay;
     private GestureDetector mDetector;
+    private BroadcastReceiver receiver;
+    private IntentFilter receiverFilter;
 
     /*
      * TODO:
@@ -65,66 +73,72 @@ public class MainActivity extends Activity
                     public void onClick(View v) {
 
                         Intent intent = new Intent(getApplicationContext(), WheelActivity.class);
-//                        intent.putParcelableArrayListExtra("responders", entries);
                         startActivity(intent);
                     }
                 });
 
-//
-                if (!connected) {
-                    showTeamButton.setVisibility(View.GONE);
-                    connectingLayout.setVisibility(View.VISIBLE);
-
-                    buildGoogleApiClient();
-                    connectGoogleApiClient();
-                }
-                else {
-                    showTeamButton.setVisibility(View.VISIBLE);
-                    connectingLayout.setVisibility(View.GONE);
-                }
+                // Initially set the connecting layout to be visible.
+                showTeamButton.setVisibility(View.GONE);
+                connectingLayout.setVisibility(View.VISIBLE);
 
             }
         });
 
+        // Setup gesture detector for DismissOverlay.
         setupGestureDetectors();
-    }
 
-    private void buildGoogleApiClient() {
-        // Iitialize Google API client.
-        if (googleApiClient == null) {
-            googleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(Wearable.API) // Request access only to the wearable API.
-                    .build();
-        }
-    }
-    private void connectGoogleApiClient() {
-        if (!googleApiClient.isConnected()) googleApiClient.connect();
-    }
+        // Setup broadcast receiver.
+        setupBroadcastReceiver();
 
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        connected = true;
-        showTeamButton.setVisibility(View.VISIBLE);
-        connectingLayout.setVisibility(View.GONE);
-//        Wearable.DataApi.addListener(googleApiClient, this); // this is how we'll communicate with the phone.
+        // Start services.
+        startService(new Intent(this, CommunicationService.class));
     }
 
     @Override
-    public void onConnectionSuspended(int i) {
-
+    protected void onResume() {
+        super.onResume();
+        this.registerReceiver(this.receiver,receiverFilter);
     }
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+    protected void onPause() {
+        super.onPause();
+        this.unregisterReceiver(this.receiver);
     }
 
-    @Override
-    public void onDataChanged(DataEventBuffer dataEventBuffer) {
 
+    public void setupBroadcastReceiver() {
+
+        this.receiverFilter = new IntentFilter();
+        this.receiverFilter.addAction(CommunicationService.BROADCAST_ACTION_COMMUNICATION_UPDATE);
+        this.receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // Determine which broadcast was sent.
+                switch (intent.getAction()) {
+
+                    // Communication update.
+                    case CommunicationService.BROADCAST_ACTION_COMMUNICATION_UPDATE:
+                        boolean status = intent.getBooleanExtra(CommunicationService.KEY_COMMUNICATION_CONNECTION_STATUS, false);
+
+                        // Allow progression through app if we're connected to a device.
+                        if (status) {
+                            showTeamButton.setVisibility(View.VISIBLE);
+                            connectingLayout.setVisibility(View.GONE);
+                        }else {
+                            showTeamButton.setVisibility(View.GONE);
+                            connectingLayout.setVisibility(View.VISIBLE);
+                        }
+
+                        break;
+
+                    // Unhandled broadcast
+                    default:
+                        break;
+                }
+            }
+        };
     }
 
     /**
@@ -150,4 +164,6 @@ public class MainActivity extends Activity
     public boolean onTouchEvent(MotionEvent ev) {
         return mDetector.onTouchEvent(ev) || super.onTouchEvent(ev);
     }
+
+
 }
