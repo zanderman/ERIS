@@ -5,7 +5,7 @@
     <uses-feature android:name="android.hardware.type.watch" />
 
     <!-- Permissions -->
-    <uses-permission android:name="android.permission.BODY_SENSORS"/>
+    <uses-permission android:name="android.permission.BODY_SENSORS" />
 
     <application
         android:allowBackup="true"
@@ -30,7 +30,10 @@
         </activity>
         <activity
             android:name=".WheelActivity"
-            android:label="@string/title_activity_wheel"></activity>
+            android:label="@string/title_activity_wheel" />
+        <activity
+            android:name=".IncidentSelectorActivity"
+            android:label="@string/title_activity_incident_selector"></activity>
     </application>
 
 </manifest>
