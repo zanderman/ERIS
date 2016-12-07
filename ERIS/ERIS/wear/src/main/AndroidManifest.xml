@@ -33,7 +33,12 @@
             android:label="@string/title_activity_wheel" />
         <activity
             android:name=".IncidentSelectorActivity"
-            android:label="@string/title_activity_incident_selector"></activity>
+            android:label="@string/title_activity_incident_selector" />
+
+        <service
+            android:name=".services.CommunicationService"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>
