@@ -70,7 +70,7 @@ import io.github.zanderman.eris.drawables.TextDrawable;
 public class WheelActivity extends Activity
         implements SensorEventListener,
             OnMapReadyCallback,
-            GoogleMap.OnMapLongClickListener,
+//            GoogleMap.OnMapLongClickListener,
             GoogleApiClient.ConnectionCallbacks,
             GoogleApiClient.OnConnectionFailedListener,
             DataApi.DataListener {
@@ -78,7 +78,6 @@ public class WheelActivity extends Activity
     private static final float ZOOM_LEVEL = 16f;
     private LinearLayout connectingLayout;
     private RelativeLayout infoLayout;
-//    private TextView mTextView;
     private WheelView wheelView;
     private ArrayList<SimpleResponder> responders;
     private DismissOverlayView mDismissOverlay;
@@ -125,7 +124,6 @@ public class WheelActivity extends Activity
             public void onLayoutInflated(WatchViewStub stub) {
 
                 // Get view elements.
-//                mTextView = (TextView) stub.findViewById(R.id.text);
                 mapFrame = (FrameLayout) stub.findViewById(R.id.mapFrame);
                 connectingLayout = (LinearLayout) stub.findViewById(R.id.waitLayout);
                 infoLayout = (RelativeLayout) stub.findViewById(R.id.infoLayout);
@@ -148,9 +146,6 @@ public class WheelActivity extends Activity
                     infoLayout.setVisibility(View.VISIBLE);
                     connectingLayout.setVisibility(View.GONE);
 
-                    // Setup dismissal overlay.
-                    setupGestureDetectors();
-
                     // Create Google Map
                     inflateMap();
 
@@ -160,6 +155,25 @@ public class WheelActivity extends Activity
 
             }
         });
+
+        // Setup dismissal overlay.
+        setupGestureDetectors();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Register sensor listener.
+        sm.registerListener(this, heartrateSensor, 300000); // sample every 30 milliseconds.
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Unregister sensor listener when the activity is not in the foreground.
+        sm.unregisterListener(this);
     }
 
     /**
@@ -241,8 +255,6 @@ public class WheelActivity extends Activity
         {
             sm = (SensorManager) this.getSystemService(SENSOR_SERVICE);
             heartrateSensor = sm.getDefaultSensor(Sensor.TYPE_HEART_RATE);
-            System.out.println("Has HR: " + heartrateSensor);
-            sm.registerListener(this, heartrateSensor, SensorManager.SENSOR_DELAY_NORMAL);
         }
 
         // Need to prompt user to allow location permissions.
@@ -361,16 +373,16 @@ public class WheelActivity extends Activity
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         map.getUiSettings().setMyLocationButtonEnabled(false);
-        map.getUiSettings().setAllGesturesEnabled(false);
-        map.setOnMapLongClickListener(this);
+//        map.getUiSettings().setAllGesturesEnabled(false);
+//        map.setOnMapLongClickListener(this);
 
         this.centerMapOnLocation(new LatLng(43.1, -87.9));
     }
 
-    @Override
-    public void onMapLongClick(LatLng latLng) {
-        mDismissOverlay.show();
-    }
+//    @Override
+//    public void onMapLongClick(LatLng latLng) {
+//        mDismissOverlay.show();
+//    }
 
     private void buildGoogleApiClient() {
         // Iitialize Google API client.
@@ -393,8 +405,8 @@ public class WheelActivity extends Activity
         connectingLayout.setVisibility(View.GONE);
         Wearable.DataApi.addListener(googleApiClient, this); // this is how we'll communicate with the phone.
 
-        // Setup dismissal overlay.
-        setupGestureDetectors();
+//        // Setup dismissal overlay.
+//        setupGestureDetectors();
 
         // Create Google Map
         inflateMap();
