@@ -6,4 +6,5 @@
 
     <!--API Keys-->
     <string name="google_maps_key">AIzaSyBzlpKfR4TtnHXbUMYulC01oQGTCTfLvcY</string>
+    <string name="title_activity_incident_selector">IncidentSelectorActivity</string>
 </resources>
