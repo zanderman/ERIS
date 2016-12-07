@@ -150,6 +150,7 @@ public class WearService extends Service
      */
     @Override
     public void onDataChanged(DataEventBuffer dataEventBuffer) {
+        Log.d("service","data listener called");
         for (DataEvent event : dataEventBuffer) {
             if (event.getType() == DataEvent.TYPE_CHANGED) {
 
