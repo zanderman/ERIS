@@ -26,6 +26,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -47,7 +49,15 @@ import com.eris.services.LocationService;
 import com.eris.services.DatabaseService;
 
 import com.eris.services.WearService;
+import com.thalmic.myo.AbstractDeviceListener;
+import com.thalmic.myo.Arm;
+import com.thalmic.myo.DeviceListener;
 import com.thalmic.myo.Hub;
+import com.thalmic.myo.Myo;
+import com.thalmic.myo.Pose;
+import com.thalmic.myo.Quaternion;
+import com.thalmic.myo.XDirection;
+import com.thalmic.myo.scanner.ScanActivity;
 
 import java.util.concurrent.CountDownLatch;
 
@@ -74,6 +84,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public LocationService locationService;
     public DatabaseService databaseService;
     public CountDownLatch databaseServiceLatch;
+
+    private boolean isLocked;
+    private DeviceListener mListener;
 
     /*
      * Constants
@@ -194,6 +207,97 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
+        mListener = new AbstractDeviceListener() {
+            @Override
+            public void onConnect(Myo myo, long timestamp) {
+                Log.d(TAG, "Myo Connected");
+            }
+
+            @Override
+            public void onDisconnect(Myo myo, long timestamp) {
+                Log.d(TAG, "Myo Disconnected");
+            }
+
+            // onArmSync() is called whenever Myo has recognized a Sync Gesture after someone has put it on their
+            // arm. This lets Myo know which arm it's on and which way it's facing.
+            @Override
+            public void onArmSync(Myo myo, long timestamp, Arm arm, XDirection xDirection) {
+                Log.d(TAG, "Myo Synced");
+            }
+
+            // onArmUnsync() is called whenever Myo has detected that it was moved from a stable position on a person's arm after
+            // it recognized the arm. Typically this happens when someone takes Myo off of their arm, but it can also happen
+            // when Myo is moved around on the arm.
+            @Override
+            public void onArmUnsync(Myo myo, long timestamp) {
+                Log.d(TAG, "Myo Unsynced");
+            }
+
+            // onUnlock() is called whenever a synced Myo has been unlocked. Under the standard locking
+            // policy, that means poses will now be delivered to the listener.
+            @Override
+            public void onUnlock(Myo myo, long timestamp) {
+                Log.d(TAG, "Myo unlocked");
+            }
+
+            // onLock() is called whenever a synced Myo has been locked. Under the standard locking
+            // policy, that means poses will no longer be delivered to the listener.
+            @Override
+            public void onLock(Myo myo, long timestamp) {
+                Log.d(TAG, "Myo locked");
+            }
+
+            // onOrientationData() is called whenever a Myo provides its current orientation,
+            // represented as a quaternion.
+            @Override
+            public void onOrientationData(Myo myo, long timestamp, Quaternion rotation) {
+               /* // Calculate Euler angles (roll, pitch, and yaw) from the quaternion.
+                float roll = (float) Math.toDegrees(Quaternion.roll(rotation));
+                float pitch = (float) Math.toDegrees(Quaternion.pitch(rotation));
+                float yaw = (float) Math.toDegrees(Quaternion.yaw(rotation));
+
+                // Adjust roll and pitch for the orientation of the Myo on the arm.
+                if (myo.getXDirection() == XDirection.TOWARD_ELBOW) {
+                    roll *= -1;
+                    pitch *= -1;
+                }
+
+                // Next, we apply a rotation to the text view using the roll, pitch, and yaw.
+                mTextView.setRotation(roll);
+                mTextView.setRotationX(pitch);
+                mTextView.setRotationY(yaw);*/
+            }
+
+
+            @Override
+            public void onPose(Myo myo, long timestamp, Pose pose) {
+                if(pose == Pose.REST) {
+                    return;
+                } else if (pose == Pose.DOUBLE_TAP) {
+                    if (isLocked) {
+                        Log.d(TAG, "Myo Unlocked");
+                    } else {
+                        Log.d(TAG, "Myo Locked");
+                    }
+                    isLocked = !isLocked;
+                    return;
+                } else if (isLocked) {
+                    return;
+                }
+                if(pose == Pose.FINGERS_SPREAD) {
+                    Log.d(TAG, "FINGERS SPREAD MADE");
+                    //TODO Do something else
+                } else if (pose == Pose.FIST) {
+                    Log.d(TAG, "FIST MADE");
+                    //TODO Do something.
+                }
+            }
+        };
+
+        Hub.getInstance().addListener(mListener);
+        Hub.getInstance().attachToAdjacentMyo();
+        Hub.getInstance().setLockingPolicy(Hub.LockingPolicy.NONE);
+
         // Run the location and database services.
         runWearService();
         runLocationService();
@@ -211,8 +315,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         // Handle action bar item clicks here excluding the home button.
+        int id = item.getItemId();
+        if (R.id.action_scan == id) {
+            onScanActionSelected();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
+    }
+
+    private void onScanActionSelected() {
+        // Launch the ScanActivity to scan for Myos to connect to.
+        Intent intent = new Intent(this, ScanActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // We don't want any callbacks when the Activity is gone, so unregister the listener.
+        Hub.getInstance().removeListener(mListener);
+
+        if (isFinishing()) {
+            // The Activity is finishing, so shutdown the Hub. This will disconnect from the Myo.
+            Hub.getInstance().shutdown();
+        }
     }
 
     @Override
