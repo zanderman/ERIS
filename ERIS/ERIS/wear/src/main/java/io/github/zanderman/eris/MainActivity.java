@@ -5,11 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.wearable.view.DismissOverlayView;
 import android.support.wearable.view.WatchViewStub;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -27,6 +31,15 @@ public class MainActivity extends Activity
     private LinearLayout connectingLayout;
     private GoogleApiClient googleApiClient;
     private boolean connected = false;
+    private DismissOverlayView mDismissOverlay;
+    private GestureDetector mDetector;
+
+    /*
+     * TODO:
+     * - write handshake method
+     * - advance to incident list once connected to phone app
+     * - if phone app is already in incident, go straight to team view
+     */
 
 
     @Override
@@ -39,21 +52,17 @@ public class MainActivity extends Activity
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
             @Override
             public void onLayoutInflated(WatchViewStub stub) {
+
+                // Obtain the DismissOverlayView element
+                mDismissOverlay = (DismissOverlayView) stub.findViewById(R.id.dismiss_overlay);
+                mDismissOverlay.setIntroText("Long press to exit app");
+                mDismissOverlay.showIntroIfNecessary();
+
+                connectingLayout = (LinearLayout) stub.findViewById(R.id.waitLayout);
                 showTeamButton = (Button) stub.findViewById(R.id.showTeamButton);
                 showTeamButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
-//                        ArrayList<Responder> entries = new ArrayList<Responder>();
-//                        entries.add( new Responder("0", "Cena, John", "EMS", Arrays.asList("100","101"), "dummy", null, "0000", "0000", "123", "dummy", null) );
-//                        entries.add( new Responder("1", "Jonas, Mike", "EMS", Arrays.asList("98","99"), "dummy", null, "0000", "0000", "123", "dummy", null) );
-//                        entries.add( new Responder("2", "Billy, Bob", "EMS", Arrays.asList("98","99"), "dummy", null, "0000", "0000", "123", "dummy", null) );
-//                        entries.add( new Responder("3", "Jonny, Wayne", "EMS", Arrays.asList("98","99"), "dummy", null, "0000", "0000", "123", "dummy", null) );
-//                        entries.add( new Responder("4", "Dude, Wilson", "EMS", Arrays.asList("98","99"), "dummy", null, "0000", "0000", "123", "dummy", null) );
-//                        entries.add( new Responder("5", "Willard, Denison", "EMS", Arrays.asList("98","99"), "dummy", null, "0000", "0000", "123", "dummy", null) );
-//                        entries.add( new Responder("6", "Goob, DaNoob", "EMS", Arrays.asList("98","99"), "dummy", null, "0000", "0000", "123", "dummy", null) );
-//                        entries.add( new Responder("0", "John", "Cena", "233", 123f, null, "asdf") );
-//                        entries.add( new Responder("1", "Mike", "Jonas", "233", 100f, null, "asdf") );
 
                         Intent intent = new Intent(getApplicationContext(), WheelActivity.class);
 //                        intent.putParcelableArrayListExtra("responders", entries);
@@ -61,23 +70,23 @@ public class MainActivity extends Activity
                     }
                 });
 
-//                connectingLayout = (LinearLayout) stub.findViewById(R.id.waitLayout);
 //
-//                if (!connected) {
-//                    showTeamButton.setVisibility(View.GONE);
-//                    connectingLayout.setVisibility(View.VISIBLE);
-//
-//                    // TODO: connect to phone
-//                    buildGoogleApiClient();
-//                    connectGoogleApiClient();
-//                }
-//                else {
-//                    showTeamButton.setVisibility(View.VISIBLE);
-//                    connectingLayout.setVisibility(View.GONE);
-//                }
+                if (!connected) {
+                    showTeamButton.setVisibility(View.GONE);
+                    connectingLayout.setVisibility(View.VISIBLE);
+
+                    buildGoogleApiClient();
+                    connectGoogleApiClient();
+                }
+                else {
+                    showTeamButton.setVisibility(View.VISIBLE);
+                    connectingLayout.setVisibility(View.GONE);
+                }
 
             }
         });
+
+        setupGestureDetectors();
     }
 
     private void buildGoogleApiClient() {
@@ -116,5 +125,29 @@ public class MainActivity extends Activity
     @Override
     public void onDataChanged(DataEventBuffer dataEventBuffer) {
 
+    }
+
+    /**
+     * Helper method that allows setup of the gesture detector.
+     */
+    private void setupGestureDetectors() {
+
+        // Configure a gesture detector
+        mDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
+            public void onLongPress(MotionEvent ev) {
+                mDismissOverlay.show();
+            }
+        });
+    }
+
+    /**
+     * Capture long presses
+     *
+     * @param ev
+     * @return
+     */
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        return mDetector.onTouchEvent(ev) || super.onTouchEvent(ev);
     }
 }
