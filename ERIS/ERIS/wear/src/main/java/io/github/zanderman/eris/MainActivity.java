@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -41,6 +42,7 @@ public class MainActivity extends Activity {
     private GestureDetector mDetector;
     private BroadcastReceiver receiver;
     private IntentFilter receiverFilter;
+    private SharedPreferences sharedPreferences;
 
     /*
      * TODO:
@@ -81,6 +83,8 @@ public class MainActivity extends Activity {
                 showTeamButton.setVisibility(View.GONE);
                 connectingLayout.setVisibility(View.VISIBLE);
 
+                // Start services.
+                startService(new Intent(getApplicationContext(), CommunicationService.class));
             }
         });
 
@@ -90,14 +94,26 @@ public class MainActivity extends Activity {
         // Setup broadcast receiver.
         setupBroadcastReceiver();
 
-        // Start services.
-        startService(new Intent(this, CommunicationService.class));
+        // Gain access to shared preferences.
+        this.sharedPreferences = getSharedPreferences(getString(R.string.communication_prefs), Context.MODE_PRIVATE);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         this.registerReceiver(this.receiver,receiverFilter);
+
+        // Determine if we're connected or not.
+        if ((showTeamButton != null) && (connectingLayout != null)) {
+            if ((sharedPreferences != null)
+                    && (sharedPreferences.getBoolean(CommunicationService.KEY_COMMUNICATION_CONNECTION_STATUS,false))) {
+                showTeamButton.setVisibility(View.VISIBLE);
+                connectingLayout.setVisibility(View.GONE);
+            } else {
+                showTeamButton.setVisibility(View.GONE);
+                connectingLayout.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     @Override
@@ -106,6 +122,13 @@ public class MainActivity extends Activity {
         this.unregisterReceiver(this.receiver);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Stop the communication service if we quit the app.
+        this.stopService(new Intent(getApplicationContext(), CommunicationService.class));
+    }
 
     public void setupBroadcastReceiver() {
 
