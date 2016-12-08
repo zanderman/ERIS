@@ -42,7 +42,8 @@ public class CommunicationService extends Service
         implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         DataApi.DataListener,
-        ResultCallback<NodeApi.GetConnectedNodesResult>, NodeApi.NodeListener {
+        ResultCallback<NodeApi.GetConnectedNodesResult>,
+        NodeApi.NodeListener {
 
     /*
      * Private members
@@ -131,6 +132,7 @@ public class CommunicationService extends Service
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        Log.d("service", "connected");
 
         // Now that the Google API client is connected,
         // ensure that we're connected to a phone.
@@ -141,6 +143,7 @@ public class CommunicationService extends Service
 
     @Override
     public void onConnectionSuspended(int i) {
+        Log.d("service", "connection suspended");
         this.connected_google_api = false;
         Wearable.NodeApi.removeListener(googleApiClient,this);
         Wearable.DataApi.removeListener(googleApiClient,this);
@@ -148,7 +151,7 @@ public class CommunicationService extends Service
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Log.d("service", "connection failed");
     }
 
     /**
@@ -190,6 +193,7 @@ public class CommunicationService extends Service
      */
     @Override
     public void onDataChanged(DataEventBuffer dataEventBuffer) {
+        Log.d("service", "data was changed");
         for (DataEvent event : dataEventBuffer) {
             if (event.getType() == DataEvent.TYPE_CHANGED) {
 
@@ -275,4 +279,5 @@ public class CommunicationService extends Service
         i.putExtra(KEY_COMMUNICATION_CONNECTION_STATUS,connected_mobile);
         sendBroadcast(i);
     }
+
 }
