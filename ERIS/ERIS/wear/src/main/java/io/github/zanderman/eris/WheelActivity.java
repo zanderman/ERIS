@@ -3,8 +3,13 @@ package io.github.zanderman.eris;
 import android.Manifest;
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
@@ -15,6 +20,7 @@ import android.hardware.SensorManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -66,14 +72,11 @@ import java.util.List;
 
 import io.github.zanderman.eris.classes.SimpleResponder;
 import io.github.zanderman.eris.drawables.TextDrawable;
+import io.github.zanderman.eris.services.CommunicationService;
 
 public class WheelActivity extends Activity
         implements SensorEventListener,
-            OnMapReadyCallback,
-//            GoogleMap.OnMapLongClickListener,
-            GoogleApiClient.ConnectionCallbacks,
-            GoogleApiClient.OnConnectionFailedListener,
-            DataApi.DataListener {
+            OnMapReadyCallback {
 
     private static final float ZOOM_LEVEL = 16f;
     private LinearLayout connectingLayout;
@@ -83,12 +86,10 @@ public class WheelActivity extends Activity
     private DismissOverlayView mDismissOverlay;
     private GestureDetector mDetector;
     private final int REQUEST_CODE_BODY_SENSORS = 1111;
-
-    /*
-     * Google API Client
-     */
-    private GoogleApiClient googleApiClient;
-    private boolean connected = false;
+    private BroadcastReceiver receiver;
+    private IntentFilter receiverFilter;
+    private CommunicationService communicationService;
+    private SharedPreferences sharedPreferences;
 
     /*
      * Sensors
@@ -103,6 +104,22 @@ public class WheelActivity extends Activity
     private FrameLayout mapFrame;
     private Marker liveMarker = null;
 
+    /*
+     * Service connectivity.
+     */
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            if (iBinder instanceof CommunicationService.ConnectionServiceBinder) {
+                communicationService = ((CommunicationService.ConnectionServiceBinder)iBinder).getService();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+        }
+    };
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,10 +130,9 @@ public class WheelActivity extends Activity
 
         // Gain access to list of responders current being used.
         responders = new ArrayList<SimpleResponder>();//intent.getParcelableArrayListExtra("responders");
-        Log.d("goober","num responders: " + responders.size());
-
-        // Setup sensors.
-        setupSensors();
+        for (int i = 0; i< 3; i++) {
+            responders.add(new SimpleResponder("" + i, "" + (char) (i + 96), new LatLng(-5678.34, 123.45), (float) (80.5 + 3 * i)));
+        }
 
         final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
@@ -134,46 +150,82 @@ public class WheelActivity extends Activity
                 mDismissOverlay.setIntroText("Long press to exit app");
                 mDismissOverlay.showIntroIfNecessary();
 
-                if (!connected) {
-                    infoLayout.setVisibility(View.GONE);
-                    connectingLayout.setVisibility(View.VISIBLE);
+                // Create Google Map
+                inflateMap();
 
-                    // Setup Google API Client.
-                    buildGoogleApiClient();
-                    connectGoogleApiClient();
-                }
-                else {
-                    infoLayout.setVisibility(View.VISIBLE);
-                    connectingLayout.setVisibility(View.GONE);
-
-                    // Create Google Map
-                    inflateMap();
-
-                    // Creation of WheelView
-                    setupWheel();
-                }
+                // Creation of WheelView
+                setupWheel();
 
             }
         });
 
+        // Setup sensors.
+        setupSensors();
+
         // Setup dismissal overlay.
         setupGestureDetectors();
+
+        // Setup broadcast receiver.
+        setupBroadcastReceiver();
+
+        // Bind with necessary services.
+        this.bindService(new Intent(this, CommunicationService.class), serviceConnection, Context.BIND_AUTO_CREATE);
+
+        // Gain access to shared preferences.
+        this.sharedPreferences = getSharedPreferences(getString(R.string.communication_prefs), Context.MODE_PRIVATE);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        // Register sensor listener.
-        sm.registerListener(this, heartrateSensor, 300000); // sample every 30 milliseconds.
+        // Determine if we're connected or not.
+        if ((sharedPreferences != null)
+                && (sharedPreferences.getBoolean(CommunicationService.KEY_COMMUNICATION_CONNECTION_STATUS,false))) {
+            sm.registerListener(this, heartrateSensor, 300000); // sample every 30 milliseconds.
+            this.registerReceiver(this.receiver,receiverFilter);
+        } else {
+            Toast.makeText(getApplicationContext(),"Connection lost", Toast.LENGTH_SHORT).show();
+            this.finish(); // Exit the activity.
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        // Unregister sensor listener when the activity is not in the foreground.
         sm.unregisterListener(this);
+        this.unregisterReceiver(this.receiver);
+    }
+
+    public void setupBroadcastReceiver() {
+
+        this.receiverFilter = new IntentFilter();
+        this.receiverFilter.addAction(CommunicationService.BROADCAST_ACTION_COMMUNICATION_UPDATE);
+        this.receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // Determine which broadcast was sent.
+                switch (intent.getAction()) {
+
+                    // Communication update.
+                    case CommunicationService.BROADCAST_ACTION_COMMUNICATION_UPDATE:
+                        boolean status = intent.getBooleanExtra(CommunicationService.KEY_COMMUNICATION_CONNECTION_STATUS, false);
+
+                        // Quit activity if we're not connected with a phone anymore.
+                        if (!status) {
+                            Toast.makeText(getApplicationContext(),"Connection lost", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                        break;
+
+                    // Unhandled broadcast
+                    default:
+                        break;
+                }
+            }
+        };
     }
 
     /**
@@ -325,8 +377,7 @@ public class WheelActivity extends Activity
 
                 for (float value : event.values) {
                     Log.d("heartrate", value + "");
-                    SendDataTask task = new SendDataTask();
-                    task.execute(value);
+                    if (communicationService != null) communicationService.transmit(value);
                     break;
                 }
 
@@ -378,176 +429,5 @@ public class WheelActivity extends Activity
 
         this.centerMapOnLocation(new LatLng(43.1, -87.9));
     }
-
-//    @Override
-//    public void onMapLongClick(LatLng latLng) {
-//        mDismissOverlay.show();
-//    }
-
-    private void buildGoogleApiClient() {
-        // Iitialize Google API client.
-        if (googleApiClient == null) {
-            googleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(Wearable.API) // Request access only to the wearable API.
-                    .build();
-        }
-    }
-    private void connectGoogleApiClient() {
-        if (!googleApiClient.isConnected()) googleApiClient.connect();
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        connected = true;
-        infoLayout.setVisibility(View.VISIBLE);
-        connectingLayout.setVisibility(View.GONE);
-        Wearable.DataApi.addListener(googleApiClient, this); // this is how we'll communicate with the phone.
-
-//        // Setup dismissal overlay.
-//        setupGestureDetectors();
-
-        // Create Google Map
-        inflateMap();
-
-        // DUMMY add to wheel
-        for (int i = 1; i <= 3; i++) {
-            responders.add(new SimpleResponder("" + i, "" + (char)(i + 96), new LatLng(-5678.34/i, 123.45), (float)(80.5 + 3*i)));
-        }
-
-        // TODO: must call setupWheel() after updating the responder list.
-
-
-        // Creation of WheelView
-        setupWheel();
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
-    /**
-     * SEND
-     */
-    public class SendDataTask extends AsyncTask<Float, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Float... params) {
-
-            PutDataMapRequest putDataMapReq = PutDataMapRequest.create("/heartrate");
-
-            Log.d("hudwear", "params.length: " + params.length);
-            putDataMapReq.getDataMap().putFloat("heartrate", params[0]);
-
-            PutDataRequest putDataReq = putDataMapReq.asPutDataRequest();
-            PendingResult<DataApi.DataItemResult> pendingResult =
-                    Wearable.DataApi.putDataItem(googleApiClient, putDataReq);
-
-            return null;
-        }
-    }
-
-    /**
-     * RECEIVE
-     *
-     * Handle information sent from the connected mobile device.
-     * @param dataEventBuffer
-     */
-    @Override
-    public void onDataChanged(DataEventBuffer dataEventBuffer) {
-        for (DataEvent event : dataEventBuffer) {
-            if (event.getType() == DataEvent.TYPE_CHANGED) {
-
-                // DataItem changed
-                DataItem item = event.getDataItem();
-
-                // Process reception of responder list.
-                if (item.getUri().getPath().compareTo("/responderlist") == 0) {
-                    DataMap dm = DataMapItem.fromDataItem(item).getDataMap();
-
-                    Message m = new Message();
-                    Bundle b = new Bundle();
-                    b.putStringArrayList("responderlist", (ArrayList<String>) dm.get("responderlist"));
-                    m.setData(b);
-                    handler.sendMessage(m);
-                }
-
-            } else if (event.getType() == DataEvent.TYPE_DELETED) {
-                // DataItem deleted
-            }
-        }
-    }
-
-    /**
-     * Update information on UI thread.
-     */
-    Handler handler = new Handler(Looper.getMainLooper()) {
-
-        @Override
-        public void handleMessage(Message msg) {
-            ArrayList<String> elements = msg.getData().getStringArrayList("responderlist");
-
-
-            /*
-             * Parse each string into a new SimpleResponder object.
-             */
-            for (String e : elements) {
-                String[] tokens = e.split(",");
-                SimpleResponder r = new SimpleResponder(tokens[0], tokens[1], new LatLng(Double.parseDouble(tokens[2]),Double.parseDouble(tokens[3])),Float.parseFloat(tokens[4]));
-
-                // Add responder to list if we can.
-                if (!responders.contains(r)) {
-                    responders.add(r);
-                }
-
-                // Update responder entry corresponding to 'r'.
-                else {
-                    responders.set(responders.indexOf(r), r);
-                }
-            }
-
-            // Creation of WheelView
-            setupWheel();
-        }
-    };
-
-//    public class CustomWheelAdapter extends WheelArrayAdapter {
-//        private
-//        public CustomWheelAdapter(List items) {
-//            super(items);
-//        }
-//
-//        @Override
-//        public Drawable getDrawable(int position) {
-//            TextDrawable nameTD = new TextDrawable(responders.get(position).name);
-//            TextDrawable heartrateTD = new TextDrawable(responders.get(position).heartRate + "");
-//            Drawable background = getResources().getDrawable(R.drawable.circle);
-//            background.setBounds(0,0,40,40); // Make background circle 40x40
-//            Drawable[] layers = {background, nameTD, heartrateTD};
-//            LayerDrawable ld = new LayerDrawable(layers);
-//            ld.setLayerInset(0, 0,0,0,0); // background
-//            ld.setLayerInset(1, 0,20,0,20); // name
-//            ld.setLayerInset(2, 0,35,0,5); // heartrate
-//            return ld;
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return responders.size();
-//        }
-//
-//        @Override
-//        public Object getItem(int position) {
-//            return responders.get(position);
-//        }
-//    }
 
 }
