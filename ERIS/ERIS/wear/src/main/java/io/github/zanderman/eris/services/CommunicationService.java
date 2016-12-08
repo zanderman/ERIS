@@ -1,10 +1,16 @@
 package io.github.zanderman.eris.services;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -12,12 +18,25 @@ import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
+import com.google.android.gms.wearable.PutDataMapRequest;
+import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
+
+import java.util.ArrayList;
+
+import io.github.zanderman.eris.R;
+import io.github.zanderman.eris.classes.SimpleResponder;
 
 public class CommunicationService extends Service
         implements GoogleApiClient.ConnectionCallbacks,
@@ -31,7 +50,8 @@ public class CommunicationService extends Service
     private GoogleApiClient googleApiClient;
     private boolean connected_mobile = false;
     private boolean connected_google_api = false;
-    private final IBinder connectionServiceBinder = new ConnectionServiceBinder();
+    public final IBinder connectionServiceBinder = new ConnectionServiceBinder();
+    private SharedPreferences sharedPreferences;
 
     /*
      * Broadcast keys
@@ -47,6 +67,7 @@ public class CommunicationService extends Service
     @Override
     public void onCreate() {
         super.onCreate();
+        this.sharedPreferences = getSharedPreferences(getString(R.string.communication_prefs), Context.MODE_PRIVATE);
     }
 
     @Override
@@ -74,6 +95,10 @@ public class CommunicationService extends Service
         }
         else {
 
+            // Put value into shared preferences.
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(KEY_COMMUNICATION_CONNECTION_STATUS,true);
+            editor.commit();
             // Send broadcast signifying that the watch is connected with a phone.
             Intent i = new Intent(BROADCAST_ACTION_COMMUNICATION_UPDATE);
             i.putExtra(KEY_COMMUNICATION_CONNECTION_STATUS,true);
@@ -126,9 +151,65 @@ public class CommunicationService extends Service
 
     }
 
+    /**
+     * SEND
+     */
+    public class SendDataTask extends AsyncTask<Float, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Float... params) {
+
+            PutDataMapRequest putDataMapReq = PutDataMapRequest.create("/heartrate");
+
+            Log.d("hudwear", "params.length: " + params.length);
+            putDataMapReq.getDataMap().putFloat("heartrate", params[0]);
+
+            PutDataRequest putDataReq = putDataMapReq.asPutDataRequest();
+            PendingResult<DataApi.DataItemResult> pendingResult =
+                    Wearable.DataApi.putDataItem(googleApiClient, putDataReq);
+
+            return null;
+        }
+    }
+
+    /**
+     * Helper method to send data to phone via AsyncTask.
+     *
+     * @param args Data to send to the phone.
+     */
+    public void transmit(Float... args) {
+        SendDataTask t = new SendDataTask();
+        t.execute(args);
+    }
+
+    /**
+     * RECEIVE
+     *
+     * Handle information sent from the connected mobile device.
+     * @param dataEventBuffer
+     */
     @Override
     public void onDataChanged(DataEventBuffer dataEventBuffer) {
+        for (DataEvent event : dataEventBuffer) {
+            if (event.getType() == DataEvent.TYPE_CHANGED) {
 
+                // DataItem changed
+                DataItem item = event.getDataItem();
+
+                // Process reception of responder list.
+                if (item.getUri().getPath().compareTo("/responderlist") == 0) {
+                    DataMap dm = DataMapItem.fromDataItem(item).getDataMap();
+
+                    // Send broadcast containing new responders.
+                    Intent intent = new Intent(BROADCAST_ACTION_COMMUNICATION_UPDATE);
+                    intent.putStringArrayListExtra(KEY_COMMUNICATION_RESPONDER,(ArrayList<String>) dm.get("responderlist"));
+                    sendBroadcast(intent);
+                }
+
+            } else if (event.getType() == DataEvent.TYPE_DELETED) {
+                // DataItem deleted
+            }
+        }
     }
 
 
@@ -154,6 +235,10 @@ public class CommunicationService extends Service
                 }
             }
 
+            // Put value into shared preferences.
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(KEY_COMMUNICATION_CONNECTION_STATUS,connected_mobile);
+            editor.commit();
             // Send broadcast signifying the status of mobile device connection.
             Intent i = new Intent(BROADCAST_ACTION_COMMUNICATION_UPDATE);
             i.putExtra(KEY_COMMUNICATION_CONNECTION_STATUS,connected_mobile);
@@ -166,6 +251,10 @@ public class CommunicationService extends Service
         Log.d("service", "connected to phone");
         connected_mobile = true;
 
+        // Put value into shared preferences.
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(KEY_COMMUNICATION_CONNECTION_STATUS,connected_mobile);
+        editor.commit();
         // Send broadcast signifying that the watch is connected with a phone.
         Intent i = new Intent(BROADCAST_ACTION_COMMUNICATION_UPDATE);
         i.putExtra(KEY_COMMUNICATION_CONNECTION_STATUS,connected_mobile);
@@ -177,6 +266,10 @@ public class CommunicationService extends Service
         Log.d("service", "disconnected from phone");
         connected_mobile = false;
 
+        // Put value into shared preferences.
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(KEY_COMMUNICATION_CONNECTION_STATUS,connected_mobile);
+        editor.commit();
         // Send broadcast signifying that the watch is disconnected with a phone.
         Intent i = new Intent(BROADCAST_ACTION_COMMUNICATION_UPDATE);
         i.putExtra(KEY_COMMUNICATION_CONNECTION_STATUS,connected_mobile);
