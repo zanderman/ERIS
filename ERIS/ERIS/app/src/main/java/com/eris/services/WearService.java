@@ -1,7 +1,9 @@
 package com.eris.services;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Bundle;
@@ -12,15 +14,19 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.eris.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataItem;
 import com.google.android.gms.wearable.DataMap;
 import com.google.android.gms.wearable.DataMapItem;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
@@ -34,7 +40,9 @@ import java.util.ArrayList;
 public class WearService extends Service
         implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
-        DataApi.DataListener {
+        DataApi.DataListener,
+        ResultCallback<NodeApi.GetConnectedNodesResult>,
+        NodeApi.NodeListener {
 
     /*
      * Constants
@@ -46,12 +54,16 @@ public class WearService extends Service
      */
     public static final String BROADCAST_ACTION_WEARABLE_UPDATE = "wearable_update";
     public static final String KEY_WEARABLE_HEARTRATE = "key_wearable_heartrate";
+    public static final String KEY_WEARABLE_CONNECTION_STATUS = "key_wearable_connection_status";
 
     /*
      * Google API Client
      */
     private GoogleApiClient googleApiClient;
-    private boolean connected = false;
+    private boolean connected_mobile = false;
+    private boolean connected_google_api = false;
+
+    private SharedPreferences sharedPreferences;
 
     /**
      * Constructor for WearService
@@ -63,18 +75,33 @@ public class WearService extends Service
     @Override
     public void onCreate() {
         super.onCreate();
+        this.sharedPreferences = getSharedPreferences(getString(R.string.sharedpreferences_communication_info), Context.MODE_PRIVATE);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         // Connect to wearable if possible.
-        if (!connected) {
+        if (!connected_google_api) {
             Log.d("service", "WearService - connecting to google APIs");
 
             // Setup Google API Client.
             buildGoogleApiClient();
             connectGoogleApiClient();
+        }
+        else if (!connected_mobile) {
+            this.checkNodeAPI();
+            Wearable.NodeApi.addListener(googleApiClient, this);
+        }
+        else {
+            // Put value into shared preferences.
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(KEY_WEARABLE_CONNECTION_STATUS,true);
+            editor.commit();
+            // Send broadcast signifying that the watch is connected with a phone.
+            Intent i = new Intent(BROADCAST_ACTION_WEARABLE_UPDATE);
+            i.putExtra(KEY_WEARABLE_CONNECTION_STATUS,true);
+            sendBroadcast(i);
         }
 
         Log.d("service", "WearService STARTED!");
@@ -107,19 +134,24 @@ public class WearService extends Service
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Log.d("service", "connected to watch!");
-        this.connected = true;
+        // Now that the Google API client is connected,
+        // ensure that we're connected to a phone.
+        this.checkNodeAPI();
+        Wearable.NodeApi.addListener(googleApiClient, this);
         Wearable.DataApi.addListener(googleApiClient, this); // this is how we'll communicate with the watch.
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-        this.connected = false;
+        Log.d("service", "connection suspended");
+        this.connected_google_api = false;
+        Wearable.NodeApi.removeListener(googleApiClient,this);
+        Wearable.DataApi.removeListener(googleApiClient,this);
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+        Log.d("service", "connection failed");
     }
 
     /**
@@ -150,8 +182,9 @@ public class WearService extends Service
      */
     @Override
     public void onDataChanged(DataEventBuffer dataEventBuffer) {
-        Log.d("service","data listener called");
         for (DataEvent event : dataEventBuffer) {
+            Log.d("service","Event received: " + event.getDataItem().getUri());
+
             if (event.getType() == DataEvent.TYPE_CHANGED) {
 
                 // DataItem changed
@@ -184,6 +217,73 @@ public class WearService extends Service
             Log.d("service", "Handling message from watch on UI thread. Got heartrate of: " + hr + " bpm");
         }
     };
+
+
+
+
+    /*
+     * Section: NodeAPI
+     */
+
+    private void checkNodeAPI(){
+        Wearable.NodeApi.getConnectedNodes(googleApiClient).setResultCallback(this);
+    }
+
+    @Override
+    public void onResult(@NonNull NodeApi.GetConnectedNodesResult getConnectedNodesResult) {
+        if (getConnectedNodesResult != null && getConnectedNodesResult.getNodes() != null){
+            for (Node node : getConnectedNodesResult.getNodes()) {
+                if (node.isNearby()) {
+                    Log.d("service", "connected to watch");
+                    connected_mobile = true;
+                }
+            }
+
+            // Put value into shared preferences.
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(KEY_WEARABLE_CONNECTION_STATUS,connected_mobile);
+            editor.commit();
+            // Send broadcast signifying the status of mobile device connection.
+            Intent i = new Intent(BROADCAST_ACTION_WEARABLE_UPDATE);
+            i.putExtra(KEY_WEARABLE_CONNECTION_STATUS,connected_mobile);
+            sendBroadcast(i);
+        }
+    }
+
+    @Override
+    public void onPeerConnected(Node node) {
+        Log.d("service", "connected to watch");
+        connected_mobile = true;
+
+        // Put value into shared preferences.
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(KEY_WEARABLE_CONNECTION_STATUS,connected_mobile);
+        editor.commit();
+        // Send broadcast signifying that the watch is connected with a phone.
+        Intent i = new Intent(BROADCAST_ACTION_WEARABLE_UPDATE);
+        i.putExtra(KEY_WEARABLE_CONNECTION_STATUS,connected_mobile);
+        sendBroadcast(i);
+    }
+
+    @Override
+    public void onPeerDisconnected(Node node) {
+        Log.d("service", "disconnected from watch");
+        connected_mobile = false;
+
+        // Put value into shared preferences.
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(KEY_WEARABLE_CONNECTION_STATUS,connected_mobile);
+        editor.commit();
+        // Send broadcast signifying that the watch is disconnected with a phone.
+        Intent i = new Intent(BROADCAST_ACTION_WEARABLE_UPDATE);
+        i.putExtra(KEY_WEARABLE_CONNECTION_STATUS,connected_mobile);
+        sendBroadcast(i);
+    }
+
+
+
+
+
 
     public class WearServiceBinder extends Binder {
         public WearService getService() { return WearService.this; }
