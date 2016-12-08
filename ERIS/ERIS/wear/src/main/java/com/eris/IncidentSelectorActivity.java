@@ -1,9 +1,11 @@
-package io.github.zanderman.eris;
+package com.eris;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.wearable.view.WatchViewStub;
 import android.widget.TextView;
+
+import com.eris.R;
 
 public class IncidentSelectorActivity extends Activity {
 

@@ -1,4 +1,4 @@
-package io.github.zanderman.eris.services;
+package com.eris.services;
 
 import android.app.Service;
 import android.content.Context;
@@ -7,20 +7,14 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.View;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
@@ -35,8 +29,7 @@ import com.google.android.gms.wearable.Wearable;
 
 import java.util.ArrayList;
 
-import io.github.zanderman.eris.R;
-import io.github.zanderman.eris.classes.SimpleResponder;
+import com.eris.R;
 
 public class CommunicationService extends Service
         implements GoogleApiClient.ConnectionCallbacks,
@@ -164,12 +157,12 @@ public class CommunicationService extends Service
 
             PutDataMapRequest putDataMapReq = PutDataMapRequest.create("/heartrate");
 
-            Log.d("hudwear", "params.length: " + params.length);
+//            Log.d("hudwear", "params.length: " + params.length);
             putDataMapReq.getDataMap().putFloat("heartrate", params[0]);
 
             PutDataRequest putDataReq = putDataMapReq.asPutDataRequest();
-            PendingResult<DataApi.DataItemResult> pendingResult =
-                    Wearable.DataApi.putDataItem(googleApiClient, putDataReq);
+            DataApi.DataItemResult dataItemResult =
+                    Wearable.DataApi.putDataItem(googleApiClient, putDataReq).await();
 
             return null;
         }
@@ -181,6 +174,7 @@ public class CommunicationService extends Service
      * @param args Data to send to the phone.
      */
     public void transmit(Float... args) {
+        Log.d("service", "transmitting");
         SendDataTask t = new SendDataTask();
         t.execute(args);
     }
@@ -195,6 +189,8 @@ public class CommunicationService extends Service
     public void onDataChanged(DataEventBuffer dataEventBuffer) {
         Log.d("service", "data was changed");
         for (DataEvent event : dataEventBuffer) {
+            Log.d("service","Event received: " + event.getDataItem().getUri());
+
             if (event.getType() == DataEvent.TYPE_CHANGED) {
 
                 // DataItem changed

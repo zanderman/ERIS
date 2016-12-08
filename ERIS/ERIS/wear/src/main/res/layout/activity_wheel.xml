@@ -7,5 +7,5 @@
     android:layout_height="match_parent"
     app:rectLayout="@layout/rect_activity_wheel"
     app:roundLayout="@layout/round_activity_wheel"
-    tools:context="io.github.zanderman.eris.WheelActivity"
+    tools:context="com.eris.WheelActivity"
     tools:deviceIds="wear"></android.support.wearable.view.WatchViewStub>

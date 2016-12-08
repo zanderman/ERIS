@@ -1,4 +1,4 @@
-package io.github.zanderman.eris.drawables;
+package com.eris.drawables;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

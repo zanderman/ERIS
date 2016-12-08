@@ -7,5 +7,5 @@
     android:layout_height="match_parent"
     app:rectLayout="@layout/rect_activity_incident_selector"
     app:roundLayout="@layout/round_activity_incident_selector"
-    tools:context="io.github.zanderman.eris.IncidentSelectorActivity"
+    tools:context="com.eris.IncidentSelectorActivity"
     tools:deviceIds="wear"></android.support.wearable.view.WatchViewStub>

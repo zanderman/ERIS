@@ -1,4 +1,4 @@
-package io.github.zanderman.eris;
+package com.eris;
 
 import android.Manifest;
 import android.app.Activity;
@@ -17,14 +17,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.wearable.view.DismissOverlayView;
@@ -32,47 +26,28 @@ import android.support.wearable.view.WatchViewStub;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMapOptions;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.wearable.DataApi;
-import com.google.android.gms.wearable.DataEvent;
-import com.google.android.gms.wearable.DataEventBuffer;
-import com.google.android.gms.wearable.DataItem;
-import com.google.android.gms.wearable.DataMap;
-import com.google.android.gms.wearable.DataMapItem;
-import com.google.android.gms.wearable.PutDataMapRequest;
-import com.google.android.gms.wearable.PutDataRequest;
-import com.google.android.gms.wearable.Wearable;
-import com.lukedeighton.wheelview.Circle;
 import com.lukedeighton.wheelview.WheelView;
 import com.lukedeighton.wheelview.adapter.WheelAdapter;
-import com.lukedeighton.wheelview.adapter.WheelArrayAdapter;
-import com.lukedeighton.wheelview.transformer.WheelSelectionTransformer;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import io.github.zanderman.eris.classes.SimpleResponder;
-import io.github.zanderman.eris.drawables.TextDrawable;
-import io.github.zanderman.eris.services.CommunicationService;
+import com.eris.R;
+
+import com.eris.classes.SimpleResponder;
+import com.eris.drawables.TextDrawable;
+import com.eris.services.CommunicationService;
 
 public class WheelActivity extends Activity
         implements SensorEventListener,
@@ -189,7 +164,6 @@ public class WheelActivity extends Activity
         // Determine if we're connected or not.
         if ((sharedPreferences != null)
                 && (sharedPreferences.getBoolean(CommunicationService.KEY_COMMUNICATION_CONNECTION_STATUS,false))) {
-            sm.registerListener(this, heartrateSensor, 300000); // sample every 30 milliseconds.
             this.registerReceiver(this.receiver,receiverFilter);
         } else {
             Toast.makeText(getApplicationContext(),"Connection lost", Toast.LENGTH_SHORT).show();
@@ -201,8 +175,8 @@ public class WheelActivity extends Activity
     protected void onPause() {
         super.onPause();
 
-        sm.unregisterListener(this);
-        this.unregisterReceiver(this.receiver);
+        if (sm != null) sm.unregisterListener(this);
+        if (this.receiver != null) this.unregisterReceiver(this.receiver);
     }
 
     public void setupBroadcastReceiver() {
@@ -314,6 +288,7 @@ public class WheelActivity extends Activity
         {
             sm = (SensorManager) this.getSystemService(SENSOR_SERVICE);
             heartrateSensor = sm.getDefaultSensor(Sensor.TYPE_HEART_RATE);
+            sm.registerListener(this, heartrateSensor, 100000); // Take heart rate every second.
         }
 
         // Need to prompt user to allow location permissions.

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="io.github.zanderman.eris.WheelActivity"
+    tools:context="com.eris.WheelActivity"
     tools:deviceIds="wear_square">
 
     <TextView

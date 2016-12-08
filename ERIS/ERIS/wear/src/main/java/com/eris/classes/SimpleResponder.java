@@ -1,4 +1,4 @@
-package io.github.zanderman.eris.classes;
+package com.eris.classes;
 
 import com.google.android.gms.maps.model.LatLng;
 
