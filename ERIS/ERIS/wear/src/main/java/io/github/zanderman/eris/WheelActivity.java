@@ -104,6 +104,7 @@ public class WheelActivity extends Activity
     private FrameLayout mapFrame;
     private Marker liveMarker = null;
 
+
     /*
      * Service connectivity.
      */
@@ -130,9 +131,13 @@ public class WheelActivity extends Activity
 
         // Gain access to list of responders current being used.
         responders = new ArrayList<SimpleResponder>();//intent.getParcelableArrayListExtra("responders");
-        for (int i = 0; i< 3; i++) {
-            responders.add(new SimpleResponder("" + i, "" + (char) (i + 96), new LatLng(-5678.34, 123.45), (float) (80.5 + 3 * i)));
-        }
+        responders.add(new SimpleResponder("0","Johnson, J.",new LatLng(0.0,0.0),(float)88.7));
+        responders.add(new SimpleResponder("1","Fife, B.",new LatLng(0.0,0.0),(float)86.4));
+        responders.add(new SimpleResponder("2","Taylor, O.",new LatLng(0.0,0.0),(float)82.8));
+        responders.add(new SimpleResponder("3","Wilson, D.",new LatLng(0.0,0.0),(float)91.3));
+        responders.add(new SimpleResponder("4","Smith, K.",new LatLng(0.0,0.0),(float)83.1));
+        responders.add(new SimpleResponder("5","Wright, N.",new LatLng(0.0,0.0),(float)85.9));
+        responders.add(new SimpleResponder("6","Sherman, P.",new LatLng(0.0,0.0),(float)92.8));
 
         final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
@@ -149,6 +154,8 @@ public class WheelActivity extends Activity
                 mDismissOverlay = (DismissOverlayView) stub.findViewById(R.id.dismiss_overlay);
                 mDismissOverlay.setIntroText("Long press to exit app");
                 mDismissOverlay.showIntroIfNecessary();
+                mDismissOverlay.bringToFront();
+                mDismissOverlay.hasFocus();
 
                 // Create Google Map
                 inflateMap();
@@ -266,7 +273,7 @@ public class WheelActivity extends Activity
             @Override
             public void onWheelItemClick(WheelView parent, int position, boolean isSelected) {
                 SimpleResponder r = responders.get(position);
-                Toast.makeText(WheelActivity.this, "clicked: " + r.name, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(WheelActivity.this, "clicked: " + r.name, Toast.LENGTH_SHORT).show();
 
 
                 // TODO: clicking on item opens Google Map to where the responder is located (possibly add distance to that responder)
@@ -276,7 +283,7 @@ public class WheelActivity extends Activity
             @Override
             public void onWheelItemSelected(WheelView parent, Drawable itemDrawable, int position) {
                 SimpleResponder r = responders.get(position);
-                Toast.makeText(WheelActivity.this, "selected: " + r.name, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(WheelActivity.this, "selected: " + r.name, Toast.LENGTH_SHORT).show();
 
                 // Center map on responder location.
                 centerMapOnLocation(r.location);
