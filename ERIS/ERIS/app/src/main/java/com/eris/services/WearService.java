@@ -175,6 +175,17 @@ public class WearService extends Service
     }
 
     /**
+     * Helper method to send data to watch via AsyncTask.
+     *
+     * @param args Data to send to the phone.
+     */
+    public void transmit(ArrayList<String>... args) {
+        Log.d("service", "transmitting");
+        SendDataTask t = new SendDataTask();
+        t.execute(args);
+    }
+
+    /**
      * RECEIVE
      *
      * Handle information sent from the connected mobile device.
@@ -215,6 +226,11 @@ public class WearService extends Service
         public void handleMessage(Message msg) {
             Float hr = msg.getData().getFloat("heartrate");
             Log.d("service", "Handling message from watch on UI thread. Got heartrate of: " + hr + " bpm");
+
+            // Broadcast the updated heartrate.
+            Intent intent = new Intent(BROADCAST_ACTION_WEARABLE_UPDATE);
+            intent.putExtra(KEY_WEARABLE_HEARTRATE, hr);
+            sendBroadcast(intent);
         }
     };
 
