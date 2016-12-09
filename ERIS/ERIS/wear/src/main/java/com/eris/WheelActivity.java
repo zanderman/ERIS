@@ -106,13 +106,13 @@ public class WheelActivity extends Activity
 
         // Gain access to list of responders current being used.
         responders = new ArrayList<SimpleResponder>();//intent.getParcelableArrayListExtra("responders");
-        responders.add(new SimpleResponder("0","Johnson, J.",new LatLng(0.0,0.0),(float)88.7));
-        responders.add(new SimpleResponder("1","Fife, B.",new LatLng(0.0,0.0),(float)86.4));
-        responders.add(new SimpleResponder("2","Taylor, O.",new LatLng(0.0,0.0),(float)82.8));
-        responders.add(new SimpleResponder("3","Wilson, D.",new LatLng(0.0,0.0),(float)91.3));
-        responders.add(new SimpleResponder("4","Smith, K.",new LatLng(0.0,0.0),(float)83.1));
-        responders.add(new SimpleResponder("5","Wright, N.",new LatLng(0.0,0.0),(float)85.9));
-        responders.add(new SimpleResponder("6","Sherman, P.",new LatLng(0.0,0.0),(float)92.8));
+//        responders.add(new SimpleResponder("0","Johnson, J.",new LatLng(0.0,0.0),(float)88.7));
+//        responders.add(new SimpleResponder("1","Fife, B.",new LatLng(0.0,0.0),(float)86.4));
+//        responders.add(new SimpleResponder("2","Taylor, O.",new LatLng(0.0,0.0),(float)82.8));
+//        responders.add(new SimpleResponder("3","Wilson, D.",new LatLng(0.0,0.0),(float)91.3));
+//        responders.add(new SimpleResponder("4","Smith, K.",new LatLng(0.0,0.0),(float)83.1));
+//        responders.add(new SimpleResponder("5","Wright, N.",new LatLng(0.0,0.0),(float)85.9));
+//        responders.add(new SimpleResponder("6","Sherman, P.",new LatLng(0.0,0.0),(float)92.8));
 
         final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
@@ -193,12 +193,41 @@ public class WheelActivity extends Activity
                     // Communication update.
                     case CommunicationService.BROADCAST_ACTION_COMMUNICATION_UPDATE:
                         boolean status = intent.getBooleanExtra(CommunicationService.KEY_COMMUNICATION_CONNECTION_STATUS, false);
+                        ArrayList<String> newResponders = intent.getStringArrayListExtra(CommunicationService.KEY_COMMUNICATION_RESPONDER);
 
                         // Quit activity if we're not connected with a phone anymore.
                         if (!status) {
                             Toast.makeText(getApplicationContext(),"Connection lost", Toast.LENGTH_SHORT).show();
                             finish();
                         }
+
+                        else if (newResponders != null) {
+                            // TODO: parse out all the responders.
+                            for (String r : newResponders) {
+                                String[] elements = r.split(",");
+                                SimpleResponder simple = new SimpleResponder(
+                                        elements[0],
+                                        elements[1],
+                                        new LatLng(
+                                                Double.parseDouble(elements[2]),
+                                                Double.parseDouble(elements[3])
+                                        ),
+                                        Float.parseFloat(elements[4])
+                                );
+
+                                // Automatically add responder if it doesn't already exist.
+                                if (!responders.contains(simple)) responders.add(simple);
+
+                                // Replace the outdated responder object with the new one.
+                                else {
+                                    responders.remove(responders.indexOf(simple));
+                                    responders.add(simple);
+                                }
+                            }
+                            responders.trimToSize(); // Remove any unused slots.
+                            setupWheel();
+                        }
+
                         break;
 
                     // Unhandled broadcast
