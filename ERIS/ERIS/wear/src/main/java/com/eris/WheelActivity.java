@@ -106,13 +106,16 @@ public class WheelActivity extends Activity
 
         // Gain access to list of responders current being used.
         responders = new ArrayList<SimpleResponder>();//intent.getParcelableArrayListExtra("responders");
-//        responders.add(new SimpleResponder("0","Johnson, J.",new LatLng(0.0,0.0),(float)88.7));
-//        responders.add(new SimpleResponder("1","Fife, B.",new LatLng(0.0,0.0),(float)86.4));
-//        responders.add(new SimpleResponder("2","Taylor, O.",new LatLng(0.0,0.0),(float)82.8));
-//        responders.add(new SimpleResponder("3","Wilson, D.",new LatLng(0.0,0.0),(float)91.3));
-//        responders.add(new SimpleResponder("4","Smith, K.",new LatLng(0.0,0.0),(float)83.1));
-//        responders.add(new SimpleResponder("5","Wright, N.",new LatLng(0.0,0.0),(float)85.9));
-//        responders.add(new SimpleResponder("6","Sherman, P.",new LatLng(0.0,0.0),(float)92.8));
+        responders.add(new SimpleResponder("0","Johnson, J.",new LatLng(37.22970076,-80.3866862),(float)88.7));
+        responders.add(new SimpleResponder("1","Fife, B.",new LatLng(37.23555738,-80.40695154),(float)86.4));
+        responders.add(new SimpleResponder("2","Taylor, O.",new LatLng(37.24317134,-80.40557936),(float)82.8));
+        responders.add(new SimpleResponder("3","Wilson, D.",new LatLng(37.2239192,-80.43880914),(float)91.3));
+        responders.add(new SimpleResponder("4","Smith, K.",new LatLng(37.22629995,-80.41950061),(float)83.1));
+        responders.add(new SimpleResponder("5","Wright, N.",new LatLng(37.24135074,-80.42166692),(float)85.9));
+        responders.add(new SimpleResponder("6","Sherman, P.",new LatLng(37.23331561,-80.38497373),(float)92.8));
+        responders.trimToSize();
+
+
 
         final WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
