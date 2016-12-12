@@ -33,6 +33,7 @@ public class Responder implements Parcelable {
     private String userID;
     private String sceneID;
     private float heartRate;
+    private String heartRateDate;
     private String rank;
     private LatLng location;
     private String locationDate;
@@ -80,7 +81,7 @@ public class Responder implements Parcelable {
         this.rank = null;
         this.location = null;
 
-
+        heartrateRecord = new ArrayList<String>(20);
         incidentHistory = new ArrayList<>();
     }
 
@@ -104,12 +105,14 @@ public class Responder implements Parcelable {
         this.location = location;
         this.rank = rank;
 
+        this.heartrateRecord = new ArrayList<String>(20);
+        this.heartrateRecord.add(Float.toString(heartRate));
 
         incidentHistory = new ArrayList<>();//TODO replace all these with constructor things.
     }
 
     public Responder(String userID, String name,  String organization, List<String> heartrateRecord,
-                     String orgSuperior,  List<String> orgSubordinates, String latitude,
+                     String heartRateDate, String orgSuperior,  List<String> orgSubordinates, String latitude,
                      String longitude, String locationDate, String sceneID, String incidentSuperior,
                      List<String> incidentSubordinates, List<String> incidentHistory) {
         //Should do null checks.
@@ -135,12 +138,13 @@ public class Responder implements Parcelable {
         }
         this.organization = organization;
         this.heartrateRecord = heartrateRecord;
-        if ((heartrateRecord != null) && (heartrateRecord.size() > 0)) {
+        if ((heartrateRecord != null) && (!heartrateRecord.isEmpty())) {
             this.heartRate = Float.parseFloat(heartrateRecord.get(0));
         } else {
             this.heartRate = -999;
-            Log.e(TAG, "No valid heartrate found.");
+            Log.e(TAG, "No valid heart rate found.");
         }
+        this.heartRateDate = heartRateDate;
         this.orgSuperior = orgSuperior;
         this.orgSubordinates = orgSubordinates;
         this.location = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
@@ -161,6 +165,7 @@ public class Responder implements Parcelable {
         name = in.readString();
         organization = in.readString();
         heartrateRecord = in.createStringArrayList();
+        heartRateDate = in.readString();
         orgSuperior = in.readString();
         orgSubordinates = in.createStringArrayList();
         location = in.readParcelable(LatLng.class.getClassLoader());
@@ -169,6 +174,12 @@ public class Responder implements Parcelable {
         incidentSuperior = in.readString();
         incidentSubordinates = in.createStringArrayList();
         incidentHistory = in.createStringArrayList();
+
+        if (heartrateRecord.isEmpty()) {
+            heartRate = -999;
+        } else {
+            heartRate = Float.parseFloat(heartrateRecord.get(0));
+        }
     }
 
     //Override function, has no other use.
@@ -183,6 +194,7 @@ public class Responder implements Parcelable {
         outParcel.writeString(name);
         outParcel.writeString(organization);
         outParcel.writeStringList(heartrateRecord);
+        outParcel.writeString(heartRateDate);
         outParcel.writeString(orgSuperior);
         outParcel.writeStringList(orgSubordinates);
         outParcel.writeParcelable(location, 0);
@@ -217,8 +229,9 @@ public class Responder implements Parcelable {
     }
     public String getOrganization() {return  this.organization;}
     public List<String> getHeartrateRecord() {return this.heartrateRecord;}
-    public float getHeartRate() { return  this.heartRate; }
-    public String getOrgSuperior() {return  this.orgSuperior;}
+    public String getHeartRateDate() {return this.heartRateDate;}
+    public float getHeartRate() { return this.heartRate; }
+    public String getOrgSuperior() {return this.orgSuperior;}
     public List<String> getOrgSubordinates() {return this.orgSubordinates;}
     public String getLatitude() {return Double.toString(this.location.latitude);}
     public String getLongitude() {return Double.toString(this.location.longitude);}
@@ -251,6 +264,13 @@ public class Responder implements Parcelable {
             throw new IllegalArgumentException("locationDate cannot be null");
         }
         this.locationDate = locationDate;
+    }
+
+    public void setHeartRateDate(String heartRateDate) {
+        if (heartRateDate == null) {
+            throw new IllegalArgumentException("heartRateDate cannot be null");
+        }
+        this.heartRateDate = heartRateDate;
     }
 
     public void setMarker(Marker marker) {
@@ -289,11 +309,13 @@ public class Responder implements Parcelable {
         if (subordinateIds == null) {
             throw new IllegalArgumentException("subordinateIds cannot be null");
         }
-        this.incidentSubordinates = subordinateIds;}
+        this.incidentSubordinates = subordinateIds;
+    }
+
     public void setHeartRate(float hr) {
         this.heartRate = hr; // Update current heartrate value.
-        if (this.heartrateRecord.size() > 20) this.heartrateRecord.remove(0);
-        this.heartrateRecord.add("" + hr);
+        if (this.heartrateRecord.size() >= 20) this.heartrateRecord.remove(19);
+        this.heartrateRecord.add(0, Float.toString(hr));
     }
 
     @Override
