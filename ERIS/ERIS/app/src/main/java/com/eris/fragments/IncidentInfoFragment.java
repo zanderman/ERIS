@@ -38,6 +38,7 @@ import com.eris.classes.Incident;
 import com.eris.classes.Responder;
 import com.eris.services.DatabaseService;
 import com.eris.services.LocationService;
+import com.eris.services.WearService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -272,6 +273,12 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
             return;
         }
 
+        // ArrayList of transmittable data to the watch.
+        ArrayList<String> transmittable = new ArrayList<>();
+
+        /*
+         * Iterate over all responders that we receive from the database.
+         */
         for (Parcelable parcelableResponder : updatedResponders) {
             Responder responder = (Responder) parcelableResponder;
 
@@ -282,14 +289,25 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
             BitmapDescriptor bitmapDescriptor;
 
             responder.setLocation(new LatLng(Double.parseDouble(responder.getLatitude()), Double.parseDouble(responder.getLongitude())));
+
+            // Current user's superior
             if (responder.getUserID().equals(currentUser.getOrgSuperior())) {
                 superiors.add(responder);
                 bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
             }
+
+            // Current user's subordinate
             else if (responder.getOrgSuperior().equals(currentUser.getUserID())) {
                 subordinates.add(responder);
                 bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+
+                // TODO: send responder to watch.
+                // Simple responder format is a single comma-delimited string with: "id,name,lat,long,hr"
+                String simple = "" + responder.getUserID() + "," + responder.getName() + "," + responder.getLatitude() + "," + responder.getLongitude() + "," + responder.getHeartRate() + "";
+                transmittable.add(simple);
             }
+
+            // Anyone else who responding to the scene
             else {
                 responders.add(responder);
                 bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
@@ -376,6 +394,15 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         subordinateAdapter.notifyDataSetChanged();
         superiorAdapter.addAll(superiors);
         superiorAdapter.notifyDataSetChanged();
+
+        /*
+         * Send data to the watch if possible.
+         */
+        transmittable.trimToSize();
+        if (transmittable.size() > 0) {
+            WearService wearService = ((MainActivity) getActivity()).wearService; // Get a reference to the wearable service defined within the calling activity.
+            wearService.transmit(transmittable);
+        }
     }
 
     @Override
@@ -499,13 +526,13 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                 if (!checkin_flipflop) {
 
                     //Ok, this needs updating.
-                    currentUser.setSceneId(incident.getSceneId());
+//                    currentUser.setSceneId(incident.getSceneId());
                     responderCheckInRequestMethodIdentifier = this.getClass().getSimpleName()
                             + "broadcast_action_database_checkin"
                             + incident.getSceneId();
                     databaseService.pushUpdatedResponderData(currentUser, responderCheckInRequestMethodIdentifier);
                 } else {//Check the user out of the scene.  TODO add history logging here.
-                    currentUser.setSceneId(Responder.NO_INCIDENT);
+//                    currentUser.setSceneId(Responder.NO_INCIDENT);
                     responderCheckOutRequestMethodIdentifier = this.getClass().getSimpleName()
                             + "broadcast_action_database_checkout"
                             + incident.getSceneId();
