@@ -37,6 +37,7 @@ import com.amazonaws.mobile.AWSMobileClient;
 import com.amazonaws.mobile.user.IdentityManager;
 import com.eris.R;
 import com.eris.classes.NavigationDrawerMenuItem;
+import com.eris.classes.NotificationDispatcher;
 import com.eris.fragments.DemoResponderDatabaseFragment;
 import com.eris.fragments.HomeFragment;
 import com.eris.fragments.IncidentHistoryFragment;
@@ -205,11 +206,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mListener = new AbstractDeviceListener() {
             @Override
             public void onConnect(Myo myo, long timestamp) {
+                Toast.makeText(getApplication().getBaseContext(), "Myo Connected", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "Myo Connected");
             }
 
             @Override
             public void onDisconnect(Myo myo, long timestamp) {
+                Toast.makeText(getApplication().getBaseContext(), "Myo Disconnected", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "Myo Disconnected");
             }
 
@@ -217,6 +220,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // arm. This lets Myo know which arm it's on and which way it's facing.
             @Override
             public void onArmSync(Myo myo, long timestamp, Arm arm, XDirection xDirection) {
+                Toast.makeText(getApplication().getBaseContext(), "Myo Synced", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "Myo Synced");
             }
 
@@ -225,6 +229,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // when Myo is moved around on the arm.
             @Override
             public void onArmUnsync(Myo myo, long timestamp) {
+                Toast.makeText(getApplication().getBaseContext(), "Myo Unsynced", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, "Myo Unsynced");
             }
 
@@ -270,9 +275,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     return;
                 } else if (pose == Pose.DOUBLE_TAP) {
                     if (isLocked) {
-                        Log.d(TAG, "Myo Unlocked");
+                        Log.d(TAG, "Myo Unlocked");//TODO change to a toast.
+                        Toast.makeText(getApplication().getBaseContext(), "Myo Unlocked", Toast.LENGTH_SHORT).show();
+
                     } else {
                         Log.d(TAG, "Myo Locked");
+                        Toast.makeText(getApplication().getBaseContext(), "Myo Locked", Toast.LENGTH_SHORT).show();
                     }
                     isLocked = !isLocked;
                     return;
@@ -281,10 +289,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 if(pose == Pose.FINGERS_SPREAD) {
                     Log.d(TAG, "FINGERS SPREAD MADE");
-                    //TODO Do something else
+                    Toast.makeText(getApplication().getBaseContext(), "SPREAD_FINGERS", Toast.LENGTH_SHORT).show();
+                    NotificationDispatcher.send("ERIS Alert", "Myo Finger Spread Gesture Received", getApplication().getBaseContext());
                 } else if (pose == Pose.FIST) {
                     Log.d(TAG, "FIST MADE");
-                    //TODO Do something.
+                    Toast.makeText(getApplication().getBaseContext(), "FIST", Toast.LENGTH_SHORT).show();
+                    NotificationDispatcher.send("ERIS Alert", "Myo Fist Gesture Received", getApplicationContext());
+                } else if (pose == Pose.WAVE_IN) {
+                    Toast.makeText(getApplication().getBaseContext(), "WAVE_IN", Toast.LENGTH_SHORT).show();
+                    final FragmentManager fragmentManager = getSupportFragmentManager();
+                    IncidentHistoryFragment historyFragment = new IncidentHistoryFragment();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.main_fragment_container, historyFragment, IncidentHistoryFragment.class.getSimpleName())
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .commit();
+                    // Set the title for the fragment.
+                    setActionBarTitle("Incident History");
+                } else if (pose == Pose.WAVE_OUT) {
+                    final FragmentManager fragmentManager = getSupportFragmentManager();
+                    IncidentListFragment listFragment = new IncidentListFragment();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.main_fragment_container, listFragment, IncidentListFragment.class.getSimpleName())
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .commit();
+                    // Set the title for the fragment.
+                    setActionBarTitle("Incident List");
+                    Toast.makeText(getApplication().getBaseContext(), "WAVE_OUT", Toast.LENGTH_SHORT).show();
                 }
             }
         };

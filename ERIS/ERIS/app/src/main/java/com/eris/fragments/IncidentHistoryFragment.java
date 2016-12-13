@@ -107,6 +107,28 @@ public class IncidentHistoryFragment extends Fragment {
                 // Toast the ID.
                 Toast.makeText(getActivity(),"showing history for incident " + incident.getSceneId(), Toast.LENGTH_SHORT).show();
 
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("incident",incident); // Place incident into the bundle.
+                bundle.putSerializable("check_in_timestamp", "SOEMTHIGN");
+                final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+
+                IncidentHistoryInfoFragment historyInfoFragment = new IncidentHistoryInfoFragment();
+                historyInfoFragment.setArguments(bundle); //Pass the incident to the fragment.
+                fragmentManager.beginTransaction()
+                        .replace(R.id.main_fragment_container, historyInfoFragment, IncidentHistoryInfoFragment.class.getSimpleName())
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .commit();
+
+                // Set the title for the fragment.
+                ((MainActivity) getActivity()).setActionBarTitle("Incident History Info");
+
+
+                //TODO oh, ok, this was here already.  I just have to make it do things.
+                //I really want a new fragment for this.  I guess.
+                //It will have much of the same information as incidentInfo, IncidentHistoryInfoFragment
+                //But it will be in one scrollable.  A map, subords: <subord list>...
+                //Incident created, when you signed in to it...
+
 //                // Create new bundle for fragment arguments.
 //                Bundle bundle = new Bundle();
 //                bundle.putSerializable("incident",incident); // Place incident into the bundle.
@@ -205,6 +227,7 @@ public class IncidentHistoryFragment extends Fragment {
 
             if (callingMethodIdentifier.equals(GET_INCIDENT_NUMBERED)) {
                 Incident i = intent.getParcelableExtra(DatabaseService.DATA);
+                i.localCheckInTime = itemTime;
                 historyStorage[itemIndex] = i;
                 itemsRecieved++;
                 if(itemsRecieved >= historyLength) {

@@ -124,7 +124,7 @@ public class IncidentListFragment extends Fragment implements SwipeRefreshLayout
 
                 // Create a new instance of the fragment.
                 IncidentInfoFragment infoFragment = new IncidentInfoFragment();
-                infoFragment.setArguments(bundle); // Pass the incident to the fragment.
+                infoFragment.setArguments(bundle); //Pass the incident to the fragment.
 
                 // Display the fragment.
                 fragmentManager.beginTransaction()

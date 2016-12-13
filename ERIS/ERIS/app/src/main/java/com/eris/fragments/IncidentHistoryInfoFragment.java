@@ -17,14 +17,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.test.suitebuilder.TestMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -49,8 +47,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -58,12 +54,12 @@ import java.util.HashMap;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
+public class IncidentHistoryInfoFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 
     /*
      * Constants
      */
-    private static final String TAG = IncidentInfoFragment.class.getSimpleName();
+    private static final String TAG = IncidentHistoryInfoFragment.class.getSimpleName();
     private static final float ZOOM_LEVEL = 16f;//17.5f;
     private final int REQUEST_CODE_ENABLE_MY_LOCATION = 222;
 
@@ -71,7 +67,6 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
      * Flags
      */
     private boolean resize_flipflop;
-    private boolean checkin_flipflop;
     private boolean information_flipflop;
 
     /*
@@ -81,7 +76,6 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
     private RelativeLayout mapContainer;
     private FloatingActionButton hierarchyFloatingActionButton,
             incidentFloatingActionButton,
-            checkinFloatingActionButton,
             informationFloatingActionButton;
     private GoogleMap googleMap;
     private BroadcastReceiver receiver;
@@ -89,24 +83,19 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
     private Thread incidentResponderUpdateThread;
     private boolean responderListUpdateFlag;
     private String respondersByIncidentRequestMethodIdentifier;
-    private String responderCheckInRequestMethodIdentifier;
-    private String responderCheckOutRequestMethodIdentifier;
     private Incident incident;
     private Responder currentUser;
     private SharedPreferences userPreferences;
     private int timeDurationForRecent;
-    private ListView responderListView, subordinateListView, superiorListView;
-    private ResponderListAdapter responderAdapter, subordinateAdapter, superiorAdapter;
-    private ArrayList<Responder> subordinates, responders, superiors;
     private HashMap<String, Marker> markers; // HashMap of Google Map markers.
 
     /*
      * Information Layout Members
      */
-    private TextView addressTextView, descriptionTextView, runtimeTextView;
+    private TextView addressTextView, descriptionTextView, runtimeTextView, informationTextView;
 
 
-    public IncidentInfoFragment() {
+    public IncidentHistoryInfoFragment() {
         // Required empty public constructor
     }
 
@@ -125,13 +114,8 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
 
         // Initialize the flipflops.
         resize_flipflop = true;
-        checkin_flipflop = false;
         information_flipflop = true;
 
-        // Setup responder arrays.
-        subordinates = new ArrayList<Responder>();
-        responders= new ArrayList<Responder>();
-        superiors = new ArrayList<Responder>();
 
         // Setup the map markers hash map
         markers = new HashMap<String, Marker>();
@@ -164,18 +148,6 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                         Parcelable updatedResponders[] = intent.getParcelableArrayExtra(DatabaseService.DATA);
                         Log.d("receiving responders", "got response :" + updatedResponders);
                         respondToUpdatedResponderBroadcast(updatedResponders);
-                    }
-                    else if (callingMethodIdentifier.equals(responderCheckInRequestMethodIdentifier)) {
-                        Toast.makeText(getActivity(), "Checked In", Toast.LENGTH_SHORT).show();
-                        // Alternate the checkin flipflop flag.
-                        checkin_flipflop = !checkin_flipflop;
-                        checkinFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_cancel_white_24dp));
-                    }
-                    else if (callingMethodIdentifier.equals(responderCheckOutRequestMethodIdentifier)) {
-                        Toast.makeText(getActivity(), "Checked Out", Toast.LENGTH_SHORT).show();
-                        // Alternate the checkin flipflop flag.
-                        checkin_flipflop = !checkin_flipflop;
-                        checkinFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_done_white_24dp));
                     }
                 } else {
                     switch ( intent.getAction() ) {
@@ -257,16 +229,10 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
      */
     private void respondToUpdatedResponderBroadcast(Parcelable[] updatedResponders) {
 
-        responders.clear();
-        subordinates.clear();
-        superiors.clear();
         for (String key : markers.keySet()) {
             markers.get(key).remove();
         }
         markers.clear();
-        responderAdapter.clear();
-        subordinateAdapter.clear();
-        superiorAdapter.clear();
 
         if (currentUser == null) {
             return;
@@ -282,18 +248,6 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
             BitmapDescriptor bitmapDescriptor;
 
             responder.setLocation(new LatLng(Double.parseDouble(responder.getLatitude()), Double.parseDouble(responder.getLongitude())));
-            if (responder.getUserID().equals(currentUser.getOrgSuperior())) {
-                superiors.add(responder);
-                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
-            }
-            else if (responder.getOrgSuperior().equals(currentUser.getUserID())) {
-                subordinates.add(responder);
-                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
-            }
-            else {
-                responders.add(responder);
-                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
-            }
 
             // Use a grey marker if the location data for a responder is not recent
             float[] markerHSV = new float[3];
@@ -307,103 +261,32 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
             else if (new Date().getTime() - Long.parseLong(responder.getLocationDate()) > timeDurationForRecent * 1000) {
                 bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(markerHSV[0]);
             }
-
-            // TODO the incident subordinates lists are not currently updated, so we need to fix that, if needed
-            // TODO however, it may not be needed, since we are likely changing marker colors overall, anyway?
-//            float[] hsv = new float[3];
-//            switch (responder.getOrganization()) {
-//                case "EMS":
-//                    // Subordinate color.
-//                    if (currentUser.getIncidentSubordinates().contains(responder.getUserID())) {
-//                        Color.colorToHSV(Color.parseColor("#9acd32"), hsv); // EMS green
-//                    }
-//                    // Superior color.
-//                    else if (currentUser.getIncidentSuperior().equals(responder.getUserID())) {
-//                        Color.colorToHSV(Color.parseColor("#00c78c"), hsv); // EMS green
-//                    }
-//                    // default color.
-//                    else {
-//                        Color.colorToHSV(getResources().getColor(R.color.md_green_600), hsv); // EMS green
-//                    }
-//                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(hsv[0]);
-//                    break;
-//                case "POLICE":
-//                    // Subordinate color.
-//                    if (currentUser.getIncidentSubordinates().contains(responder.getUserID())) {
-//                        Color.colorToHSV(getResources().getColor(R.color.md_blue_400), hsv); // Police blue
-//                    }
-//                    // Superior color.
-//                    else if (currentUser.getIncidentSuperior().equals(responder.getUserID())) {
-//                        Color.colorToHSV(getResources().getColor(R.color.md_blue_900), hsv); // Police blue
-//                    }
-//                    // default color.
-//                    else {
-//                        Color.colorToHSV(getResources().getColor(R.color.md_blue_700), hsv); // Police blue
-//                    }
-//                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(hsv[0]);
-//                    break;
-//                case "FIRE":
-//                    // Subordinate color.
-//                    if (currentUser.getIncidentSubordinates().contains(responder.getUserID())) {
-//                        Color.colorToHSV(Color.parseColor("#ff83fa"), hsv); // Fire red
-//                    }
-//                    // Superior color.
-//                    else if (currentUser.getIncidentSuperior().equals(responder.getUserID())) {
-//                        Color.colorToHSV(Color.parseColor("#8B1C62"), hsv); // Fire red
-//                    }
-//                    // default color.
-//                    else {
-//                        Color.colorToHSV(getResources().getColor(R.color.md_red_500), hsv); // Fire red
-//                    }
-//                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(hsv[0]);
-//                    break;
-//                default:
-//                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
-//            }
-            Marker marker = googleMap.addMarker(
-                    new MarkerOptions()
-                            .position(responder.getLocation())
-                            .title(responder.getName())
-                            .snippet(responder.getOrganization() + "  //  "
-                                    + responder.getHeartrateRecord().get(0))
-                            .icon(bitmapDescriptor)
-            );
-            markers.put(responder.getUserID(), marker);
         }
-        responderAdapter.addAll(responders);
-        responderAdapter.notifyDataSetChanged();
-        subordinateAdapter.addAll(subordinates);
-        subordinateAdapter.notifyDataSetChanged();
-        superiorAdapter.addAll(superiors);
-        superiorAdapter.notifyDataSetChanged();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Obtain access to the root layout.
-        View root = inflater.inflate(R.layout.fragment_incident_info, container, false);
+        View root = inflater.inflate(R.layout.fragment_incident_history_info, container, false);
 
         // Set references to FrameLayouts.
         infoContainer = (LinearLayout) root.findViewById(R.id.incident_info_container);
-        hierarchyContainer = (LinearLayout) root.findViewById(R.id.incident_hierarchy_layout);
+        //hierarchyContainer = (LinearLayout) root.findViewById(R.id.incident_hierarchy_layout);
         mapContainer = (RelativeLayout) root.findViewById(R.id.incident_map_layout);
 
         // Set references to FloatingActionButtons.
         hierarchyFloatingActionButton = (FloatingActionButton) root.findViewById(R.id.hierarchy_floatingActionButton);
         incidentFloatingActionButton = (FloatingActionButton) root.findViewById(R.id.incident_floatingActionButton);
-        checkinFloatingActionButton = (FloatingActionButton) root.findViewById(R.id.checkin_floatingActionButton);
         informationFloatingActionButton = (FloatingActionButton) root.findViewById(R.id.information_floatingActionButton);
 
         // Set references to information display elements.
         addressTextView = (TextView) root.findViewById(R.id.info_address);
         descriptionTextView = (TextView) root.findViewById(R.id.info_description);
         runtimeTextView = (TextView) root.findViewById(R.id.info_runtime);
+        informationTextView = (TextView) root.findViewById(R.id.incident_information);
 
         // Get reference to ListView objects.
-        responderListView = (ListView) root.findViewById(R.id.incident_responder_list);
-        subordinateListView = (ListView) root.findViewById(R.id.incident_subordinate_list);
-        superiorListView = (ListView) root.findViewById(R.id.incident_superior_list);
 
         // Add Google Map to fragment.
         final SupportMapFragment fragment = SupportMapFragment.newInstance();
@@ -428,41 +311,9 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
         addressTextView.setText(this.incident.getAddress());
         descriptionTextView.setText(this.incident.getDescription());
         runtimeTextView.setText(this.incident.getTime());
-
-        /*
-         * Set list adapters.
-         */
-        responderAdapter = new ResponderListAdapter(getActivity());
-        responderListView.setAdapter(responderAdapter);
-        subordinateAdapter = new ResponderListAdapter(getActivity());
-        subordinateListView.setAdapter(subordinateAdapter);
-        superiorAdapter = new ResponderListAdapter(getActivity());
-        superiorListView.setAdapter(superiorAdapter);
-
-        /*
-         * Set ListView item actions.
-         */
-        responderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                centerMapOnLocation( responderAdapter.getItem(i).getLocation() ); // Center map on responder location.
-                markers.get(responderAdapter.getItem(i).getUserID()).showInfoWindow();
-            }
-        });
-        subordinateListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                centerMapOnLocation( subordinateAdapter.getItem(i).getLocation() ); // Center map on responder location.
-                markers.get(subordinateAdapter.getItem(i).getUserID()).showInfoWindow();
-            }
-        });
-        superiorListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                centerMapOnLocation( superiorAdapter.getItem(i).getLocation() ); // Center map on responder location.
-                markers.get(superiorAdapter.getItem(i).getUserID()).showInfoWindow();
-            }
-        });
+        informationTextView.setText("Checked in at:\n" +
+                "MM DD YYYY HH MM SS MIL\n"
+                        + this.incident.localCheckInTime);
 
         /*
          * Set FloatingActionButton actions.
@@ -478,42 +329,6 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
             @Override
             public void onClick(View view) {
                 centerMapOnLocation(incident.getLocation()); // Center the map on the incident location.
-            }
-        });
-
-        //Check if already logged in.
-        if (currentUser.getSceneID().equals(incident.getSceneId())) {
-            checkinFloatingActionButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_cancel_white_24dp));
-            checkin_flipflop = !checkin_flipflop;
-        }
-        checkinFloatingActionButton.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-
-                // Get a reference to the database service to check the responder in
-                DatabaseService databaseService = ((MainActivity) getActivity()).databaseService;
-
-                /*
-                 * Set up database communication for check-in button
-                 */
-                if (!checkin_flipflop) {
-
-                    //Ok, this needs updating.
-                    currentUser.setSceneId(incident.getSceneId());
-                    responderCheckInRequestMethodIdentifier = this.getClass().getSimpleName()
-                            + "broadcast_action_database_checkin"
-                            + incident.getSceneId();
-                    databaseService.pushUpdatedResponderData(currentUser, responderCheckInRequestMethodIdentifier);
-                } else {//Check the user out of the scene.  TODO add history logging here.
-                    currentUser.setSceneId(Responder.NO_INCIDENT);
-                    responderCheckOutRequestMethodIdentifier = this.getClass().getSimpleName()
-                            + "broadcast_action_database_checkout"
-                            + incident.getSceneId();
-                    databaseService.pushUpdatedResponderData(currentUser, responderCheckOutRequestMethodIdentifier);
-                }
-
-                // The callback has consumed the long click.
-                return true;
             }
         });
 

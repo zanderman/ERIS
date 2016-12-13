@@ -47,6 +47,7 @@ public class Incident implements Parcelable, Serializable{
     private LatLng location;
     private String sceneId;
     private List<String> organizations;
+    public String localCheckInTime;
 
 
     public Incident(String sceneId, String description, String address, String latitude, String longitude, String time, String title, List<String> organizations) {
