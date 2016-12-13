@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -293,13 +292,13 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
             // Current user's superior
             if (responder.getUserID().equals(currentUser.getOrgSuperior())) {
                 superiors.add(responder);
-                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
+                bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.green_dot_2);
             }
 
             // Current user's subordinate
             else if (responder.getOrgSuperior().equals(currentUser.getUserID())) {
                 subordinates.add(responder);
-                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+                bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.green_dot_2);
 
                 // TODO: send responder to watch.
                 // Simple responder format is a single comma-delimited string with: "id,name,lat,long,hr"
@@ -310,20 +309,17 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
             // Anyone else who responding to the scene
             else {
                 responders.add(responder);
-                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+                bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.green_dot_2);
             }
 
-            // Use a grey marker if the location data for a responder is not recent
-            float[] markerHSV = new float[3];
-            Color.colorToHSV(Color.GRAY, markerHSV); // grey
             // If no locationDate is found, assume the data is not recent
             if (responder.getLocationDate() == null) {
-                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(markerHSV[0]);
+                bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.grey_dot_2);
             }
             // If the current time is more than timeDurationForRecent seconds after the
             // responder's location date, then the location data is not recent
             else if (new Date().getTime() - Long.parseLong(responder.getLocationDate()) > timeDurationForRecent * 1000) {
-                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(markerHSV[0]);
+                bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.grey_dot_2);
             }
 
             // TODO the incident subordinates lists are not currently updated, so we need to fix that, if needed
