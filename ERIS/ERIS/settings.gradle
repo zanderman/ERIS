@@ -6,4 +6,4 @@
 //
 // Source code generated from template: aws-my-sample-app-android v0.9
 //
-include ':app'
+include ':app', ':wear', ':WheelViewLib'

@@ -289,25 +289,16 @@ public class Responder implements Parcelable {
         if (subordinateIds == null) {
             throw new IllegalArgumentException("subordinateIds cannot be null");
         }
-        this.incidentSubordinates = subordinateIds;
+        this.incidentSubordinates = subordinateIds;}
+    public void setHeartRate(float hr) {
+        this.heartRate = hr; // Update current heartrate value.
+        if (this.heartrateRecord.size() > 20) this.heartrateRecord.remove(0);
+        this.heartrateRecord.add("" + hr);
     }
 
-    /**
-     * Set the incident/scene ID for this responder.
-     *
-     * @param sceneId  The Incident ID to be set
-     */
-
-    public void setSceneId(String sceneId) {
-        if (sceneId == null) {
-            throw new IllegalArgumentException("sceneId cannot be null, use empty string");
-        } else if (sceneId == NO_INCIDENT) {//Check out of scene.
-            this.sceneID = sceneId;
-        } else {//Check in to scene
-            this.sceneID = sceneId;
-            //Log the check in in the history.  sceneId + currentInstant
-            incidentHistory.add(sceneId + ":" + dateTimeFormatter.print(new Instant().getMillis()));
-        }
-        Log.e(TAG, "Incident history: " + incidentHistory.toString());
+    @Override
+    public boolean equals(Object o) {
+        Responder r = (Responder) o;
+        return (this.getUserID().equals(r.getUserID()));
     }
 }

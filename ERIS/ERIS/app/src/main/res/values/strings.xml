@@ -25,6 +25,7 @@
     <string name="sharedpreferences_entry_userID">UserID</string>
     <string name="sharedpreferences_user_settings">Settings</string>
     <string name="sharedpreferences_notification_info">Notifications</string>
+    <string name="sharedpreferences_communication_info">CommunicationInfo</string>
 
     <!-- Preference names in notification table -->
     <string name="preferences_notification_id">LastID</string>

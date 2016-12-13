@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">ERIS</string>
+    <string name="hello_round">Hello Round World!</string>
+    <string name="hello_square">Hello Square World!</string>
+    <string name="title_activity_wheel">WheelActivity</string>
+
+    <!--API Keys-->
+    <string name="google_maps_key">AIzaSyBzlpKfR4TtnHXbUMYulC01oQGTCTfLvcY</string>
+    <string name="title_activity_incident_selector">IncidentSelectorActivity</string>
+
+    <!-- Shared Preferences -->
+    <string name="communication_prefs">CommunicationPreferences</string>
+</resources>

@@ -49,6 +49,7 @@ import com.eris.navigation.NavigationDrawer;
 import com.eris.services.LocationService;
 import com.eris.services.DatabaseService;
 
+import com.eris.services.WearService;
 import com.thalmic.myo.AbstractDeviceListener;
 import com.thalmic.myo.Arm;
 import com.thalmic.myo.DeviceListener;
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /** The helper class used to toggle the left navigation drawer open and closed. */
     private ActionBarDrawerToggle drawerToggle;
 
+    public WearService wearService;
     public LocationService locationService;
     public DatabaseService databaseService;
     public CountDownLatch databaseServiceLatch;
@@ -98,6 +100,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (iBinder instanceof DatabaseService.DatabaseServiceBinder) {
                 databaseService = ((DatabaseService.DatabaseServiceBinder)iBinder).getService();
                 databaseServiceLatch.countDown();
+            }
+            else if (iBinder instanceof WearService.WearServiceBinder) {
+                wearService = ((WearService.WearServiceBinder)iBinder).getService();
             }
         }
 
@@ -324,9 +329,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Hub.getInstance().setLockingPolicy(Hub.LockingPolicy.NONE);
 
         // Run the location and database services.
+        runWearService();
         runLocationService();
         runDatabaseService();
         bindService(new Intent(this, DatabaseService.class), serviceConnection, Context.BIND_AUTO_CREATE);
+        bindService(new Intent(this, WearService.class), serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -443,6 +450,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     REQUEST_CODE_ACCESS_FINE_LOCATION);
             return;
         }
+    }
+
+    /**
+     * Performs all actions needed to start an instance of the WearService.
+     */
+    public void runWearService() {
+        startService( new Intent(this, WearService.class) );
+        return;
     }
 
 

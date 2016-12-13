@@ -52,7 +52,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
         // Setup listeners for UI elements.
         findViewById(R.id.sign_in_button).setOnClickListener(this);
-        findViewById(R.id.skip_button).setOnClickListener(this);
 
         // Create shared preferences
         sharedPreferences = getSharedPreferences(getResources()
@@ -73,18 +72,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             // Google Sign-In button.
             case R.id.sign_in_button:
                 signIn();
-                break;
-
-            // Skip login for development purposes.
-            // TODO: Remove this option upon release.
-            case R.id.skip_button:
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(getResources()
-                        .getString(R.string.sharedpreferences_entry_userID), "4093842287");
-                editor.commit();
-
-                startActivity(new Intent(this,MainActivity.class));
-                finish();
                 break;
 
             // Unrecognized UI element.
