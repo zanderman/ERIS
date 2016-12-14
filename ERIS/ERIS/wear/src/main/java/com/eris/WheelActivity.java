@@ -180,6 +180,10 @@ public class WheelActivity extends Activity
 
         if (sm != null) sm.unregisterListener(this);
         if (this.receiver != null) this.unregisterReceiver(this.receiver);
+        this.unbindService(serviceConnection);
+
+        // Exit this activity.
+        this.finish();
     }
 
     public void setupBroadcastReceiver() {
