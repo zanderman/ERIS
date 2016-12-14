@@ -17,6 +17,7 @@ public class UserDataDO {
     private String _userId;
     private String _currentIncidentId;
     private List<String> _heartbeatRecord;
+    private String _heartRateDate;
     private List<String> _incidentHistory;
     private List<String> _incidentSubordinates;
     private String _incidentSuperior;
@@ -52,6 +53,14 @@ public class UserDataDO {
 
     public void setHeartbeatRecord(final List<String> _heartbeatRecord) {
         this._heartbeatRecord = _heartbeatRecord;
+    }
+    @DynamoDBAttribute(attributeName = "heartRateDate")
+    public String getHeartRateDate() {
+        return _heartRateDate;
+    }
+
+    public void setHeartRateDate(final String _heartRateDate) {
+        this._heartRateDate = _heartRateDate;
     }
     @DynamoDBAttribute(attributeName = "incidentHistory")
     public List<String> getIncidentHistory() {

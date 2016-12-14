@@ -96,7 +96,8 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
     private Incident incident;
     private Responder currentUser;
     private SharedPreferences userPreferences;
-    private int timeDurationForRecent;
+    private int timeDurationForRecentLocation;
+    private int timeDurationForRecentHeartRate;
     private ListView responderListView, subordinateListView, superiorListView;
     private ResponderListAdapter responderAdapter, subordinateAdapter, superiorAdapter;
     private ArrayList<Responder> subordinates, responders, superiors;
@@ -146,8 +147,9 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                 getResources().getString(R.string.sharedpreferences_user_settings),
                 0
         );
-        timeDurationForRecent = userPreferences.getInt(
-                getResources().getString(R.string.preferences_time_duration_for_recent), 45);
+        int baseTimeDurationForRecent = userPreferences.getInt(getResources().getString(R.string.preferences_broadcast), 30);
+        timeDurationForRecentLocation = Math.max(60, baseTimeDurationForRecent * 2);
+        timeDurationForRecentHeartRate = Math.max(90, baseTimeDurationForRecent * 2 + 30);
 
         // Create an intent filter
         receiverFilter = new IntentFilter();
@@ -314,68 +316,30 @@ public class IncidentInfoFragment extends Fragment implements OnMapReadyCallback
                 bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.green_dot_2);
             }
 
+            // Get the current time for use in "recent" calculations below
+            long currTime = new Date().getTime();
+
+            // Use a grey marker if the location data for a responder is not recent
             // If no locationDate is found, assume the data is not recent
             if (responder.getLocationDate() == null) {
                 bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.grey_dot_2);
             }
-            // If the current time is more than timeDurationForRecent seconds after the
+            // If the current time is more than timeDurationForRecentLocation seconds after the
             // responder's location date, then the location data is not recent
-            else if (new Date().getTime() - Long.parseLong(responder.getLocationDate()) > timeDurationForRecent * 1000) {
+            else if (currTime - Long.parseLong(responder.getLocationDate()) > timeDurationForRecentLocation * 1000) {
                 bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.grey_dot_2);
             }
 
-            // TODO the incident subordinates lists are not currently updated, so we need to fix that, if needed
-            // TODO however, it may not be needed, since we are likely changing marker colors overall, anyway?
-//            float[] hsv = new float[3];
-//            switch (responder.getOrganization()) {
-//                case "EMS":
-//                    // Subordinate color.
-//                    if (currentUser.getIncidentSubordinates().contains(responder.getUserID())) {
-//                        Color.colorToHSV(Color.parseColor("#9acd32"), hsv); // EMS green
-//                    }
-//                    // Superior color.
-//                    else if (currentUser.getIncidentSuperior().equals(responder.getUserID())) {
-//                        Color.colorToHSV(Color.parseColor("#00c78c"), hsv); // EMS green
-//                    }
-//                    // default color.
-//                    else {
-//                        Color.colorToHSV(getResources().getColor(R.color.md_green_600), hsv); // EMS green
-//                    }
-//                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(hsv[0]);
-//                    break;
-//                case "POLICE":
-//                    // Subordinate color.
-//                    if (currentUser.getIncidentSubordinates().contains(responder.getUserID())) {
-//                        Color.colorToHSV(getResources().getColor(R.color.md_blue_400), hsv); // Police blue
-//                    }
-//                    // Superior color.
-//                    else if (currentUser.getIncidentSuperior().equals(responder.getUserID())) {
-//                        Color.colorToHSV(getResources().getColor(R.color.md_blue_900), hsv); // Police blue
-//                    }
-//                    // default color.
-//                    else {
-//                        Color.colorToHSV(getResources().getColor(R.color.md_blue_700), hsv); // Police blue
-//                    }
-//                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(hsv[0]);
-//                    break;
-//                case "FIRE":
-//                    // Subordinate color.
-//                    if (currentUser.getIncidentSubordinates().contains(responder.getUserID())) {
-//                        Color.colorToHSV(Color.parseColor("#ff83fa"), hsv); // Fire red
-//                    }
-//                    // Superior color.
-//                    else if (currentUser.getIncidentSuperior().equals(responder.getUserID())) {
-//                        Color.colorToHSV(Color.parseColor("#8B1C62"), hsv); // Fire red
-//                    }
-//                    // default color.
-//                    else {
-//                        Color.colorToHSV(getResources().getColor(R.color.md_red_500), hsv); // Fire red
-//                    }
-//                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(hsv[0]);
-//                    break;
-//                default:
-//                    bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW);
-//            }
+            // If no heartRateDate is found, assume the data is not recent
+            if (responder.getHeartRateDate() == null) {
+                responder.setHeartRate(-999);
+            }
+            // If the current time is more than timeDurationForRecentHeartRate seconds after the
+            // responder's heart rate date, then the heart rate data is not recent
+            else if (currTime - Long.parseLong(responder.getHeartRateDate()) > timeDurationForRecentHeartRate * 1000) {
+                responder.setHeartRate(-999);
+            }
+
             Marker marker = googleMap.addMarker(
                     new MarkerOptions()
                             .position(responder.getLocation())

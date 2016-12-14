@@ -92,6 +92,7 @@ public class DatabaseService extends Service {
         // Create an intent filter
         IntentFilter filter = new IntentFilter();
         filter.addAction(LocationService.BROADCAST_ACTION_LOCATION_UPDATE);
+        filter.addAction(WearService.BROADCAST_ACTION_WEARABLE_UPDATE);
 
         // Create broadcast receiver object.
         this.receiver = new BroadcastReceiver() {
@@ -106,6 +107,15 @@ public class DatabaseService extends Service {
                         double latitude = intent.getDoubleExtra(LocationService.KEY_LOCATION_LATITUDE, 0.0);
                         double longitude = intent.getDoubleExtra(LocationService.KEY_LOCATION_LONGITUDE, 0.0);
                         updateCurrentUserLocation(latitude, longitude);
+                        break;
+
+                    // Updated Heart Rate
+                    case WearService.BROADCAST_ACTION_WEARABLE_UPDATE:
+                        float newHeartRate = intent.getFloatExtra(WearService.KEY_WEARABLE_HEARTRATE, 0);
+                        if (newHeartRate != 0) {
+                            currentUser.setHeartRate(newHeartRate);
+                            currentUser.setHeartRateDate(Long.toString(new Date().getTime()));
+                        }
                         break;
 
                     // Unhandled broadcast.
@@ -207,7 +217,7 @@ public class DatabaseService extends Service {
             //No just broadcast this with the rID.
             intent.putExtra(ERROR_STATUS, Responder.NO_ERROR);
             Responder r = new Responder(foundUser.getUserId(), foundUser.getName(), foundUser.getOrganization(),
-                    foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
+                    foundUser.getHeartbeatRecord(), foundUser.getHeartRateDate(), foundUser.getOrgSuperior(),
                     foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
                     foundUser.getLocationDate(), foundUser.getCurrentIncidentId(),
                     foundUser.getIncidentSuperior(), foundUser.getIncidentSubordinates(), foundUser.getIncidentHistory());
@@ -263,7 +273,7 @@ public class DatabaseService extends Service {
                 if (resultList.size() > 0) {
                     UserDataDO foundUser = resultList.get(0);
                     Responder subordinate = new Responder(foundUser.getUserId(), foundUser.getName(), foundUser.getOrganization(),
-                            foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
+                            foundUser.getHeartbeatRecord(), foundUser.getHeartRateDate(), foundUser.getOrgSuperior(),
                             foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
                             foundUser.getLocationDate(), foundUser.getCurrentIncidentId(),
                             foundUser.getIncidentSuperior(), foundUser.getIncidentSubordinates(), foundUser.getIncidentHistory());
@@ -272,8 +282,8 @@ public class DatabaseService extends Service {
                     Log.e(TAG, "Failed to find responder " + subordinateId);
                     List<String> emptyList = new ArrayList<String>();
                     Responder subordinate = new Responder(subordinateId, "unknown", superior.getOrganization(),
-                            emptyList, "unknown",
-                            emptyList, "0.0", "0.0", "January 1, 1970, 00:00:00 GMT",
+                            emptyList, "0", "unknown",
+                            emptyList, "0.0", "0.0", "0",
                             "unknown", superior.getUserID(),
                             emptyList, emptyList);
                     orgSubordinates[i] = subordinate;
@@ -337,7 +347,7 @@ public class DatabaseService extends Service {
                     while(resultsIterator.hasNext()) {
                         foundUser = resultsIterator.next();
                         responder = new Responder(foundUser.getUserId(), foundUser.getName(),  foundUser.getOrganization(),
-                                foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
+                                foundUser.getHeartbeatRecord(), foundUser.getHeartRateDate(), foundUser.getOrgSuperior(),
                                 foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
                                 foundUser.getLocationDate(), foundUser.getCurrentIncidentId(),
                                 foundUser.getIncidentSuperior(), foundUser.getIncidentSubordinates(),
@@ -400,7 +410,7 @@ public class DatabaseService extends Service {
                     while(resultsIterator.hasNext()) {
                         foundUser = resultsIterator.next();
                         responder = new Responder(foundUser.getUserId(), foundUser.getName(),  foundUser.getOrganization(),
-                                foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
+                                foundUser.getHeartbeatRecord(), foundUser.getHeartRateDate(), foundUser.getOrgSuperior(),
                                 foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
                                 foundUser.getLocationDate(), foundUser.getCurrentIncidentId(),
                                 foundUser.getIncidentSuperior(), foundUser.getIncidentSubordinates(),
@@ -452,7 +462,7 @@ public class DatabaseService extends Service {
                     while(resultsIterator.hasNext()) {
                         foundUser = resultsIterator.next();
                         responder = new Responder(foundUser.getUserId(), foundUser.getName(),  foundUser.getOrganization(),
-                                foundUser.getHeartbeatRecord(), foundUser.getOrgSuperior(),
+                                foundUser.getHeartbeatRecord(), foundUser.getHeartRateDate(), foundUser.getOrgSuperior(),
                                 foundUser.getOrgSubordinates(), foundUser.getLatitude(), foundUser.getLongitude(),
                                 foundUser.getLocationDate(), foundUser.getCurrentIncidentId(),
                                 foundUser.getIncidentSuperior(), foundUser.getIncidentSubordinates(),
@@ -643,6 +653,7 @@ public class DatabaseService extends Service {
             userData.setLatitude(responder.getLatitude());
             userData.setLocationDate(responder.getLocationDate());
             userData.setHeartbeatRecord(responder.getHeartrateRecord());
+            userData.setHeartRateDate(responder.getHeartRateDate());
             userData.setIncidentSubordinates(responder.getIncidentSubordinates());
             userData.setIncidentSuperior(responder.getIncidentSuperior());
             userData.setName(responder.getName());
@@ -707,6 +718,9 @@ public class DatabaseService extends Service {
                 if (responder.getHeartrateRecord() == null) {
                     throw new IllegalArgumentException("heartbeatRecord cannot be null");
                 }
+                if (responder.getHeartRateDate() == null) {
+                    throw new IllegalArgumentException("heartRateDate cannot be null");
+                }
                 if (responder.getIncidentSubordinates() == null) {
                     throw new IllegalArgumentException("incidentSubordinates cannot be null");
                 }
@@ -730,6 +744,7 @@ public class DatabaseService extends Service {
                 userData.setLatitude(responder.getLatitude());
                 userData.setLocationDate(responder.getLocationDate());
                 userData.setHeartbeatRecord(responder.getHeartrateRecord());
+                userData.setHeartRateDate(responder.getHeartRateDate());
                 userData.setIncidentSubordinates(responder.getIncidentSubordinates());
                 userData.setIncidentSuperior(responder.getIncidentSuperior());
                 userData.setName(responder.getName());
