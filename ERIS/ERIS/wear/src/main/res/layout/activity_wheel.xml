@@ -8,4 +8,5 @@
     app:rectLayout="@layout/rect_activity_wheel"
     app:roundLayout="@layout/round_activity_wheel"
     tools:context="com.eris.WheelActivity"
-    tools:deviceIds="wear"></android.support.wearable.view.WatchViewStub>
+    tools:deviceIds="wear"
+    android:keepScreenOn="true"></android.support.wearable.view.WatchViewStub>
