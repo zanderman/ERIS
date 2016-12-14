@@ -86,7 +86,7 @@ public class IncidentHistoryInfoFragment extends Fragment implements OnMapReadyC
     private Incident incident;
     private Responder currentUser;
     private SharedPreferences userPreferences;
-    private int timeDurationForRecent;
+    private int timeDurationForRecentLocation;
     private HashMap<String, Marker> markers; // HashMap of Google Map markers.
 
     /*
@@ -128,8 +128,8 @@ public class IncidentHistoryInfoFragment extends Fragment implements OnMapReadyC
                 getResources().getString(R.string.sharedpreferences_user_settings),
                 0
         );
-        timeDurationForRecent = userPreferences.getInt(
-                getResources().getString(R.string.preferences_time_duration_for_recent), 45);
+        int baseTimeDurationForRecent = userPreferences.getInt(getResources().getString(R.string.preferences_broadcast), 30);
+        timeDurationForRecentLocation = Math.max(60, baseTimeDurationForRecent * 2);
 
         // Create an intent filter
         receiverFilter = new IntentFilter();
@@ -250,16 +250,14 @@ public class IncidentHistoryInfoFragment extends Fragment implements OnMapReadyC
             responder.setLocation(new LatLng(Double.parseDouble(responder.getLatitude()), Double.parseDouble(responder.getLongitude())));
 
             // Use a grey marker if the location data for a responder is not recent
-            float[] markerHSV = new float[3];
-            Color.colorToHSV(Color.GRAY, markerHSV); // grey
             // If no locationDate is found, assume the data is not recent
             if (responder.getLocationDate() == null) {
-                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(markerHSV[0]);
+                bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.grey_dot_2);
             }
-            // If the current time is more than timeDurationForRecent seconds after the
+            // If the current time is more than timeDurationForRecentLocation seconds after the
             // responder's location date, then the location data is not recent
-            else if (new Date().getTime() - Long.parseLong(responder.getLocationDate()) > timeDurationForRecent * 1000) {
-                bitmapDescriptor = BitmapDescriptorFactory.defaultMarker(markerHSV[0]);
+            else if (new Date().getTime() - Long.parseLong(responder.getLocationDate()) > timeDurationForRecentLocation * 1000) {
+                bitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.grey_dot_2);
             }
         }
     }
