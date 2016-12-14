@@ -156,14 +156,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 "Incident History", R.drawable.ic_history_black_24dp,
                 IncidentHistoryFragment.class.getName(), IncidentHistoryFragment.class.getSimpleName()
         );
-        NavigationDrawerMenuItem commandStructureItem = new NavigationDrawerMenuItem(
-                "Command Structure", R.mipmap.ic_line_style_black_24dp,
-                DemoResponderDatabaseFragment.class.getName(), DemoResponderDatabaseFragment.class.getSimpleName()
-        );
-        NavigationDrawerMenuItem databaseServiceTestItem = new NavigationDrawerMenuItem(
-                "Database Test", R.mipmap.ic_donut_large_black_24dp,
-                IncidentDatabaseFragment.class.getName(), IncidentDatabaseFragment.class.getSimpleName()
-        );
         NavigationDrawerMenuItem settingsItem = new NavigationDrawerMenuItem(
                 "Settings", R.mipmap.ic_settings_black_24dp,
                 SettingsFragment.class.getName(), SettingsFragment.class.getSimpleName()
@@ -171,8 +163,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         navigationDrawer.addItemToMenu(incidentListItem);
         navigationDrawer.addItemToMenu(incidentHistoryItem);
-        navigationDrawer.addItemToMenu(commandStructureItem);
-        navigationDrawer.addItemToMenu(databaseServiceTestItem);
         navigationDrawer.addItemToMenu(settingsItem);
 
         if (savedInstanceState == null) {
